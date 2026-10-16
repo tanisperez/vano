@@ -1,7 +1,8 @@
 # Vano
 
-A light, native, open source disk analyzer. See what fills your disk in an instant and clear it
-safely: Vano shows where the space goes in a treemap you can zoom into folder by folder, and
+Vano (Italian for an empty space, the opening of a door or a window in a wall) is a light,
+native, open source disk analyzer. See what fills your disk in an instant and clear it safely:
+it shows where the space goes in a treemap you can zoom into folder by folder, and
 recommends what can go to the Trash, where everything can still be put back.
 
 [Download](https://github.com/tanisperez/vano/releases/latest) ·

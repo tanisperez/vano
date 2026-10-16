@@ -170,6 +170,7 @@ impl AppView {
                                 )
                                 .children(warning.clone().map(|text| {
                                     h_flex()
+                                        .items_start()
                                         .gap(px(8.0))
                                         .px(px(12.0))
                                         .py(px(10.0))
@@ -177,8 +178,16 @@ impl AppView {
                                         .bg(palette.warning_subtle)
                                         .text_color(palette.warning)
                                         .text_size(px(12.5))
-                                        .child(Icon::new(Lucide::TriangleAlert).small())
-                                        .child(div().flex_1().child(text))
+                                        .line_height(px(18.0))
+                                        .child(
+                                            div()
+                                                .flex_none()
+                                                .h(px(18.0))
+                                                .flex()
+                                                .items_center()
+                                                .child(Icon::new(Lucide::TriangleAlert).small()),
+                                        )
+                                        .child(div().flex_1().min_w_0().child(text))
                                 })),
                         )
                         .child(
