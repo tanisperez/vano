@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:"Geist";src:url("site/fonts/Geist-Regular.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Geist";src:url("site/fonts/Geist-Medium.woff2") format("woff2");font-weight:500}
+@font-face{font-family:"Geist";src:url("site/fonts/Geist-SemiBold.woff2") format("woff2");font-weight:600 700}
+@font-face{font-family:"Geist Mono";src:url("site/fonts/GeistMono-Regular.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Geist Mono";src:url("site/fonts/GeistMono-Medium.woff2") format("woff2");font-weight:500 600}
+html,body{margin:0;height:100%}
+body{font-family:"Geist",system-ui,sans-serif}
+button{font-family:inherit}
+a{color:var(--accent-text,#3f47c4);text-decoration:none}
+a:hover{color:var(--fg,#1b1c22)}
+@keyframes sz-spin{to{transform:rotate(360deg)}}
+@keyframes sz-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+[data-mode]{--success:#1d8657;--success-subtle:#e2f4ea;--warning:#9a6500;--warning-subtle:#fbf0d9;--danger:#cf3535;--danger-subtle:#fde7e7;--info:#1c6fb0;--info-subtle:#e1eef9;--danger-fg:#fff;--scrim:#0a0b1073;--shadow:0 12px 32px rgba(20,22,40,.14),0 0 0 1px rgba(20,22,40,.06);--desk:#e2e3e8;--accent-hover:color-mix(in oklab,var(--accent) 86%,#000);--pressed:color-mix(in oklab,var(--hover) 34%,var(--border-strong));--safe-fill:color-mix(in oklab,var(--success) 9%,var(--raised));--safe-hatch:color-mix(in oklab,var(--success) 38%,transparent);--safe-line:color-mix(in oklab,var(--success) 62%,transparent);--review-fill:var(--warning-subtle);--review-line:color-mix(in oklab,var(--warning) 50%,transparent);
+--cat-media-bg:oklch(.975 .018 55);--cat-media-fill:oklch(.935 .045 55);--cat-media-line:oklch(.80 .09 55);--cat-media-dot:oklch(.70 .16 50);
+--cat-other-bg:oklch(.975 .003 260);--cat-other-fill:oklch(.94 .006 260);--cat-other-line:oklch(.82 .012 260);--cat-other-dot:oklch(.64 .02 260);
+--cat-code-bg:oklch(.975 .018 285);--cat-code-fill:oklch(.925 .045 285);--cat-code-line:oklch(.78 .09 285);--cat-code-dot:oklch(.60 .17 285);
+--cat-sdk-bg:oklch(.975 .016 215);--cat-sdk-fill:oklch(.93 .04 215);--cat-sdk-line:oklch(.79 .08 215);--cat-sdk-dot:oklch(.68 .12 215);
+--cat-ai-bg:oklch(.975 .018 350);--cat-ai-fill:oklch(.93 .045 350);--cat-ai-line:oklch(.80 .09 350);--cat-ai-dot:oklch(.64 .19 350);
+--cat-caches-bg:oklch(.975 .016 255);--cat-caches-fill:oklch(.925 .04 255);--cat-caches-line:oklch(.78 .08 255);--cat-caches-dot:oklch(.60 .17 255)}
+[data-mode="dark"]{--success:#4fc88f;--success-subtle:#15302a;--warning:#e8b75a;--warning-subtle:#352b15;--danger:#f27171;--danger-subtle:#3b1e21;--info:#62b3f0;--info-subtle:#162a3b;--shadow:0 12px 32px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.04);--desk:#08090b;--accent-hover:color-mix(in oklab,var(--accent) 86%,#fff);--safe-fill:color-mix(in oklab,var(--success) 12%,var(--raised));--safe-hatch:color-mix(in oklab,var(--success) 34%,transparent);--safe-line:color-mix(in oklab,var(--success) 55%,transparent);--review-line:color-mix(in oklab,var(--warning) 45%,transparent);
+--cat-media-bg:oklch(.245 .025 55);--cat-media-fill:oklch(.30 .05 55);--cat-media-line:oklch(.46 .08 55);--cat-media-dot:oklch(.76 .13 55);
+--cat-other-bg:oklch(.24 .004 260);--cat-other-fill:oklch(.29 .008 260);--cat-other-line:oklch(.42 .012 260);--cat-other-dot:oklch(.66 .02 260);
+--cat-code-bg:oklch(.24 .03 285);--cat-code-fill:oklch(.30 .06 285);--cat-code-line:oklch(.46 .09 285);--cat-code-dot:oklch(.72 .14 285);
+--cat-sdk-bg:oklch(.24 .022 215);--cat-sdk-fill:oklch(.30 .045 215);--cat-sdk-line:oklch(.46 .07 215);--cat-sdk-dot:oklch(.76 .11 215);
+--cat-ai-bg:oklch(.24 .028 350);--cat-ai-fill:oklch(.30 .055 350);--cat-ai-line:oklch(.46 .09 350);--cat-ai-dot:oklch(.74 .15 350);
+--cat-caches-bg:oklch(.24 .026 255);--cat-caches-fill:oklch(.30 .05 255);--cat-caches-line:oklch(.46 .085 255);--cat-caches-dot:oklch(.72 .13 255)}
+[data-pal="indigo"]{--bg:#fcfcfd;--surface:#f4f5f7;--raised:#ffffff;--overlay:#ffffff;--border:#e3e5ea;--border-strong:#cdd0d8;--fg:#1b1c22;--fg-muted:#5c606e;--fg-subtle:#8b8e9a;--hover:#eceef2;--accent:#4f57d8;--accent-fg:#ffffff;--accent-text:#3f47c4;--accent-subtle:#e8e9fd}
+[data-pal="indigo"][data-mode="dark"]{--bg:#15161a;--surface:#1b1c21;--raised:#23252c;--overlay:#262830;--border:#2c2e36;--border-strong:#3b3e48;--fg:#e9eaee;--fg-muted:#a0a3ae;--fg-subtle:#6f7280;--hover:#25272e;--accent:#5b63e6;--accent-fg:#ffffff;--accent-text:#a3a9ff;--accent-subtle:#272b4d}
+[data-pal="graphite"]{--bg:#fcfcfc;--surface:#f5f5f5;--raised:#ffffff;--overlay:#ffffff;--border:#e5e5e5;--border-strong:#d0d0d0;--fg:#171717;--fg-muted:#5e5e5e;--fg-subtle:#8f8f8f;--hover:#eeeeee;--accent:#171717;--accent-fg:#ffffff;--accent-text:#171717;--accent-subtle:#ececec}
+[data-pal="graphite"][data-mode="dark"]{--bg:#141414;--surface:#1a1a1a;--raised:#232323;--overlay:#262626;--border:#2d2d2d;--border-strong:#3d3d3d;--fg:#ededed;--fg-muted:#a3a3a3;--fg-subtle:#717171;--hover:#262626;--accent:#ededed;--accent-fg:#141414;--accent-text:#ffffff;--accent-subtle:#2e2e2e}
+[data-pal="electric"]{--bg:#fbfcfe;--surface:#f2f5f9;--raised:#ffffff;--overlay:#ffffff;--border:#e0e6ee;--border-strong:#c9d2de;--fg:#111827;--fg-muted:#556070;--fg-subtle:#8792a2;--hover:#e9eef5;--accent:#0b63f6;--accent-fg:#ffffff;--accent-text:#0052d6;--accent-subtle:#e3edff}
+[data-pal="electric"][data-mode="dark"]{--bg:#0f131a;--surface:#141922;--raised:#1b222d;--overlay:#1f2632;--border:#263040;--border-strong:#344156;--fg:#e8edf5;--fg-muted:#9aa6b8;--fg-subtle:#677489;--hover:#1f2733;--accent:#2f7bff;--accent-fg:#ffffff;--accent-text:#8db8ff;--accent-subtle:#15284a}
+</style>
+</helmet>
+<div data-pal="{{ pal }}" data-mode="{{ mode }}" style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--desk); font-family:{{ uiFontCss }}; font-size:{{ uiSizePx }}; --mono:{{ monoFontCss }}; line-height:1.35; color:var(--fg); -webkit-font-smoothing:antialiased;">
+<div ref="{{ frameRef }}" data-screen-label="{{ screenLabel }}" style="position:relative; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); box-sizing:border-box; width:{{ frame.w }}; max-width:{{ frame.maxW }}; height:{{ frame.h }}; border-radius:{{ frame.r }}; border:{{ frame.border }}; box-shadow:{{ frame.shadow }};">
+
+  <div style="flex:none; height:40px; display:flex; align-items:center; gap:8px; padding:0 8px 0 14px; background:var(--surface); border-bottom:1px solid var(--border); box-sizing:border-box;">
+    <div style="display:flex; gap:8px; margin-right:10px; flex:none;">
+      <span style="width:12px; height:12px; border-radius:6px; background:#ff5f57;"></span>
+      <span style="width:12px; height:12px; border-radius:6px; background:#febc2e;"></span>
+      <span style="width:12px; height:12px; border-radius:6px; background:#28c840;"></span>
+    </div>
+    <div style="width:18px; height:18px; border-radius:5px; background:var(--accent); color:var(--accent-fg); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex:none;">V</div>
+    <div style="font-weight:600; display:{{ nameDisplay }};">Vano</div>
+    <div style="width:1px; height:16px; margin:0 4px; background:var(--border); flex:none;"></div>
+    <button onClick="{{ goHome }}" style="height:26px; padding:0 8px; display:flex; align-items:center; gap:6px; border:none; border-radius:6px; background:transparent; color:var(--fg-muted); font-size:13px; cursor:pointer; min-width:0;" style-hover="background:var(--hover)">
+      <span style="flex:none; width:14px; height:14px; background-color:currentColor; -webkit-mask:{{ locIcon }} center / contain no-repeat; mask:{{ locIcon }} center / contain no-repeat;"></span>
+      <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ targetLabel }}</span>
+      <span style="flex:none; width:12px; height:12px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevron-down.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevron-down.svg') center / contain no-repeat;"></span>
+    </button>
+    <div style="flex:1;"></div>
+    <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ rescan }}" style="height:26px; padding:0 8px; display:flex; align-items:center; gap:6px; border:none; border-radius:6px; background:transparent; color:var(--fg-muted); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)">
+        <span style="flex:none; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/refresh-cw.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/refresh-cw.svg') center / contain no-repeat;"></span>
+        <span style="display:{{ nameDisplay }};">Rescan</span>
+      </button>
+    </sc-if>
+    <button onClick="{{ openSettings }}" style="width:26px; height:26px; flex:none; display:flex; align-items:center; justify-content:center; border:none; border-radius:6px; background:transparent; color:var(--fg-muted); cursor:pointer;" style-hover="background:var(--hover)">
+      <span style="width:16px; height:16px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/settings.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/settings.svg') center / contain no-repeat;"></span>
+    </button>
+  </div>
+
+  <div style="flex:1; min-height:0; overflow:auto; display:flex; flex-direction:column; background:var(--bg);">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="width:100%; max-width:760px; margin:0 auto; padding:56px 40px 32px; box-sizing:border-box; display:flex; flex-direction:column; flex:1 0 auto; line-height:1.25;">
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div style="width:48px; height:48px; border-radius:12px; background:var(--accent); color:var(--accent-fg); font-size:24px; font-weight:700; display:flex; align-items:center; justify-content:center; flex:none;">V</div>
+          <div style="display:flex; flex-direction:column; gap:4px; min-width:0;">
+            <div style="font-size:26px; font-weight:600; letter-spacing:-0.01em;">Vano</div>
+            <div style="font-size:14px; color:var(--fg-muted);">See what fills your disk and clear it safely.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:36px; display:flex; flex-direction:column; gap:6px;">
+          <div style="padding:0 10px 6px; font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">What to scan</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px;">
+            <sc-for list="{{ locations }}" as="l" hint-placeholder-count="3">
+              <div onClick="{{ l.pick }}" style="padding:14px 16px; border-radius:10px; background:{{ l.bg }}; border:1px {{ l.borderStyle }} {{ l.line }}; box-shadow:{{ l.ring }}; display:flex; flex-direction:column; gap:10px; cursor:pointer; min-width:0;" style-hover="border-color:var(--border-strong)">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="flex:none; width:16px; height:16px; color:{{ l.iconColor }}; background-color:currentColor; -webkit-mask:{{ l.icon }} center / contain no-repeat; mask:{{ l.icon }} center / contain no-repeat;"></span>
+                  <span style="font-weight:500; white-space:nowrap;">{{ l.title }}</span>
+                </div>
+                <div style="font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg-subtle);">{{ l.path }}</div>
+                <div style="display:{{ l.barDisplay }}; height:4px; border-radius:2px; background:var(--hover); overflow:hidden;">
+                  <div style="height:100%; width:{{ l.pct }}; background:var(--fg-muted); border-radius:2px;"></div>
+                </div>
+                <div style="font-size:12px; color:var(--fg-muted);">{{ l.caption }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ diskNote }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:6px; display:flex; gap:8px; align-items:flex-start; padding:9px 12px; border-radius:8px; background:var(--info-subtle); color:var(--info); font-size:12.5px; line-height:1.4;">
+              <span style="flex:none; margin-top:1px; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/info.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/info.svg') center / contain no-repeat;"></span>
+              <span>macOS asks for Full Disk Access to read system folders. Anything Vano cannot read is counted as Not scanned.</span>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="margin-top:20px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button onClick="{{ scan }}" style="height:32px; padding:0 14px; min-width:100px; display:flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:8px; background:var(--accent); color:var(--accent-fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--accent-hover)">
+            <span>Scan {{ targetLabel }}</span>
+            <span style="position:relative; top:1px; font-family:var(--mono, 'Geist Mono', monospace); font-size:10.5px; opacity:.75;">↵</span>
+          </button>
+        </div>
+
+        <div style="margin-top:36px; display:flex; flex-direction:column; gap:6px;">
+          <div style="padding:0 10px 6px; font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">Recent</div>
+          <sc-for list="{{ recents }}" as="r" hint-placeholder-count="2">
+            <div onClick="{{ r.open }}" style="height:34px; padding:0 10px; border-radius:7px; display:flex; align-items:center; gap:12px; cursor:pointer;" style-hover="background:var(--hover)">
+              <span style="flex:none; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.name }}</span>
+              <span style="flex:1; min-width:0; font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg-subtle); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.meta }}</span>
+              <span style="flex:none; white-space:nowrap; font-size:12px; color:var(--accent-text);">Open results</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="flex:1; min-height:24px;"></div>
+        <div style="border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--fg-muted); text-wrap:pretty;">Vano only reads file sizes. Nothing is removed until you confirm, and removed items go to the Trash.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isScanning }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1 0 auto; display:flex; flex-direction:column; gap:16px; padding:16px; box-sizing:border-box;">
+        <div style="position:relative; flex:none; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--raised);">
+          <div style="display:grid; grid-template-columns:{{ statCols }}; gap:1px; background:var(--border); border-bottom:1px solid var(--border);">
+            <sc-for list="{{ scanStats }}" as="s" hint-placeholder-count="4">
+              <div style="background:var(--raised); padding:14px 16px 16px; min-width:0; display:flex; flex-direction:column; gap:8px;">
+                <div style="font-size:12.5px; color:var(--fg-muted); white-space:nowrap;">{{ s.label }}</div>
+                <div style="display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;">
+                  <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:26px; font-weight:500; letter-spacing:-0.02em; white-space:nowrap; font-variant-numeric:tabular-nums;">{{ s.value }}</span>
+                  <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg-subtle); white-space:nowrap;">{{ s.sub }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; padding:9px 16px 11px; min-width:0;">
+            <sc-if value="{{ scanDone }}" hint-placeholder-val="{{ false }}">
+              <span style="flex:none; width:14px; height:14px; color:var(--success); background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/circle-check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/circle-check.svg') center / contain no-repeat;"></span>
+            </sc-if>
+            <sc-if value="{{ scanRunning }}" hint-placeholder-val="{{ true }}">
+              <span style="flex:none; width:12px; height:12px; border-radius:50%; box-sizing:border-box; border:1.5px solid var(--hover); border-top-color:var(--accent); animation:sz-spin .8s linear infinite;"></span>
+            </sc-if>
+            <span style="flex:1; min-width:0; font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ scanPath }}</span>
+            <span style="flex:none; white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg); font-variant-numeric:tabular-nums;">{{ scanPct }}</span>
+          </div>
+          <div style="position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--hover);">
+            <div style="height:100%; width:{{ scanBar }}; background:var(--accent); transition:width .2s linear;"></div>
+          </div>
+        </div>
+
+        <div style="flex:1 0 auto; display:flex; flex-wrap:wrap; gap:16px;">
+          <div style="flex:999 1 520px; min-width:0; min-height:460px; background:var(--raised); border:1px solid var(--border); border-radius:10px; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="display:flex; align-items:flex-start; gap:12px; padding:14px 16px; flex-wrap:wrap;">
+              <div style="flex:1; min-width:180px;">
+                <div style="font-size:15px; font-weight:600;">Live view</div>
+                <div style="margin-top:3px; font-size:12px; color:var(--fg-muted);">Sizes grow as folders are read. Nothing on disk changes.</div>
+              </div>
+              <div style="display:flex; padding:2px; gap:2px; border-radius:7px; background:var(--surface); border:1px solid var(--border);">
+                <sc-for list="{{ styleSegs }}" as="g" hint-placeholder-count="3">
+                  <div onClick="{{ g.pick }}" style="height:22px; padding:0 10px; display:flex; align-items:center; border-radius:5px; font-size:12px; cursor:pointer; background:{{ g.bg }}; color:{{ g.color }}; box-shadow:{{ g.shadow }};" style-hover="color:var(--fg)">{{ g.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:9px 16px; border-top:1px solid var(--border); font-size:13px; color:var(--fg-muted);">
+              <span>{{ rootLabel }}</span>
+              <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; font-variant-numeric:tabular-nums;">{{ countedLabel }}</span>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; padding:0 16px 16px; min-height:0;">
+              <sc-if value="{{ styleTreemap }}" hint-placeholder-val="{{ true }}">
+                <div ref="{{ tmRef }}" style="position:relative; flex:1; min-height:300px; overflow:hidden;">
+                  <sc-for list="{{ scanTiles }}" as="t" hint-placeholder-count="0">
+                    <div style="position:absolute; box-sizing:border-box; overflow:hidden; left:{{ t.x }}px; top:{{ t.y }}px; width:{{ t.w }}px; height:{{ t.h }}px; opacity:{{ t.op }}; background-color:{{ t.bg }}; background-image:{{ t.img }}; border:1px solid {{ t.line }}; border-radius:{{ t.r }}px; transition:{{ tmTransition }};">
+                      <div style="display:{{ t.headDisplay }}; align-items:center; justify-content:space-between; gap:6px; padding:6px 8px 0; min-width:0;">
+                        <span style="min-width:0; font-size:{{ t.labelSize }}px; font-weight:{{ t.labelWeight }}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ t.label }}</span>
+                        <span style="display:{{ t.headSizeDisplay }}; flex:none; font-family:var(--mono, 'Geist Mono', monospace); font-size:11px; color:var(--fg-subtle);">{{ t.sizeLabel }}</span>
+                      </div>
+                      <div style="display:{{ t.bigDisplay }}; position:absolute; left:8px; bottom:6px; font-family:var(--mono, 'Geist Mono', monospace); font-weight:500; font-size:{{ t.bigFont }}px; letter-spacing:-0.02em; white-space:nowrap;">{{ t.sizeLabel }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ styleRings }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; padding:12px 0;">
+                  <div style="position:relative; width:248px; height:248px; border-radius:50%; background:{{ ringGrad }}; flex:none;">
+                    <div style="position:absolute; inset:0; border-radius:50%; background:{{ cometGrad }}; -webkit-mask:radial-gradient(circle, transparent 103px, #000 104px); mask:radial-gradient(circle, transparent 103px, #000 104px);"></div>
+                    <div style="position:absolute; inset:20px; border-radius:50%; background:var(--raised); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; box-shadow:0 0 0 1px var(--border);">
+                      <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:30px; font-weight:500; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;">{{ countedShort }}</span>
+                      <span style="font-size:12px; color:var(--fg-subtle);">{{ ringSub }}</span>
+                    </div>
+                  </div>
+                  <div style="width:100%; max-width:520px; display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:8px 20px;">
+                    <sc-for list="{{ ringLegend }}" as="c" hint-placeholder-count="6">
+                      <div style="display:flex; align-items:center; gap:8px; min-width:0; font-size:12px; color:var(--fg-muted);">
+                        <span style="flex:none; width:8px; height:8px; border-radius:2px; background:{{ c.dot }};"></span>
+                        <span style="flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ c.name }}</span>
+                        <span style="font-family:var(--mono, 'Geist Mono', monospace); color:var(--fg); font-variant-numeric:tabular-nums;">{{ c.value }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ styleRanking }}" hint-placeholder-val="{{ false }}">
+                <div style="position:relative; height:420px; flex:none;">
+                  <sc-for list="{{ rankRows }}" as="k" hint-placeholder-count="0">
+                    <div style="position:absolute; left:0; right:0; height:36px; top:{{ k.top }}px; opacity:{{ k.op }}; display:flex; align-items:center; gap:12px; transition:top .5s cubic-bezier(.2,.7,.2,1), opacity .4s ease;">
+                      <span style="flex:none; width:18px; text-align:right; font-family:var(--mono, 'Geist Mono', monospace); font-size:11px; color:var(--fg-subtle);">{{ k.rank }}</span>
+                      <span style="flex:none; width:8px; height:8px; border-radius:2px; background:{{ k.dot }};"></span>
+                      <span style="flex:none; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ k.name }}</span>
+                      <div style="flex:1; min-width:40px; height:8px; border-radius:4px; background:var(--hover); overflow:hidden;">
+                        <div style="height:100%; width:{{ k.barW }}; border-radius:4px; background:{{ k.dot }}; transition:width .25s linear;"></div>
+                      </div>
+                      <span style="flex:none; width:72px; text-align:right; font-family:var(--mono, 'Geist Mono', monospace); font-size:12.5px; font-weight:500; font-variant-numeric:tabular-nums;">{{ k.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="flex:1 1 320px; min-width:0; min-height:420px; background:var(--raised); border:1px solid var(--border); border-radius:10px; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="padding:14px 16px; border-bottom:1px solid var(--border);">
+              <div style="font-size:15px; font-weight:600;">Found so far</div>
+              <div style="margin-top:3px; font-size:12px; color:var(--fg-muted);">Recommendations appear as each folder finishes.</div>
+            </div>
+            <div style="flex:1; min-height:0; overflow:auto;">
+              <sc-if value="{{ foundEmpty }}" hint-placeholder-val="{{ true }}">
+                <div style="padding:28px 16px; font-size:12.5px; color:var(--fg-subtle); text-align:center;">Reading the first folders…</div>
+              </sc-if>
+              <sc-for list="{{ found }}" as="f" hint-placeholder-count="0">
+                <div style="display:flex; align-items:center; gap:12px; padding:10px 16px; border-bottom:1px solid var(--border); animation:sz-in .4s ease both;">
+                  <span style="flex:none; width:6px; height:6px; border-radius:3px; background:{{ f.dot }};"></span>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ f.name }}</div>
+                    <div style="margin-top:2px; font-family:var(--mono, 'Geist Mono', monospace); font-size:11.5px; color:var(--fg-subtle); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ f.path }}</div>
+                  </div>
+                  <span style="flex:none; white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace); font-size:13px; font-weight:500;">{{ f.size }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="padding:12px 16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <div style="flex:1; min-width:140px; font-size:12.5px; color:var(--fg-muted);"><span style="font-family:var(--mono, 'Geist Mono', monospace); font-weight:500; color:var(--fg);">{{ foundTotal }}</span> reclaimable so far</div>
+              <sc-if value="{{ scanRunning }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ cancelScan }}" style="height:30px; padding:0 12px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)">Cancel scan</button>
+              </sc-if>
+              <sc-if value="{{ scanDone }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ viewResults }}" style="height:30px; padding:0 12px; border-radius:8px; border:none; background:var(--accent); color:var(--accent-fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--accent-hover)">View results</button>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1 0 auto; display:flex; flex-direction:column; gap:16px; padding:16px; box-sizing:border-box;">
+        <div style="flex:none; display:grid; grid-template-columns:{{ statCols }}; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div style="background:var(--raised); padding:14px 16px 16px; min-width:0; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--fg-muted);">
+                <span style="display:{{ s.dotDisplay }}; width:6px; height:6px; border-radius:3px; background:{{ s.dot }};"></span>
+                <span style="white-space:nowrap;">{{ s.label }}</span>
+              </div>
+              <div style="display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;">
+                <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:26px; font-weight:500; letter-spacing:-0.02em; white-space:nowrap;">{{ s.value }}</span>
+                <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:{{ s.subColor }}; white-space:nowrap;">{{ s.sub }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="flex:1 0 auto; display:flex; flex-wrap:wrap; gap:16px;">
+          <div style="flex:999 1 520px; min-width:0; min-height:480px; background:var(--raised); border:1px solid var(--border); border-radius:10px; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="display:flex; align-items:flex-start; gap:12px; padding:14px 16px; flex-wrap:wrap;">
+              <div style="flex:1; min-width:180px;">
+                <div style="font-size:15px; font-weight:600;">Explorer</div>
+                <div style="margin-top:3px; font-size:12px; color:var(--fg-muted);">{{ explorerSub }}</div>
+              </div>
+              <div style="display:flex; padding:2px; gap:2px; border-radius:7px; background:var(--surface); border:1px solid var(--border);">
+                <sc-for list="{{ colorSegs }}" as="g" hint-placeholder-count="2">
+                  <div onClick="{{ g.pick }}" style="height:22px; padding:0 10px; display:flex; align-items:center; border-radius:5px; font-size:12px; cursor:pointer; background:{{ g.bg }}; color:{{ g.color }}; box-shadow:{{ g.shadow }};" style-hover="color:var(--fg)">{{ g.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; padding:9px 16px; border-top:1px solid var(--border); font-size:13px; color:var(--fg-muted); min-width:0;">
+              <span onClick="{{ unzoom }}" style="cursor:pointer; white-space:nowrap;" style-hover="color:var(--fg)">{{ rootLabel }}</span>
+              <sc-if value="{{ zoomed }}" hint-placeholder-val="{{ false }}">
+                <span style="color:var(--fg-subtle);">/</span>
+                <span style="color:var(--fg); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ zoomName }}</span>
+              </sc-if>
+              <span style="flex:1;"></span>
+              <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:12px;">{{ explorerTotal }}</span>
+            </div>
+            <div style="flex:1; display:flex; padding:0 16px; min-height:0;">
+              <div ref="{{ tmRef }}" style="position:relative; flex:1; min-height:300px; overflow:hidden;">
+                <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="0">
+                  <div onClick="{{ t.onClick }}" style="position:absolute; box-sizing:border-box; overflow:hidden; cursor:pointer; left:{{ t.x }}px; top:{{ t.y }}px; width:{{ t.w }}px; height:{{ t.h }}px; opacity:{{ t.op }}; background-color:{{ t.bg }}; background-image:{{ t.img }}; border:1px solid {{ t.line }}; border-radius:{{ t.r }}px; transition:{{ tmTransition }};" style-hover="border-color:var(--fg-subtle)">
+                    <div style="display:{{ t.headDisplay }}; align-items:center; justify-content:space-between; gap:6px; padding:6px 8px 0; min-width:0;">
+                      <span style="min-width:0; font-size:{{ t.labelSize }}px; font-weight:{{ t.labelWeight }}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ t.label }}</span>
+                      <span style="display:{{ t.headSizeDisplay }}; flex:none; font-family:var(--mono, 'Geist Mono', monospace); font-size:11px; color:var(--fg-subtle);">{{ t.sizeLabel }}</span>
+                    </div>
+                    <div style="display:{{ t.bigDisplay }}; position:absolute; left:8px; bottom:6px; font-family:var(--mono, 'Geist Mono', monospace); font-weight:500; font-size:{{ t.bigFont }}px; letter-spacing:-0.02em; white-space:nowrap;">{{ t.sizeLabel }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px 18px; padding:12px 16px 14px;">
+              <sc-for list="{{ legend }}" as="c" hint-placeholder-count="6">
+                <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--fg-muted);">
+                  <span style="flex:none; width:10px; height:10px; box-sizing:border-box; border-radius:3px; background-color:{{ c.bg }}; background-image:{{ c.img }}; border:1px solid {{ c.line }};"></span>
+                  <span>{{ c.name }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="flex:1 1 340px; min-width:0; min-height:440px; background:var(--raised); border:1px solid var(--border); border-radius:10px; display:flex; flex-direction:column; overflow:hidden;">
+            <sc-if value="{{ showList }}" hint-placeholder-val="{{ true }}">
+              <div style="padding:14px 16px; border-bottom:1px solid var(--border);">
+                <div style="font-size:15px; font-weight:600;">Recommendations</div>
+                <div style="margin-top:3px; font-size:12px; color:var(--fg-muted);">Select items to move to the Trash.</div>
+              </div>
+              <div style="flex:1; min-height:0; overflow:auto;">
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px 8px;">
+                  <span style="height:22px; padding:0 8px; display:flex; align-items:center; gap:5px; border-radius:6px; background:var(--success-subtle); color:var(--success); font-size:12px; font-weight:600;"><span style="width:6px; height:6px; border-radius:3px; background:currentColor;"></span>Safe to remove</span>
+                  <span style="white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg-muted);">{{ safeTotal }}</span>
+                </div>
+                <sc-if value="{{ safeEmpty }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:10px 16px 14px; font-size:12.5px; color:var(--fg-subtle);">Nothing left in this group.</div>
+                </sc-if>
+                <sc-for list="{{ safeRows }}" as="r" hint-placeholder-count="5">
+                  <div onClick="{{ r.toggle }}" style="display:flex; align-items:center; gap:12px; padding:10px 10px 10px 16px; border-top:1px solid var(--border); cursor:pointer;" style-hover="background:var(--hover)">
+                    <span style="flex:none; width:16px; height:16px; box-sizing:border-box; border-radius:4px; display:flex; align-items:center; justify-content:center; background:{{ r.cbBg }}; border:1px solid {{ r.cbLine }}; color:var(--accent-fg);">
+                      <span style="display:{{ r.cbCheck }}; width:12px; height:12px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat;"></span>
+                    </span>
+                    <div style="flex:1; min-width:0;">
+                      <div style="font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.name }}</div>
+                      <div style="margin-top:2px; font-family:var(--mono, 'Geist Mono', monospace); font-size:11.5px; color:var(--fg-subtle); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.path }}</div>
+                    </div>
+                    <span style="flex:none; white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace); font-size:13px; font-weight:500;">{{ r.size }}</span>
+                    <span onClick="{{ r.open }}" style="flex:none; width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--fg-subtle);" style-hover="background:var(--pressed); color:var(--fg)">
+                      <span style="width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevron-right.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevron-right.svg') center / contain no-repeat;"></span>
+                    </span>
+                  </div>
+                </sc-for>
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 16px 8px; border-top:1px solid var(--border);">
+                  <span style="height:22px; padding:0 8px; display:flex; align-items:center; gap:5px; border-radius:6px; background:var(--warning-subtle); color:var(--warning); font-size:12px; font-weight:600;"><span style="width:6px; height:6px; border-radius:3px; background:currentColor;"></span>Review first</span>
+                  <span style="white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg-muted);">{{ reviewTotal }}</span>
+                </div>
+                <sc-if value="{{ reviewEmpty }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:10px 16px 14px; font-size:12.5px; color:var(--fg-subtle);">Nothing left in this group.</div>
+                </sc-if>
+                <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="7">
+                  <div onClick="{{ r.toggle }}" style="display:flex; align-items:center; gap:12px; padding:10px 10px 10px 16px; border-top:1px solid var(--border); cursor:pointer;" style-hover="background:var(--hover)">
+                    <span style="flex:none; width:16px; height:16px; box-sizing:border-box; border-radius:4px; display:flex; align-items:center; justify-content:center; background:{{ r.cbBg }}; border:1px solid {{ r.cbLine }}; color:var(--accent-fg);">
+                      <span style="display:{{ r.cbCheck }}; width:12px; height:12px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat;"></span>
+                    </span>
+                    <div style="flex:1; min-width:0;">
+                      <div style="font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.name }}</div>
+                      <div style="margin-top:2px; font-family:var(--mono, 'Geist Mono', monospace); font-size:11.5px; color:var(--fg-subtle); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.path }}</div>
+                    </div>
+                    <span style="flex:none; white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace); font-size:13px; font-weight:500;">{{ r.size }}</span>
+                    <span onClick="{{ r.open }}" style="flex:none; width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--fg-subtle);" style-hover="background:var(--pressed); color:var(--fg)">
+                      <span style="width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevron-right.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevron-right.svg') center / contain no-repeat;"></span>
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="padding:12px 16px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
+                <div style="font-size:12.5px; color:var(--fg-muted);"><span style="font-family:var(--mono, 'Geist Mono', monospace); font-weight:500; color:var(--fg);">{{ selTotal }}</span> selected · {{ selCount }}</div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                  <button onClick="{{ selectSafe }}" style="height:30px; padding:0 12px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)">Select safe</button>
+                  <button onClick="{{ trashSelected }}" style="height:30px; padding:0 12px; display:flex; align-items:center; gap:6px; border-radius:8px; border:none; background:var(--accent); color:var(--accent-fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap; opacity:{{ trashOpacity }};" style-hover="background:var(--accent-hover)">
+                    <span style="width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/trash-2.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/trash-2.svg') center / contain no-repeat;"></span>
+                    <span>Move to Trash</span>
+                  </button>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ showDetail }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; align-items:center; padding:9px 10px; border-bottom:1px solid var(--border);">
+                <button onClick="{{ closeDetail }}" style="height:26px; padding:0 8px 0 4px; display:flex; align-items:center; gap:4px; border:none; border-radius:6px; background:transparent; color:var(--fg-muted); font-size:13px; cursor:pointer;" style-hover="background:var(--hover)">
+                  <span style="width:16px; height:16px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevron-left.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevron-left.svg') center / contain no-repeat;"></span>
+                  <span>Recommendations</span>
+                </button>
+              </div>
+              <div style="flex:1; min-height:0; overflow:auto; padding:16px; display:flex; flex-direction:column; gap:16px;">
+                <div>
+                  <div style="font-size:15px; font-weight:600;">{{ d.name }}</div>
+                  <div style="margin-top:4px; font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg-subtle); word-break:break-all;">{{ d.path }}</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                  <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:28px; font-weight:500; letter-spacing:-0.02em;">{{ d.size }}</span>
+                  <span style="height:22px; padding:0 8px; display:flex; align-items:center; gap:5px; border-radius:6px; background:{{ d.badgeBg }}; color:{{ d.badgeFg }}; font-size:12px; font-weight:600;"><span style="width:6px; height:6px; border-radius:3px; background:{{ d.badgeDot }};"></span>{{ d.badge }}</span>
+                </div>
+                <div style="font-size:13px; color:var(--fg-muted); line-height:1.45; text-wrap:pretty;">{{ d.desc }}</div>
+                <sc-if value="{{ d.hasReason }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; gap:8px; align-items:flex-start; padding:9px 12px; border-radius:8px; background:var(--warning-subtle); color:var(--warning); font-size:12.5px; line-height:1.4;">
+                    <span style="flex:none; margin-top:1px; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/triangle-alert.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/triangle-alert.svg') center / contain no-repeat;"></span>
+                    <span>{{ d.reason }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ d.hasInside }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">Largest inside</div>
+                    <sc-for list="{{ d.inside }}" as="i" hint-placeholder-count="3">
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; justify-content:space-between; gap:10px; font-size:12px;">
+                          <span style="font-family:var(--mono, 'Geist Mono', monospace); color:var(--fg-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ i.name }}</span>
+                          <span style="flex:none; white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace);">{{ i.size }}</span>
+                        </div>
+                        <div style="height:4px; border-radius:2px; background:var(--hover); overflow:hidden;"><div style="height:100%; width:{{ i.pct }}; border-radius:2px; background:{{ d.barColor }};"></div></div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ d.hasLinks }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">Covered by</div>
+                    <sc-for list="{{ d.links }}" as="k" hint-placeholder-count="1">
+                      <div onClick="{{ k.open }}" style="display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--border); border-radius:8px; cursor:pointer;" style-hover="background:var(--hover)">
+                        <span style="flex:none; width:6px; height:6px; border-radius:3px; background:{{ k.dot }};"></span>
+                        <span style="flex:1; min-width:0; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ k.name }}</span>
+                        <span style="flex:none; white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace); font-size:12px; color:var(--fg-muted);">{{ k.size }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <div style="display:grid; grid-template-columns:auto 1fr; gap:6px 16px; font-size:12.5px;">
+                  <sc-for list="{{ d.meta }}" as="m" hint-placeholder-count="2">
+                    <span style="color:var(--fg-subtle);">{{ m.k }}</span>
+                    <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:12px;">{{ m.v }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="padding:12px 16px; border-top:1px solid var(--border); display:flex; gap:8px; flex-wrap:wrap;">
+                <button style="height:30px; padding:0 12px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)">Show in Finder</button>
+                <button onClick="{{ d.toggleSel }}" style="display:{{ d.selDisplay }}; height:30px; padding:0 12px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)">{{ d.selLabel }}</button>
+                <button onClick="{{ d.trash }}" style="height:30px; padding:0 12px; display:flex; align-items:center; gap:6px; border-radius:8px; border:none; background:var(--accent); color:var(--accent-fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--accent-hover)">
+                  <span style="width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/trash-2.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/trash-2.svg') center / contain no-repeat;"></span>
+                  <span>Move to Trash</span>
+                </button>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="flex:none; height:24px; display:flex; align-items:center; gap:16px; padding:0 12px; background:var(--surface); border-top:1px solid var(--border); font-size:11.5px; color:var(--fg-subtle); white-space:nowrap; overflow:hidden;">
+    <div style="display:flex; align-items:center; gap:6px; min-width:0;">
+      <span style="flex:none; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/hard-drive.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/hard-drive.svg') center / contain no-repeat;"></span>
+      <span style="overflow:hidden; text-overflow:ellipsis;">{{ statusLeft }}</span>
+    </div>
+    <div style="flex:1;"></div>
+    <div style="overflow:hidden; text-overflow:ellipsis;">{{ statusRight }}</div>
+  </div>
+
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeConfirm }}" style="position:absolute; inset:0; background:var(--scrim); display:flex; align-items:center; justify-content:center; padding:16px; z-index:10;">
+      <div onClick="{{ stop }}" style="width:100%; max-width:480px; max-height:100%; display:flex; flex-direction:column; background:var(--overlay); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); overflow:hidden;">
+        <div style="flex:none; height:52px; display:flex; align-items:center; gap:12px; padding:0 12px 0 20px; border-bottom:1px solid var(--border);">
+          <div style="flex:1; font-size:15px; font-weight:600;">{{ confirmTitle }}</div>
+          <button onClick="{{ closeConfirm }}" style="width:28px; height:28px; display:flex; align-items:center; justify-content:center; border:none; border-radius:6px; background:transparent; color:var(--fg-muted); cursor:pointer;" style-hover="background:var(--hover)">
+            <span style="width:16px; height:16px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/x.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/x.svg') center / contain no-repeat;"></span>
+          </button>
+        </div>
+        <div style="flex:1; min-height:0; overflow:auto; padding:20px; display:flex; flex-direction:column; gap:14px;">
+          <div style="font-size:13px; color:var(--fg-muted); line-height:1.45;">These items go to the Trash. You can put them back from there until you empty it.</div>
+          <div style="border:1px solid var(--border); border-radius:8px; background:var(--raised); overflow:hidden;">
+            <sc-for list="{{ confirmItems }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--border);">
+                <span style="flex:none; width:6px; height:6px; border-radius:3px; background:{{ c.dot }};"></span>
+                <div style="flex:1; min-width:0;">
+                  <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ c.name }}</div>
+                  <div style="font-family:var(--mono, 'Geist Mono', monospace); font-size:11px; color:var(--fg-subtle); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ c.path }}</div>
+                </div>
+                <span style="flex:none; white-space:nowrap; font-family:var(--mono, 'Geist Mono', monospace); font-size:12.5px;">{{ c.size }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:var(--surface);">
+              <span style="font-weight:600;">Total</span>
+              <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:13px; font-weight:500;">{{ confirmTotal }}</span>
+            </div>
+          </div>
+          <sc-if value="{{ confirmHasReview }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; gap:8px; align-items:flex-start; padding:9px 12px; border-radius:8px; background:var(--warning-subtle); color:var(--warning); font-size:12.5px; line-height:1.4;">
+              <span style="flex:none; margin-top:1px; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/triangle-alert.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/triangle-alert.svg') center / contain no-repeat;"></span>
+              <span>{{ confirmReviewText }}</span>
+            </div>
+          </sc-if>
+        </div>
+        <div style="flex:none; min-height:52px; display:flex; align-items:center; justify-content:flex-end; gap:8px; padding:0 20px; border-top:1px solid var(--border);">
+          <button onClick="{{ closeConfirm }}" style="height:30px; padding:0 12px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)">Cancel</button>
+          <button onClick="{{ doTrash }}" style="height:30px; padding:0 12px; display:flex; align-items:center; gap:8px; border-radius:8px; border:none; background:var(--danger); color:var(--danger-fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:color-mix(in oklab, var(--danger) 88%, #000)">
+            <sc-if value="{{ trashing }}" hint-placeholder-val="{{ false }}">
+              <span style="flex:none; width:12px; height:12px; border-radius:50%; box-sizing:border-box; border:1.5px solid rgba(255,255,255,.35); border-top-color:#fff; animation:sz-spin .8s linear infinite;"></span>
+            </sc-if>
+            <span>{{ confirmBtn }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+
+  <sc-if value="{{ sOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeSettings }}" style="position:absolute; inset:0; z-index:12; background:var(--scrim); display:flex; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+      <div onClick="{{ closeSelects }}" data-screen-label="04 Settings" style="position:relative; width:100%; max-width:800px; height:720px; max-height:100%; display:flex; flex-direction:{{ sDir }}; background:var(--overlay); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); overflow:hidden;">
+        <div style="flex:none; width:{{ sNavW }}; display:flex; flex-direction:{{ sNavDir }}; gap:2px; padding:{{ sNavPad }}; box-sizing:border-box; background:var(--surface); border-right:{{ sNavBR }}; border-bottom:{{ sNavBB }}; overflow-x:auto;">
+          <div style="display:{{ sWideDisplay }}; padding:2px 8px 10px; font-size:14px; font-weight:600;">Settings</div>
+          <sc-for list="{{ sNav }}" as="n" hint-placeholder-count="4">
+            <div onClick="{{ n.pick }}" style="flex:none; height:28px; padding:0 8px; display:flex; align-items:center; gap:8px; border-radius:7px; cursor:pointer; white-space:nowrap; background:{{ n.bg }}; color:{{ n.color }}; font-weight:{{ n.weight }};" style-hover="background:{{ n.hover }}"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:{{ n.icon }} center / contain no-repeat; mask:{{ n.icon }} center / contain no-repeat;"></span><span>{{ n.label }}</span></div>
+          </sc-for>
+          <div style="display:{{ sWideDisplay }}; flex:1;"></div>
+          <div style="display:{{ sWideDisplay }}; padding:8px; font-size:11.5px; line-height:1.5; color:var(--fg-subtle);"><div>Saved to</div><div style="font-family:var(--mono, 'Geist Mono', monospace); word-break:break-all;">~/Library/Application Support/Vano/settings.toml</div></div>
+        </div>
+        <div style="flex:1; min-width:0; min-height:0; display:flex; flex-direction:column;">
+          <div style="flex:none; height:52px; display:flex; align-items:center; justify-content:space-between; padding:0 12px 0 20px; border-bottom:1px solid var(--border);">
+            <div style="font-size:15px; font-weight:600;">{{ sTitle }}</div>
+            <button onClick="{{ closeSettings }}" style="width:28px; height:28px; display:flex; align-items:center; justify-content:center; border:none; border-radius:6px; background:transparent; color:var(--fg-muted); cursor:pointer;" style-hover="background:var(--hover)"><span style="flex:none; display:block; width:16px; height:16px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/x.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/x.svg') center / contain no-repeat;"></span></button>
+          </div>
+          <div style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:20px; display:flex; flex-direction:column; gap:22px;">
+            <sc-if value="{{ sAppearance }}" hint-placeholder-val="{{ true }}"><div style="display:flex; flex-direction:column; gap:14px;">
+  <div style="font-weight:500;">Language</div>
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;"><div>Display language</div><div style="font-size:12px; color:var(--fg-muted); text-wrap:pretty;">Automatic follows your system language.</div></div>
+  <div style="flex:none;"><div style="position:relative; flex:none;">
+  <button onClick="{{ selLang.toggle }}" style="width:220px; height:30px; padding:0 10px; display:flex; align-items:center; justify-content:space-between; gap:8px; border-radius:7px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; cursor:pointer; box-sizing:border-box;" style-hover="background:var(--hover)">
+    <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:{{ selLang.font }};">{{ selLang.label }}</span>
+    <span style="color:var(--fg-subtle);"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevrons-up-down.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevrons-up-down.svg') center / contain no-repeat;"></span></span>
+  </button>
+  <sc-if value="{{ selLang.open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ stop }}" style="position:absolute; right:0; top:34px; z-index:30; width:240px; padding:4px; box-sizing:border-box; background:var(--overlay); border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow); display:flex; flex-direction:column;">
+      <sc-for list="{{ selLang.options }}" as="o" hint-placeholder-count="4">
+        <div onClick="{{ o.pick }}" style="height:28px; padding:0 8px; display:flex; align-items:center; gap:8px; border-radius:6px; cursor:pointer;" style-hover="background:var(--hover)">
+          <span style="flex:none; width:13px; display:flex; justify-content:center; color:var(--accent-text);"><span style="display:{{ o.check }};"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat;"></span></span></span>
+          <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:{{ o.font }};">{{ o.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+</div></div>
+</div>
+</div>
+<div style="flex:none; height:1px; background:var(--border);"></div>
+<div style="display:flex; flex-direction:column; gap:10px;">
+  <div style="display:flex; flex-direction:column; gap:2px;"><div style="font-weight:500;">Theme</div><div style="font-size:12px; color:var(--fg-muted);">System follows your OS light/dark setting and switches live.</div></div>
+  <div style="display:flex; gap:12px;">
+  <sc-for list="{{ themeCards }}" as="c" hint-placeholder-count="3">
+    <div onClick="{{ c.pick }}" style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; cursor:pointer;" style-hover="opacity:.85" style-active="opacity:.7">
+      <div style="height:92px; box-sizing:border-box; display:flex; border-radius:10px; border:{{ c.frameBorder }}; padding:{{ c.framePad }}; background:{{ c.frameBg }};">
+        <div style="flex:1; display:flex; border-radius:6px; border:1px solid var(--border-strong); overflow:hidden;">
+          <div data-pal="{{ c.pal }}" data-mode="{{ c.left }}" style="flex:1; min-width:0; background:var(--surface); padding:8px; display:flex; flex-direction:column; gap:5px;"><div style="height:5px; width:70%; border-radius:3px; background:var(--border-strong);"></div><div style="height:5px; width:50%; border-radius:3px; background:var(--accent);"></div><div style="height:5px; width:60%; border-radius:3px; background:var(--border-strong);"></div></div>
+          <div data-pal="{{ c.pal }}" data-mode="{{ c.right }}" style="flex:2 1 0; min-width:0; background:var(--bg); padding:8px; display:flex; flex-direction:column; gap:6px;"><div style="height:12px; border-radius:4px; border:1px solid var(--border-strong); box-sizing:border-box;"></div><div style="height:5px; width:80%; border-radius:3px; background:var(--border-strong);"></div><div style="height:5px; width:55%; border-radius:3px; background:var(--border-strong);"></div></div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; min-width:0;"><span style="flex:none; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:{{ c.radio }};"></span><span style="white-space:nowrap;">{{ c.label }}</span></div>
+    </div>
+  </sc-for>
+</div>
+</div>
+<div style="flex:none; height:1px; background:var(--border);"></div>
+<div style="display:flex; flex-direction:column; gap:10px;">
+  <div style="display:flex; flex-direction:column; gap:2px;"><div style="font-weight:500;">Accent</div><div style="font-size:12px; color:var(--fg-muted);">Changes the accent and the neutrals. Treemap and status colors stay the same.</div></div>
+  <div style="display:flex; gap:12px;">
+  <sc-for list="{{ palCards }}" as="c" hint-placeholder-count="3">
+    <div onClick="{{ c.pick }}" style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; cursor:pointer;" style-hover="opacity:.85" style-active="opacity:.7">
+      <div style="height:92px; box-sizing:border-box; display:flex; border-radius:10px; border:{{ c.frameBorder }}; padding:{{ c.framePad }}; background:{{ c.frameBg }};">
+        <div style="flex:1; display:flex; border-radius:6px; border:1px solid var(--border-strong); overflow:hidden;">
+          <div data-pal="{{ c.pal }}" data-mode="{{ c.left }}" style="flex:1; min-width:0; background:var(--surface); padding:8px; display:flex; flex-direction:column; gap:5px;"><div style="height:5px; width:70%; border-radius:3px; background:var(--border-strong);"></div><div style="height:5px; width:50%; border-radius:3px; background:var(--accent);"></div><div style="height:5px; width:60%; border-radius:3px; background:var(--border-strong);"></div></div>
+          <div data-pal="{{ c.pal }}" data-mode="{{ c.right }}" style="flex:2 1 0; min-width:0; background:var(--bg); padding:8px; display:flex; flex-direction:column; gap:6px;"><div style="height:12px; border-radius:4px; border:1px solid var(--border-strong); box-sizing:border-box;"></div><div style="height:5px; width:80%; border-radius:3px; background:var(--border-strong);"></div><div style="height:5px; width:55%; border-radius:3px; background:var(--border-strong);"></div></div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; min-width:0;"><span style="flex:none; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:{{ c.radio }};"></span><span style="white-space:nowrap;">{{ c.label }}</span></div>
+    </div>
+  </sc-for>
+</div>
+</div>
+<div style="flex:none; height:1px; background:var(--border);"></div>
+<div style="display:flex; flex-direction:column; gap:14px;">
+  <div style="font-weight:500;">Interface</div>
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;"><div>Font</div><div style="font-size:12px; color:var(--fg-muted); text-wrap:pretty;">Geist is bundled, so every platform looks the same.</div></div>
+  <div style="flex:none;"><div style="position:relative; flex:none;">
+  <button onClick="{{ selUi.toggle }}" style="width:220px; height:30px; padding:0 10px; display:flex; align-items:center; justify-content:space-between; gap:8px; border-radius:7px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; cursor:pointer; box-sizing:border-box;" style-hover="background:var(--hover)">
+    <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:{{ selUi.font }};">{{ selUi.label }}</span>
+    <span style="color:var(--fg-subtle);"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevrons-up-down.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevrons-up-down.svg') center / contain no-repeat;"></span></span>
+  </button>
+  <sc-if value="{{ selUi.open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ stop }}" style="position:absolute; right:0; top:34px; z-index:30; width:240px; padding:4px; box-sizing:border-box; background:var(--overlay); border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow); display:flex; flex-direction:column;">
+      <sc-for list="{{ selUi.options }}" as="o" hint-placeholder-count="4">
+        <div onClick="{{ o.pick }}" style="height:28px; padding:0 8px; display:flex; align-items:center; gap:8px; border-radius:6px; cursor:pointer;" style-hover="background:var(--hover)">
+          <span style="flex:none; width:13px; display:flex; justify-content:center; color:var(--accent-text);"><span style="display:{{ o.check }};"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat;"></span></span></span>
+          <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:{{ o.font }};">{{ o.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+</div></div>
+</div>
+<div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;"><div>Font size</div></div>
+  <div style="flex:none;"><div style="display:flex; align-items:center; gap:8px;">
+      <button onClick="{{ sizeMinus }}" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:7px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); cursor:pointer;" style-hover="background:var(--hover)"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/minus.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/minus.svg') center / contain no-repeat;"></span></button>
+      <span style="width:64px; text-align:center; font-family:var(--mono, 'Geist Mono', monospace);">{{ uiSizeLabel }}</span>
+      <button onClick="{{ sizePlus }}" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:7px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); cursor:pointer;" style-hover="background:var(--hover)"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/plus.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/plus.svg') center / contain no-repeat;"></span></button>
+    </div></div>
+</div>
+</div>
+<div style="flex:none; height:1px; background:var(--border);"></div>
+<div style="display:flex; flex-direction:column; gap:14px;">
+  <div style="font-weight:500;">Sizes and paths</div>
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;"><div>Monospace font</div><div style="font-size:12px; color:var(--fg-muted); text-wrap:pretty;">Used for sizes, paths and counters.</div></div>
+  <div style="flex:none;"><div style="position:relative; flex:none;">
+  <button onClick="{{ selMono.toggle }}" style="width:220px; height:30px; padding:0 10px; display:flex; align-items:center; justify-content:space-between; gap:8px; border-radius:7px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; cursor:pointer; box-sizing:border-box;" style-hover="background:var(--hover)">
+    <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:{{ selMono.font }};">{{ selMono.label }}</span>
+    <span style="color:var(--fg-subtle);"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevrons-up-down.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevrons-up-down.svg') center / contain no-repeat;"></span></span>
+  </button>
+  <sc-if value="{{ selMono.open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ stop }}" style="position:absolute; right:0; top:34px; z-index:30; width:240px; padding:4px; box-sizing:border-box; background:var(--overlay); border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow); display:flex; flex-direction:column;">
+      <sc-for list="{{ selMono.options }}" as="o" hint-placeholder-count="4">
+        <div onClick="{{ o.pick }}" style="height:28px; padding:0 8px; display:flex; align-items:center; gap:8px; border-radius:6px; cursor:pointer;" style-hover="background:var(--hover)">
+          <span style="flex:none; width:13px; display:flex; justify-content:center; color:var(--accent-text);"><span style="display:{{ o.check }};"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat;"></span></span></span>
+          <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:{{ o.font }};">{{ o.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+</div></div>
+</div>
+<div style="display:flex; align-items:center; gap:12px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; background:var(--bg);">
+      <div style="flex:1; min-width:0;"><div style="font-weight:500;">npm cache</div><div style="margin-top:2px; font-family:var(--mono, 'Geist Mono', monospace); font-size:11.5px; color:var(--fg-subtle);">~/.npm/_cacache</div></div>
+      <span style="font-family:var(--mono, 'Geist Mono', monospace); font-size:13px; font-weight:500;">13.4 GB</span>
+    </div>
+</div></sc-if>
+            <sc-if value="{{ sScanning }}" hint-placeholder-val="{{ false }}"><div style="display:flex; flex-direction:column; gap:10px;">
+  <div style="display:flex; flex-direction:column; gap:2px;"><div style="font-weight:500;">Live view</div><div style="font-size:12px; color:var(--fg-muted);">What the left panel shows while Vano reads the disk. You can also switch it during a scan.</div></div>
+  <div style="display:flex; gap:12px;"><div onClick="{{ scTree.pick }}" style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; cursor:pointer;" style-hover="opacity:.85" style-active="opacity:.7">
+  <div style="height:92px; box-sizing:border-box; display:flex; border-radius:10px; border:{{ scTree.frameBorder }}; padding:{{ scTree.framePad }}; background:{{ scTree.frameBg }};">
+    <div style="flex:1; min-width:0; display:flex; border-radius:6px; border:1px solid var(--border-strong); background:var(--raised); overflow:hidden; padding:6px; box-sizing:border-box;"><div style="flex:1; display:flex; gap:3px;">
+  <div style="flex:3; background:var(--cat-code-fill); border:1px solid var(--cat-code-line); border-radius:3px; box-sizing:border-box;"></div>
+  <div style="flex:2; display:flex; flex-direction:column; gap:3px;">
+    <div style="flex:3; background:var(--cat-ai-fill); border:1px solid var(--cat-ai-line); border-radius:3px; box-sizing:border-box;"></div>
+    <div style="flex:2; display:flex; gap:3px;"><div style="flex:3; background:var(--safe-fill); border:1px solid var(--safe-line); border-radius:3px; box-sizing:border-box; background-image:repeating-linear-gradient(135deg, var(--safe-hatch) 0 1px, transparent 1px 5px);"></div><div style="flex:2; background:var(--cat-media-fill); border:1px solid var(--cat-media-line); border-radius:3px; box-sizing:border-box;"></div></div>
+  </div>
+</div></div>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px; min-width:0;"><span style="flex:none; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:{{ scTree.radio }};"></span><span style="white-space:nowrap;">Treemap</span><span style="display:{{ scTree.defDisplay }}; font-size:12px; color:var(--fg-subtle);">Default</span></div>
+</div><div onClick="{{ scRings.pick }}" style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; cursor:pointer;" style-hover="opacity:.85" style-active="opacity:.7">
+  <div style="height:92px; box-sizing:border-box; display:flex; border-radius:10px; border:{{ scRings.frameBorder }}; padding:{{ scRings.framePad }}; background:{{ scRings.frameBg }};">
+    <div style="flex:1; min-width:0; display:flex; border-radius:6px; border:1px solid var(--border-strong); background:var(--raised); overflow:hidden; padding:6px; box-sizing:border-box;"><div style="flex:1; display:flex; align-items:center; justify-content:center; gap:10px;">
+  <div style="position:relative; width:56px; height:56px; border-radius:50%; background:conic-gradient(var(--cat-code-dot) 0deg 120deg, var(--cat-ai-dot) 120deg 185deg, var(--cat-caches-dot) 185deg 240deg, var(--cat-sdk-dot) 240deg 280deg, var(--hover) 280deg 360deg);"><div style="position:absolute; inset:8px; border-radius:50%; background:var(--raised);"></div></div>
+</div></div>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px; min-width:0;"><span style="flex:none; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:{{ scRings.radio }};"></span><span style="white-space:nowrap;">Rings</span><span style="display:{{ scRings.defDisplay }}; font-size:12px; color:var(--fg-subtle);">Default</span></div>
+</div><div onClick="{{ scRank.pick }}" style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; cursor:pointer;" style-hover="opacity:.85" style-active="opacity:.7">
+  <div style="height:92px; box-sizing:border-box; display:flex; border-radius:10px; border:{{ scRank.frameBorder }}; padding:{{ scRank.framePad }}; background:{{ scRank.frameBg }};">
+    <div style="flex:1; min-width:0; display:flex; border-radius:6px; border:1px solid var(--border-strong); background:var(--raised); overflow:hidden; padding:6px; box-sizing:border-box;"><div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:7px; padding:0 4px;"><div style="display:flex; align-items:center; gap:5px;"><span style="flex:none; width:5px; height:5px; border-radius:1px; background:var(--cat-code-dot);"></span><div style="flex:1; height:5px; border-radius:3px; background:var(--hover);"><div style="width:92%; height:100%; border-radius:3px; background:var(--cat-code-dot);"></div></div></div><div style="display:flex; align-items:center; gap:5px;"><span style="flex:none; width:5px; height:5px; border-radius:1px; background:var(--cat-ai-dot);"></span><div style="flex:1; height:5px; border-radius:3px; background:var(--hover);"><div style="width:64%; height:100%; border-radius:3px; background:var(--cat-ai-dot);"></div></div></div><div style="display:flex; align-items:center; gap:5px;"><span style="flex:none; width:5px; height:5px; border-radius:1px; background:var(--cat-caches-dot);"></span><div style="flex:1; height:5px; border-radius:3px; background:var(--hover);"><div style="width:48%; height:100%; border-radius:3px; background:var(--cat-caches-dot);"></div></div></div><div style="display:flex; align-items:center; gap:5px;"><span style="flex:none; width:5px; height:5px; border-radius:1px; background:var(--cat-sdk-dot);"></span><div style="flex:1; height:5px; border-radius:3px; background:var(--hover);"><div style="width:30%; height:100%; border-radius:3px; background:var(--cat-sdk-dot);"></div></div></div></div></div>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px; min-width:0;"><span style="flex:none; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:{{ scRank.radio }};"></span><span style="white-space:nowrap;">Ranking</span><span style="display:{{ scRank.defDisplay }}; font-size:12px; color:var(--fg-subtle);">Default</span></div>
+</div></div>
+  <div style="font-size:12px; color:var(--fg-muted);">{{ scanDesc }}</div>
+</div></sc-if>
+            <sc-if value="{{ sAdvanced }}" hint-placeholder-val="{{ false }}"><div style="display:flex; flex-direction:column; gap:14px;">
+  <div style="font-weight:500;">Logging</div>
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;"><div>Log level</div><div style="font-size:12px; color:var(--fg-muted); text-wrap:pretty;">Debug and Trace add detail to diagnose problems.</div></div>
+  <div style="flex:none;"><div style="position:relative; flex:none;">
+  <button onClick="{{ selLog.toggle }}" style="width:160px; height:30px; padding:0 10px; display:flex; align-items:center; justify-content:space-between; gap:8px; border-radius:7px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; cursor:pointer; box-sizing:border-box;" style-hover="background:var(--hover)">
+    <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:{{ selLog.font }};">{{ selLog.label }}</span>
+    <span style="color:var(--fg-subtle);"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevrons-up-down.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/chevrons-up-down.svg') center / contain no-repeat;"></span></span>
+  </button>
+  <sc-if value="{{ selLog.open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ stop }}" style="position:absolute; right:0; top:34px; z-index:30; width:180px; padding:4px; box-sizing:border-box; background:var(--overlay); border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow); display:flex; flex-direction:column;">
+      <sc-for list="{{ selLog.options }}" as="o" hint-placeholder-count="4">
+        <div onClick="{{ o.pick }}" style="height:28px; padding:0 8px; display:flex; align-items:center; gap:8px; border-radius:6px; cursor:pointer;" style-hover="background:var(--hover)">
+          <span style="flex:none; width:13px; display:flex; justify-content:center; color:var(--accent-text);"><span style="display:{{ o.check }};"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat;"></span></span></span>
+          <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:{{ o.font }};">{{ o.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+</div></div>
+</div>
+<div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+    <div style="min-width:0; display:flex; flex-direction:column; gap:2px;"><div>Log file</div><div style="font-size:12px; color:var(--fg-muted); font-family:var(--mono, 'Geist Mono', monospace); word-break:break-all;">~/Library/Logs/Vano/vano.log</div></div>
+    <button style="flex:none; height:30px; padding:0 12px; display:flex; align-items:center; gap:6px; border:none; border-radius:8px; background:transparent; color:var(--fg-muted); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/folder-open.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/folder-open.svg') center / contain no-repeat;"></span><span>Open folder</span></button>
+  </div>
+<div style="font-size:12px; color:var(--fg-subtle); text-wrap:pretty;">Rotated every 5 MB, keeping the last 3 files. The VANO_LOG environment variable overrides the level at startup.</div>
+</div></sc-if>
+            <sc-if value="{{ sAbout }}" hint-placeholder-val="{{ false }}"><div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+  <div style="flex:none; width:44px; height:44px; border-radius:11px; background:var(--accent); color:var(--accent-fg); font-size:22px; font-weight:700; display:flex; align-items:center; justify-content:center;">V</div>
+  <div style="flex:1; min-width:160px; display:flex; flex-direction:column; gap:3px;">
+    <div style="font-size:16px; font-weight:600;">Vano</div>
+    <div style="display:flex; gap:4px; color:var(--fg-muted); white-space:nowrap;"><span>Version</span><span style="font-family:var(--mono, 'Geist Mono', monospace); color:var(--fg);">{{ version }}</span><span>· macOS arm64</span></div>
+  </div>
+  <div style="flex:none; display:flex; gap:6px;"><button onClick="{{ noop }}" style="height:30px; padding:0 12px; display:flex; align-items:center; gap:6px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/file-text.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/file-text.svg') center / contain no-repeat;"></span><span>Release notes</span></button><button onClick="{{ noop }}" style="height:30px; padding:0 12px; display:flex; align-items:center; gap:6px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/github.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/github.svg') center / contain no-repeat;"></span><span>GitHub</span></button></div>
+</div>
+<div style="flex:none; height:1px; background:var(--border);"></div>
+<div style="display:flex; flex-direction:column; gap:12px;">
+  <div style="font-weight:500;">Updates</div>
+  <sc-if value="{{ updManaged }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex; align-items:flex-start; gap:12px; padding:14px; border-radius:10px; background:var(--surface); border:1px solid var(--border);">
+      <span style="margin-top:1px; color:var(--fg-muted);"><span style="flex:none; display:block; width:18px; height:18px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/package.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/package.svg') center / contain no-repeat;"></span></span>
+      <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:4px;">
+        <div style="font-weight:500;">Updates come from your package manager</div>
+        <div style="color:var(--fg-muted); line-height:1.5; text-wrap:pretty;">Vano doesn't update itself on Linux. Install it from the apt or dnf repositories and your usual upgrade command will bring new versions. If you use the tarball, download new versions from the releases page.</div>
+        <div style="padding-top:6px;"><button onClick="{{ noop }}" style="height:30px; padding:0 12px; display:flex; align-items:center; gap:6px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/external-link.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/external-link.svg') center / contain no-repeat;"></span><span>Install instructions</span></button></div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--fg-muted); min-width:0;"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/info.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/info.svg') center / contain no-repeat;"></span><span>Installed from</span><span style="font-family:var(--mono, 'Geist Mono', monospace); color:var(--fg);">/usr/bin/vano</span></div>
+  </sc-if>
+  <sc-if value="{{ updManagedNot }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ updReady }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:center; gap:12px; padding:14px; border-radius:10px; background:var(--accent-subtle); border:1px solid color-mix(in oklab, var(--accent) 35%, transparent); flex-wrap:wrap;">
+        <span style="color:var(--accent-text);"><span style="flex:none; display:block; width:18px; height:18px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/download.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/download.svg') center / contain no-repeat;"></span></span>
+        <div style="flex:1; min-width:180px; display:flex; flex-direction:column; gap:2px;">
+          <div style="font-weight:500;">Vano {{ nextVersion }} is ready to install</div>
+          <div style="font-size:12px; color:var(--fg-muted);">Downloaded and verified. Restarting keeps your last scan.</div>
+        </div>
+        <button onClick="{{ restartUpdate }}" style="height:30px; padding:0 12px; border:none; border-radius:8px; background:var(--accent); color:var(--accent-fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--accent-hover)">Restart to update</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ updChecking }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; background:var(--surface); border:1px solid var(--border); color:var(--fg-muted);"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/refresh-cw.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/refresh-cw.svg') center / contain no-repeat; animation:sz-spin 1s linear infinite;"></span><span>Checking for updates...</span></div>
+</sc-if>
+    <sc-if value="{{ updUptodate }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; background:var(--surface); border:1px solid var(--border); color:var(--fg-muted);"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/check.svg') center / contain no-repeat;"></span><span>Vano is up to date ({{ version }})</span></div>
+</sc-if>
+    <sc-if value="{{ updFailed }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; background:var(--surface); border:1px solid var(--border); color:var(--fg-muted);"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/circle-alert.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/circle-alert.svg') center / contain no-repeat;"></span><span>The last check failed. The log has the details.</span></div>
+</sc-if>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;"><div>Check for updates automatically</div><div style="font-size:12px; color:var(--fg-muted); text-wrap:pretty;">Once, a few seconds after launch. Never polls in the background.</div></div>
+  <div style="flex:none;"><div onClick="{{ toggleAuto }}" style="position:relative; width:32px; height:18px; border-radius:9px; background:{{ swBg }}; cursor:pointer; transition:background .15s ease;"><div style="position:absolute; top:2px; left:{{ swLeft }}; width:14px; height:14px; border-radius:7px; background:var(--accent-fg); box-shadow:0 1px 2px rgba(0,0,0,.2); transition:left .15s ease;"></div></div></div>
+</div>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;"><div>Check now</div><div style="display:flex; gap:4px; font-size:12px; color:var(--fg-muted); min-width:0;"><span style="flex:none; white-space:nowrap;">Downloads to</span><span style="font-family:var(--mono, 'Geist Mono', monospace); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">~/Downloads</span></div></div>
+      <button onClick="{{ checkNow }}" style="height:30px; padding:0 12px; display:flex; align-items:center; gap:6px; border-radius:8px; border:1px solid var(--border-strong); background:var(--raised); color:var(--fg); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap; flex:none; opacity:{{ checkOpacity }};" style-hover="background:var(--hover)"><span style="flex:none; display:block; width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/refresh-cw.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/refresh-cw.svg') center / contain no-repeat;"></span><span>Check for updates</span></button>
+    </div>
+  </sc-if>
+</div></sc-if>
+          </div>
+          <sc-if value="{{ sFooter }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none; height:52px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 20px; border-top:1px solid var(--border);">
+              <span style="font-size:12px; color:var(--fg-subtle); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Changes apply immediately.</span>
+              <button onClick="{{ resetSettings }}" style="height:30px; padding:0 12px; border:none; border-radius:8px; background:transparent; color:var(--fg-muted); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap;" style-hover="background:var(--hover)">Reset to defaults</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sAbout }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none; height:48px; display:flex; align-items:center; padding:0 20px; border-top:1px solid var(--border); font-size:12px; color:var(--fg-subtle);">{{ aboutFooter }}</div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute; left:50%; bottom:40px; transform:translateX(-50%); max-width:calc(100% - 32px); display:flex; align-items:center; gap:12px; padding:10px 10px 10px 14px; background:var(--overlay); border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow); z-index:9; animation:sz-in .3s ease both; box-sizing:border-box;">
+      <span style="flex:none; width:16px; height:16px; color:var(--success); background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/circle-check.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/circle-check.svg') center / contain no-repeat;"></span>
+      <span style="min-width:0;">{{ toastText }}</span>
+      <a onClick="{{ undo }}" style="flex:none; cursor:pointer; font-weight:500;">Undo</a>
+      <button onClick="{{ closeToast }}" style="flex:none; width:24px; height:24px; display:flex; align-items:center; justify-content:center; border:none; border-radius:6px; background:transparent; color:var(--fg-subtle); cursor:pointer;" style-hover="background:var(--hover)">
+        <span style="width:14px; height:14px; background-color:currentColor; -webkit-mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/x.svg') center / contain no-repeat; mask:url('https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/x.svg') center / contain no-repeat;"></span>
+      </button>
+    </div>
+  </sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;palette&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;indigo&quot;,&quot;graphite&quot;,&quot;electric&quot;],&quot;default&quot;:&quot;indigo&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;system&quot;,&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;system&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;scanStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;treemap&quot;,&quot;rings&quot;,&quot;ranking&quot;],&quot;default&quot;:&quot;treemap&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Scan animation&quot;},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;scanning&quot;,&quot;results&quot;,&quot;settings&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;updateState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;idle&quot;,&quot;uptodate&quot;,&quot;ready&quot;,&quot;failed&quot;,&quot;managed&quot;],&quot;default&quot;:&quot;idle&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;windowWidth&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;fill&quot;,&quot;1280&quot;,&quot;960&quot;,&quot;560&quot;],&quot;default&quot;:&quot;fill&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const ICONS = 'https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/';
+const ic = n => `url('${ICONS}${n}.svg')`;
+const DISK_TOTAL = 462, FREE0 = 39.5, SCAN_SECONDS = 14.2, TICK = 50;
+const HATCH = 'repeating-linear-gradient(135deg, var(--safe-hatch) 0 1.5px, transparent 1.5px 7px)';
+const CATS = [
+  { id: 'media', name: 'Documents & media' }, { id: 'other', name: 'Dev tools & other' },
+  { id: 'code', name: 'Code projects' }, { id: 'sdk', name: 'iOS & Android SDKs' },
+  { id: 'ai', name: 'AI models' }, { id: 'caches', name: 'Package caches' }];
+const ORDER = ['android', 'cache', 'cursor', 'gradle', 'minikube', 'npm', 'ollama', 'vscode', 'dotfiles', 'desktop', 'documents', 'downloads', 'library', 'music', 'pictures', 'apps', 'syslib', 'system', 'var'];
+const HOME = [
+  { id: 'desktop', name: 'Desktop', cat: 'code', kids: [['atlas', 16.6], ['pebble', 8.2], ['side-quest', 4.2], ['orbit', 3.4], ['old-saas', 2.8], ['recordings', 2.4, 'Screen recordings', 'media'], ['sandbox', 2.1], ['notes', 0.8], ['scratch', 0.5], ['dotfiles', 0.3], ['misc', 0.2]] },
+  { id: 'library', name: 'Library', cat: 'other', kids: [['android', 9.9, 'Android SDK', 'sdk'], ['xcode', 6.5, 'Xcode DerivedData', 'sdk'], ['coresim', 2.6, 'CoreSimulator', 'sdk'], ['caches', 0.4, 'Caches'], ['containers', 0.3, 'Containers']] },
+  { id: 'ollama', name: '.ollama', cat: 'ai', kids: [['deepseek', 8.3, 'deepseek-coder-v2'], ['llama', 4.6, 'llama3.1:8b'], ['mistral', 3.8, 'mistral:7b-instruct']] },
+  { id: 'npm', name: '.npm', cat: 'caches', v: 13.4 },
+  { id: 'android', name: '.android', cat: 'sdk', kids: [['emu', 7.3, 'Emulator images']] },
+  { id: 'gradle', name: '.gradle', cat: 'caches', kids: [['caches', 6.1], ['wrapper', 0.5]] },
+  { id: 'documents', name: 'Documents', cat: 'media', kids: [['taxes', 2.1, 'Taxes'], ['scans', 1.6, 'Scans'], ['contracts', 1.2, 'Contracts'], ['notes', 0.8, 'Notes export'], ['other', 0.5, 'Other']] },
+  { id: 'dotfiles', name: 'Other dotfiles', cat: 'other', v: 6.0 },
+  { id: 'pictures', name: 'Pictures', cat: 'media', kids: [['photos', 3.0, 'Photos Library'], ['shots', 0.4, 'Screenshots']] },
+  { id: 'vscode', name: '.vscode', cat: 'other', v: 3.1 },
+  { id: 'cache', name: '.cache', cat: 'caches', kids: [['uv', 1.8], ['puppeteer', 1.2]] },
+  { id: 'downloads', name: 'Downloads', cat: 'media', kids: [['installers', 1.5, 'Installers'], ['archives', 0.8, 'Archives'], ['files', 0.6, 'Other files']] },
+  { id: 'music', name: 'Music', cat: 'media', v: 2.2 },
+  { id: 'cursor', name: '.cursor', cat: 'other', v: 1.6 },
+  { id: 'minikube', name: '.minikube', cat: 'other', v: 1.4 }];
+const SYSTEM = [
+  { id: 'apps', name: 'Applications', cat: 'other', v: 46.2 }, { id: 'system', name: 'System', cat: 'other', v: 31.0 },
+  { id: 'var', name: 'private/var', cat: 'other', v: 14.8 }, { id: 'syslib', name: 'Library (system)', cat: 'other', v: 7.4 }];
+const RECS = [
+  { id: 'npm', name: 'npm cache', path: '~/.npm', status: 'safe', red: { 'npm': 13.4 }, desc: 'Packages npm downloaded before. npm fetches them again the next time a project installs them.', files: '412,880', last: 'Today', inside: [['_cacache', 13.1], ['_logs', 0.2], ['_npx', 0.1]] },
+  { id: 'next', name: 'Next.js & Turbo build output', path: '~/Desktop/*/.next, .turbo', status: 'safe', red: { 'desktop/atlas': 6.0, 'desktop/pebble': 3.3, 'desktop/side-quest': 1.8, 'desktop/old-saas': 1.2 }, desc: 'Build artifacts. The next build or dev server creates them again.', files: '96,204', last: '2 days ago', inside: [['atlas/.next', 6.0], ['pebble/.turbo', 3.3], ['side-quest/.next', 1.8], ['old-saas/.next', 1.2]] },
+  { id: 'gradle', name: 'Gradle caches', path: '~/.gradle', status: 'safe', red: { 'gradle/caches': 6.1, 'gradle/wrapper': 0.5 }, desc: 'Dependency and build caches. Gradle downloads what it needs on the next build.', files: '58,317', last: '3 weeks ago', inside: [['caches/modules-2', 4.8], ['caches/transforms-4', 1.3], ['wrapper/dists', 0.5]] },
+  { id: 'xcode', name: 'Xcode DerivedData', path: '~/Library/Developer/Xcode', status: 'safe', red: { 'library/xcode': 6.4 }, desc: 'Intermediate build products and indexes. Xcode builds them again when you open a project.', files: '201,455', last: '5 days ago', inside: [['Pebble-ahzkqzp', 3.9], ['Atlas-dfoeiwq', 2.1], ['ModuleCache.noindex', 0.4]] },
+  { id: 'uv', name: 'uv & Puppeteer caches', path: '~/.cache/uv, ~/.cache/puppeteer', status: 'safe', red: { 'cache/uv': 1.8, 'cache/puppeteer': 1.2 }, desc: 'Python wheels and the browser builds Puppeteer downloads. Both are fetched again on demand.', files: '33,910', last: '1 week ago', inside: [['uv/wheels-v3', 1.8], ['puppeteer/chrome', 1.2]] },
+  { id: 'android', name: 'Android SDK & emulators', path: '~/Library/Android, ~/.android', status: 'review', red: { 'library/android': 9.9, 'android/emu': 7.3 }, desc: 'SDK platforms, build tools and emulator system images.', reason: 'Android Studio needs the SDK to build apps. Remove only what you no longer use.', files: '148,602', last: '2 months ago', inside: [['avd/Pixel_8_API_35', 7.3], ['sdk/system-images', 5.8], ['sdk/platforms', 2.6], ['sdk/build-tools', 1.5]] },
+  { id: 'ollama', name: 'Ollama models', path: '~/.ollama/models', status: 'review', red: { 'ollama/deepseek': 8.3, 'ollama/llama': 4.6, 'ollama/mistral': 3.8 }, desc: 'Weights of the language models you pulled with Ollama.', reason: 'A removed model has to be downloaded again with ollama pull.', files: '27', last: '6 weeks ago', inside: [['deepseek-coder-v2', 8.3], ['llama3.1:8b', 4.6], ['mistral:7b-instruct', 3.8]] },
+  { id: 'worktrees', name: 'atlas worktrees', path: '~/Desktop/atlas/.claude/worktrees', status: 'review', approx: true, red: { 'desktop/atlas': 9.0 }, desc: 'Extra git worktrees of the atlas repository.', reason: 'Worktrees can hold uncommitted changes. Check them with git worktree list first.', files: '310,774', last: '4 days ago', inside: [['feat-billing', 3.4], ['fix-auth-redirect', 2.9], ['spike-search', 2.7]] },
+  { id: 'nodemods', name: 'node_modules in idle projects', path: '~/Desktop/{orbit,sandbox,side-quest}', status: 'review', red: { 'desktop/orbit': 3.2, 'desktop/sandbox': 1.9, 'desktop/side-quest': 1.5 }, desc: 'Installed dependencies of projects you have not opened in 60 days.', reason: 'Reinstalling needs network access and the lockfile of each project.', files: '689,120', last: '3 months ago', inside: [['orbit/node_modules', 3.2], ['sandbox/node_modules', 1.9], ['side-quest/node_modules', 1.5]] },
+  { id: 'sims', name: 'iOS simulators', path: '~/Library/Developer/CoreSimulator', status: 'review', red: { 'library/coresim': 2.6 }, desc: 'Simulator devices and the apps installed on them.', reason: 'Deleting a device also deletes its app data.', files: '84,330', last: '2 months ago', inside: [['iPhone 15 Pro (17.5)', 1.4], ['iPad Air (17.5)', 0.8], ['Caches', 0.4]] },
+  { id: 'recordings', name: 'Screen recordings', path: '~/Desktop/*.mov', status: 'review', red: { 'desktop/recordings': 2.4 }, desc: 'Twelve .mov files on the Desktop, the oldest from March.', reason: 'These are your own files. Keep any you still need.', files: '12', last: '1 month ago', inside: [['Screen Recording 2026-03-04.mov', 0.9], ['Screen Recording 2026-05-21.mov', 0.6], ['10 more files', 0.9]] },
+  { id: 'installers', name: 'Old installers', path: '~/Downloads/*.dmg, *.pkg', status: 'review', red: { 'downloads/installers': 1.5 }, desc: 'Disk images and packages of apps that are already installed.', reason: 'Keep an installer if you cannot download that version again.', files: '9', last: '4 months ago', inside: [['android-studio.dmg', 0.9], ['Docker.dmg', 0.6]] }];
+const UI_FONTS = { geist: ['Geist (bundled)', "'Geist', system-ui, sans-serif"], system: ['System UI', 'system-ui, -apple-system, sans-serif'], helvetica: ['Helvetica Neue', "'Helvetica Neue', Helvetica, Arial, sans-serif"], avenir: ['Avenir Next', "'Avenir Next', Avenir, sans-serif"] };
+const MONO_FONTS = { geist: ['Geist Mono (bundled)', "'Geist Mono', ui-monospace, monospace"], system: ['System mono', "ui-monospace, 'SF Mono', Menlo, monospace"], menlo: ['Menlo', 'Menlo, Monaco, monospace'], courier: ['Courier New', "'Courier New', Courier, monospace"] };
+const SUFFIX = ['', '/node_modules/.pnpm', '/.git/objects/pack', '/build/intermediates', '/src', '/target/debug/deps', '/blobs'];
+const fmt = v => (v >= 100 ? v.toFixed(0) : v.toFixed(1)) + ' GB';
+const recSize = r => Object.values(r.red).reduce((a, b) => a + b, 0);
+const recLabel = r => (r.approx ? '~' : '') + fmt(recSize(r));
+const statusDot = s => s === 'safe' ? 'var(--success)' : 'var(--warning)';
+const catName = id => (CATS.find(c => c.id === id) || {}).name || '';
+
+function norm(t, pre) {
+  const path = pre + t.name;
+  const kids = t.kids ? t.kids.map(k => ({ id: t.id + '/' + k[0], name: k[2] || k[0], base: k[1], cat: k[3] || t.cat, path: path + '/' + (k[2] || k[0]), parent: t.id })) : null;
+  return { id: t.id, name: t.name, cat: t.cat, path, base: kids ? kids.reduce((s, k) => s + k.base, 0) : t.v, kids };
+}
+
+function squarify(items, rect) {
+  const out = {};
+  const list = items.filter(i => i.v > 0.0001).sort((a, b) => b.v - a.v);
+  items.forEach(i => { if (!(i.v > 0.0001)) out[i.id] = { x: rect.x + rect.w / 2, y: rect.y + rect.h / 2, w: 0, h: 0 }; });
+  const total = list.reduce((s, i) => s + i.v, 0);
+  if (!total || rect.w <= 0 || rect.h <= 0) { list.forEach(i => out[i.id] = { x: rect.x, y: rect.y, w: 0, h: 0 }); return out; }
+  const sc = rect.w * rect.h / total;
+  const q = list.map(i => ({ id: i.id, a: i.v * sc }));
+  let { x, y, w, h } = rect; let row = [];
+  const worst = (r, s) => { let sum = 0, mx = 0, mn = Infinity; r.forEach(e => { sum += e.a; mx = Math.max(mx, e.a); mn = Math.min(mn, e.a); }); return Math.max(s * s * mx / (sum * sum), (sum * sum) / (s * s * mn)); };
+  const lay = () => {
+    const sum = row.reduce((s, e) => s + e.a, 0);
+    if (w >= h) { const cw = sum / h; let cy = y; row.forEach(e => { const eh = e.a / cw; out[e.id] = { x, y: cy, w: cw, h: eh }; cy += eh; }); x += cw; w -= cw; }
+    else { const rh = sum / w; let cx = x; row.forEach(e => { const ew = e.a / rh; out[e.id] = { x: cx, y, w: ew, h: rh }; cx += ew; }); y += rh; h -= rh; }
+    row = [];
+  };
+  while (q.length) { const s = Math.min(w, h); const it = q[0]; if (!row.length || worst([...row, it], s) <= worst(row, s)) { row.push(it); q.shift(); } else lay(); }
+  if (row.length) lay();
+  return out;
+}
+
+class Component extends DCLogic {
+  state = { sOpen: false, sCat: 'appearance', sSelect: null, prefs: { language: 'auto', pal: null, theme: null, uiFont: 'geist', uiSize: 13, monoFont: 'geist', logLevel: 'info', checkUpdates: true }, upd: null, version: '0.1.0', screen: null, target: 'home', colorBy: 'category', zoom: null, selected: new Set(['npm', 'next', 'gradle', 'uv', 'android']), detail: null, confirm: null, trashing: false, removed: new Set(), removedNodes: new Set(), extra: 0, toast: null, p: 0, tick: 0, scanStyle: null, sysDark: false, tm: { w: 0, h: 0 }, fw: 1200 };
+  _trees = {}; _sched = {};
+
+  componentDidMount() {
+    this.mq = window.matchMedia('(prefers-color-scheme: dark)');
+    this.onMq = e => this.setState({ sysDark: e.matches });
+    this.mq.addEventListener('change', this.onMq);
+    this.setState({ sysDark: this.mq.matches });
+    this.onKey = e => {
+      if ((e.metaKey || e.ctrlKey) && e.key === ',') { e.preventDefault(); this.setState({ sOpen: true }); }
+      else if (e.key === 'Escape' && this.state.sOpen) this.setState(s => s.sSelect ? { sSelect: null } : { sOpen: false });
+    };
+    window.addEventListener('keydown', this.onKey);
+    this.go(this.props.startScreen ?? 'home');
+  }
+  componentDidUpdate(prev) {
+    if (prev.startScreen !== this.props.startScreen) this.go(this.props.startScreen ?? 'home');
+    if (prev.scanStyle !== this.props.scanStyle) this.setState({ scanStyle: null });
+    if (prev.palette !== this.props.palette) this.setState(s => ({ prefs: { ...s.prefs, pal: null } }));
+    if (prev.theme !== this.props.theme) this.setState(s => ({ prefs: { ...s.prefs, theme: null } }));
+    if (prev.updateState !== this.props.updateState) this.setState({ upd: null });
+  }
+  componentWillUnmount() {
+    clearInterval(this.timer); clearTimeout(this.adv); clearTimeout(this.toastT); clearTimeout(this.updT);
+    window.removeEventListener('keydown', this.onKey);
+    if (this.mq) this.mq.removeEventListener('change', this.onMq);
+    if (this.ro) this.ro.disconnect(); if (this.fro) this.fro.disconnect();
+  }
+
+  tmRef = el => {
+    if (this.ro) { this.ro.disconnect(); this.ro = null; }
+    if (!el) return;
+    this.ro = new ResizeObserver(([e]) => { const w = Math.round(e.contentRect.width), h = Math.round(e.contentRect.height); if (w !== this.state.tm.w || h !== this.state.tm.h) this.setState({ tm: { w, h } }); });
+    this.ro.observe(el);
+  };
+  frameRef = el => {
+    if (this.fro) { this.fro.disconnect(); this.fro = null; }
+    if (!el) return;
+    this.fro = new ResizeObserver(([e]) => { const w = Math.round(e.contentRect.width); if (w !== this.state.fw) this.setState({ fw: w }); });
+    this.fro.observe(el);
+  };
+
+  tree(target) {
+    if (!this._trees[target]) { const home = HOME.map(t => norm(t, '~/')); this._trees[target] = target === 'disk' ? [...home, ...SYSTEM.map(t => norm(t, '/'))] : home; }
+    return this._trees[target];
+  }
+  sched(target) {
+    if (this._sched[target]) return this._sched[target];
+    const tops = [...this.tree(target)].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
+    const leaves = []; tops.forEach(t => (t.kids || [t]).forEach(l => leaves.push(l)));
+    const ws = leaves.map(l => Math.pow(l.base, 0.6) + 0.4); const tot = ws.reduce((a, b) => a + b, 0);
+    const map = {}; let acc = 0;
+    leaves.forEach((l, i) => { const t0 = acc / tot * 0.97; acc += ws[i]; map[l.id] = { t0, t1: acc / tot * 0.97 }; });
+    const foundAt = {}; RECS.forEach(r => { foundAt[r.id] = Math.max(...Object.keys(r.red).map(k => (map[k] ? map[k].t1 : 1))); });
+    return (this._sched[target] = { map, leaves, foundAt });
+  }
+
+  go(s) {
+    if (s === 'settings') { this.setState({ sOpen: true }); s = 'results'; }
+    if (s === 'scanning') return this.startScan();
+    clearInterval(this.timer); clearTimeout(this.adv);
+    this.setState({ screen: s, detail: null, zoom: null, p: s === 'results' ? 1 : this.state.p });
+  }
+  startScan() {
+    clearInterval(this.timer); clearTimeout(this.adv);
+    this.setState({ screen: 'scanning', p: 0, tick: 0, zoom: null, detail: null });
+    this.timer = setInterval(() => {
+      this.setState(st => ({ p: Math.min(1, st.p + (TICK / 1000) / SCAN_SECONDS), tick: st.tick + 1 }), () => {
+        if (this.state.p >= 1) { clearInterval(this.timer); this.adv = setTimeout(() => this.setState({ screen: 'results' }), 1600); }
+      });
+    }, TICK);
+  }
+  toggle(id) { this.setState(s => { const sel = new Set(s.selected); sel.has(id) ? sel.delete(id) : sel.add(id); return { selected: sel }; }); }
+  findNode(target, id) { for (const t of this.tree(target)) { if (t.id === id) return t; for (const k of (t.kids || [])) if (k.id === id) return k; } return null; }
+  openConfirm(c) { this.setState({ confirm: c }); }
+
+  doTrash = () => {
+    const c = this.state.confirm; if (!c || this.state.trashing) return;
+    this.setState({ trashing: true });
+    setTimeout(() => {
+      this.setState(s => {
+        const removed = new Set(s.removed), rn = new Set(s.removedNodes), sel = new Set(s.selected); let extra = s.extra;
+        (c.recs || []).forEach(id => { removed.add(id); sel.delete(id); });
+        (c.nodes || []).forEach(n => { rn.add(n.id); extra += n.v; });
+        return { removed, removedNodes: rn, selected: sel, extra, confirm: null, trashing: false, detail: null, toast: { count: (c.recs || []).length + (c.nodes || []).length, total: c.total, batch: c } };
+      });
+      clearTimeout(this.toastT); this.toastT = setTimeout(() => this.setState({ toast: null }), 8000);
+    }, 1100);
+  };
+  undo = () => {
+    const t = this.state.toast; if (!t) return;
+    this.setState(s => {
+      const removed = new Set(s.removed), rn = new Set(s.removedNodes); let extra = s.extra;
+      (t.batch.recs || []).forEach(id => removed.delete(id));
+      (t.batch.nodes || []).forEach(n => { rn.delete(n.id); extra -= n.v; });
+      return { removed, removedNodes: rn, extra, toast: null };
+    });
+  };
+
+  buildTiles(tops, valOf, W, H, o) {
+    const T = []; if (W <= 0 || H <= 0) return T;
+    const tv = tops.map(t => ({ id: t.id, v: t.kids ? t.kids.reduce((s, k) => s + valOf(k), 0) : valOf(t) }));
+    const R = squarify(tv, { x: 0, y: 0, w: W, h: H });
+    tops.forEach((t, i) => {
+      const r = R[t.id]; const x = r.x + 2, y = r.y + 2, w = Math.max(0, r.w - 4), h = Math.max(0, r.h - 4);
+      const hasKids = !!(t.kids && t.kids.length);
+      const fit = hasKids && w >= 64 && h >= 68;
+      T.push(this.tile(t, { x, y, w, h }, tv[i].v, fit ? 'parent' : 'leaf', o));
+      if (hasKids) {
+        const inner = { x: x + 5, y: y + 27, w: w - 10, h: h - 32 };
+        const kv = t.kids.map(k => ({ id: k.id, v: fit ? valOf(k) : 0 }));
+        const KR = fit ? squarify(kv, inner) : {};
+        t.kids.forEach((k, j) => {
+          const kr = fit ? KR[k.id] : { x: x + w / 2, y: y + h / 2, w: 0, h: 0 };
+          T.push(this.tile(k, { x: kr.x + 1.5, y: kr.y + 1.5, w: Math.max(0, kr.w - 3), h: Math.max(0, kr.h - 3) }, kv[j].v, 'kid', o));
+        });
+      }
+    });
+    return T;
+  }
+  tile(node, r, v, kind, o) {
+    const st = o.statusOf(node.id), c = node.cat;
+    let bg, line, img = 'none';
+    if (kind === 'parent') {
+      if (o.colorBy === 'category') { bg = `var(--cat-${c}-bg)`; line = `var(--cat-${c}-line)`; } else { bg = 'var(--raised)'; line = 'var(--border-strong)'; }
+    } else if (st === 'safe') { bg = 'var(--safe-fill)'; line = 'var(--safe-line)'; img = HATCH; }
+    else if (o.colorBy === 'cleanup') { if (st === 'review') { bg = 'var(--review-fill)'; line = 'var(--review-line)'; } else { bg = 'var(--surface)'; line = 'var(--border)'; } }
+    else { bg = `var(--cat-${c}-fill)`; line = `var(--cat-${c}-line)`; }
+    if (o.current === node.id) line = 'var(--accent)';
+    const vis = r.w >= 2 && r.h >= 2 && v > 0.0001;
+    const parent = kind === 'parent';
+    const big = !parent && r.w >= 58 && r.h >= 50;
+    return {
+      x: r.x.toFixed(1), y: r.y.toFixed(1), w: r.w.toFixed(1), h: r.h.toFixed(1), op: vis ? 1 : 0, bg, img, line, r: kind === 'kid' ? 5 : 6,
+      label: node.name, sizeLabel: fmt(v),
+      headDisplay: r.w >= 46 && r.h >= 24 ? 'flex' : 'none', headSizeDisplay: parent && r.w >= 150 ? 'block' : 'none',
+      labelWeight: parent ? 500 : 400, labelSize: parent ? 12.5 : 12,
+      bigDisplay: big ? 'block' : 'none', bigFont: Math.max(12, Math.min(26, Math.sqrt(r.w * r.h) / 8)).toFixed(1),
+      onClick: o.onTile ? () => o.onTile(node, kind) : undefined
+    };
+  }
+
+  renderVals() {
+    const st = this.state, P = this.props;
+    const pal = st.prefs.pal ?? P.palette ?? 'indigo';
+    const theme = st.prefs.theme ?? P.theme ?? 'system';
+    const mode = theme === 'system' ? (st.sysDark ? 'dark' : 'light') : theme;
+    const ww = P.windowWidth ?? 'fill', fill = ww === 'fill';
+    const frame = { w: fill ? '100%' : ww + 'px', maxW: fill ? 'none' : 'calc(100% - 48px)', h: fill ? '100vh' : 'calc(100vh - 48px)', r: fill ? '0' : '10px', border: fill ? 'none' : '1px solid var(--border-strong)', shadow: fill ? 'none' : 'var(--shadow)' };
+    const screen = st.screen ?? (P.startScreen ?? 'home');
+    const target = st.target, tree = this.tree(target), sch = this.sched(target);
+    const scanStyle = st.scanStyle ?? P.scanStyle ?? 'treemap';
+    const treeTotal = tree.reduce((s, t) => s + t.base, 0);
+    const targetLabel = target === 'disk' ? 'Macintosh HD' : 'Home folder';
+    const rootLabel = target === 'disk' ? 'Macintosh HD' : '~ Home';
+    const tmTransition = ['left', 'top', 'width', 'height'].map(p => `${p} .45s cubic-bezier(.2,.7,.2,1)`).join(', ') + ', opacity .4s ease, background-color .3s ease, border-color .3s ease';
+
+    const active = RECS.filter(r => !st.removed.has(r.id));
+    const red = {}; RECS.filter(r => st.removed.has(r.id)).forEach(r => Object.entries(r.red).forEach(([k, v]) => red[k] = (red[k] || 0) + v));
+    const leafVal = l => st.removedNodes.has(l.id) ? 0 : Math.max(0, l.base - (red[l.id] || 0));
+    const best = {}; active.forEach(r => Object.entries(r.red).forEach(([k, v]) => { if (!best[k] || v > best[k].v) best[k] = { v, s: r.status }; }));
+    const trashedRec = RECS.filter(r => st.removed.has(r.id)).reduce((s, r) => s + recSize(r), 0);
+    const freeNow = FREE0 + trashedRec + st.extra;
+
+    const v = {
+      pal, mode, frame, frameRef: this.frameRef, tmRef: this.tmRef, tmTransition,
+      screenLabel: screen === 'home' ? '01 Home' : screen === 'scanning' ? '02 Scanning' : '03 Results',
+      nameDisplay: st.fw < 560 ? 'none' : 'block',
+      statCols: st.fw >= 760 ? 'repeat(4, minmax(0, 1fr))' : 'repeat(2, minmax(0, 1fr))',
+      isHome: screen === 'home', isScanning: screen === 'scanning', isResults: screen === 'results',
+      targetLabel, rootLabel, locIcon: ic(target === 'disk' ? 'hard-drive' : 'house'),
+      goHome: () => this.go('home'), rescan: () => this.startScan(), scan: () => this.startScan(),
+      statusLeft: `Macintosh HD · ${fmt(freeNow)} free of ${DISK_TOTAL} GB`,
+      stop: e => e.stopPropagation()
+    };
+    Object.assign(v, this.settingsVals(pal, theme, mode, scanStyle));
+
+    // Home
+    const loc = (id, title, path, icon, caption, pct, dashed) => {
+      const sel = target === id;
+      return { title, path, icon: ic(icon), caption, pct: pct || '0%', barDisplay: pct ? 'block' : 'none', borderStyle: dashed ? 'dashed' : 'solid',
+        bg: sel ? 'var(--accent-subtle)' : 'var(--raised)', line: sel ? 'var(--accent)' : 'var(--border)', ring: sel ? 'inset 0 0 0 1px var(--accent)' : 'none',
+        iconColor: sel ? 'var(--accent-text)' : 'var(--fg-subtle)', pick: dashed ? undefined : () => this.setState({ target: id }) };
+    };
+    v.locations = [
+      loc('home', 'Home folder', '~  /Users/tanis', 'house', 'Your files, projects and caches.'),
+      loc('disk', 'Macintosh HD', '/', 'hard-drive', `${(DISK_TOTAL - freeNow).toFixed(1)} GB used of ${DISK_TOTAL} GB`, ((DISK_TOTAL - freeNow) / DISK_TOTAL * 100).toFixed(1) + '%'),
+      loc('folder', 'Choose a folder…', 'Any folder or external drive', 'folder-open', 'Opens the system folder picker.', null, true)];
+    v.diskNote = target === 'disk';
+    v.recents = [
+      { name: 'Home folder', meta: '135 GB · 3 days ago', open: () => { this.setState({ target: 'home' }); this.go('results'); } },
+      { name: 'Macintosh HD', meta: '234 GB read · 2 weeks ago', open: () => { this.setState({ target: 'disk' }); this.go('results'); } }];
+
+    // Scanning
+    const p = st.p, done = p >= 1;
+    const pL = done ? 1 : Math.min(1, Math.floor(st.tick / 5) * 5 * (TICK / 1000) / SCAN_SECONDS);
+    const ease = c => 1 - (1 - c) * (1 - c);
+    const valAt = (l, pp) => { const s = sch.map[l.id]; if (!s) return 0; const c = Math.max(0, Math.min(1, (pp - s.t0) / (s.t1 - s.t0))); return l.base * ease(c); };
+    if (screen === 'scanning') {
+      const counted = sch.leaves.reduce((s, l) => s + valAt(l, p), 0);
+      const cur = sch.leaves.find(l => { const s = sch.map[l.id]; return p >= s.t0 && p < s.t1; });
+      const el = p * SCAN_SECONDS;
+      const files = Math.round(Math.pow(p, 0.92) * (target === 'disk' ? 2914077 : 1240312));
+      const foundRecs = RECS.filter(r => sch.foundAt[r.id] <= p).sort((a, b) => sch.foundAt[a.id] - sch.foundAt[b.id]);
+      const foundSet = new Set(foundRecs.map(r => r.id));
+      const fbest = {}; foundRecs.forEach(r => Object.entries(r.red).forEach(([k, x]) => { if (!fbest[k] || x > fbest[k].v) fbest[k] = { v: x, s: r.status }; }));
+      Object.assign(v, {
+        scanDone: done, scanRunning: !done,
+        scanStats: [
+          { label: 'Files scanned', value: files.toLocaleString('en-US'), sub: '' },
+          { label: 'Counted', value: fmt(counted), sub: 'of ~' + fmt(treeTotal) },
+          { label: 'Elapsed', value: el.toFixed(1) + ' s', sub: '' },
+          { label: 'Throughput', value: (el > 0.3 ? counted / el : 0).toFixed(1) + ' GB/s', sub: '' }],
+        scanPath: done ? `Scan complete. ${files.toLocaleString('en-US')} files in ${SCAN_SECONDS} s` : (cur ? cur.path + SUFFIX[(st.tick >> 2) % SUFFIX.length] : 'Finishing up…'),
+        scanPct: Math.floor(p * 100) + '%', scanBar: (p * 100).toFixed(2) + '%',
+        countedLabel: fmt(counted), countedShort: fmt(counted), ringSub: done ? `${files.toLocaleString('en-US')} files` : 'of ~' + fmt(treeTotal),
+        styleTreemap: scanStyle === 'treemap', styleRings: scanStyle === 'rings', styleRanking: scanStyle === 'ranking',
+        styleSegs: [['treemap', 'Treemap'], ['rings', 'Rings'], ['ranking', 'Ranking']].map(([id, label]) => ({ label, pick: () => this.setState({ scanStyle: id }), bg: scanStyle === id ? 'var(--raised)' : 'transparent', color: scanStyle === id ? 'var(--fg)' : 'var(--fg-muted)', shadow: scanStyle === id ? '0 1px 2px rgba(0,0,0,.12)' : 'none' })),
+        found: foundRecs.map(r => ({ name: r.name, path: r.path, size: recLabel(r), dot: statusDot(r.status) })),
+        foundEmpty: foundRecs.length === 0, foundTotal: fmt(foundRecs.reduce((s, r) => s + recSize(r), 0)),
+        cancelScan: () => this.go('home'), viewResults: () => this.go('results')
+      });
+      if (scanStyle === 'treemap') {
+        v.scanTiles = this.buildTiles(tree, l => valAt(l, pL), st.tm.w, st.tm.h, { colorBy: 'category', statusOf: id => (fbest[id] && foundSet.size ? fbest[id].s : null), current: done ? null : (cur && cur.id) });
+      } else v.scanTiles = [];
+      if (scanStyle === 'rings') {
+        const sums = {}; sch.leaves.forEach(l => sums[l.cat] = (sums[l.cat] || 0) + valAt(l, p));
+        let a = 0; const parts = [];
+        ['code', 'ai', 'caches', 'sdk', 'media', 'other'].forEach(c => { const d = (sums[c] || 0) / treeTotal * 360; if (d > 0.05) parts.push(`var(--cat-${c}-dot) ${a.toFixed(2)}deg ${(a + d).toFixed(2)}deg`); a += d; });
+        parts.push(`var(--hover) ${a.toFixed(2)}deg 360deg`);
+        v.ringGrad = `conic-gradient(${parts.join(', ')})`;
+        const ang = (st.tick * 8) % 360;
+        v.cometGrad = done ? 'none' : `conic-gradient(from ${ang}deg, transparent 0deg, color-mix(in oklab, var(--raised) 0%, transparent) 300deg, color-mix(in oklab, var(--raised) 70%, transparent) 359deg, transparent 360deg)`;
+        v.ringLegend = CATS.map(c => ({ name: c.name, dot: `var(--cat-${c.id}-dot)`, value: fmt(sums[c.id] || 0) }));
+      }
+      if (scanStyle === 'ranking') {
+        const vals = tree.map(t => ({ t, v: (t.kids || [t]).reduce((s, l) => s + valAt(l, p), 0) }));
+        const order = [...vals].filter(x => x.v > 0.01).sort((a, b) => b.v - a.v).map(x => x.t.id);
+        const maxB = Math.max(...tree.map(t => t.base));
+        v.rankRows = vals.map(({ t, v: x }) => { const rk = order.indexOf(t.id); const shown = rk >= 0 && rk < 10; return { name: t.name, rank: shown ? rk + 1 : '', top: (shown ? rk : 10) * 42, op: shown ? 1 : 0, dot: `var(--cat-${t.cat}-dot)`, barW: (x / maxB * 100).toFixed(1) + '%', value: fmt(x) }; });
+      }
+      v.statusRight = done ? 'Scan complete' : `Scanning ${targetLabel} · ${Math.floor(p * 100)}%`;
+    }
+
+    // Results
+    if (screen === 'results') {
+      const zoomNode = st.zoom ? tree.find(t => t.id === st.zoom) : null;
+      const tops = zoomNode ? zoomNode.kids.map(k => ({ ...k, kids: null })) : tree;
+      const onTile = (node, kind) => {
+        if (!zoomNode && node.kids && node.kids.length) this.setState({ zoom: node.id, detail: null });
+        else this.setState({ detail: { type: 'node', id: node.id } });
+      };
+      v.tiles = this.buildTiles(tops, leafVal, st.tm.w, st.tm.h, { colorBy: st.colorBy, statusOf: id => (best[id] ? best[id].s : null), onTile });
+      const totalNow = tops.reduce((s, t) => s + (t.kids ? t.kids.reduce((a, k) => a + leafVal(k), 0) : leafVal(t)), 0);
+      v.zoomed = !!zoomNode; v.zoomName = zoomNode ? zoomNode.name : ''; v.explorerTotal = fmt(totalNow);
+      v.unzoom = () => this.setState({ zoom: null });
+      v.explorerSub = zoomNode ? 'Click a tile for details.' : (target === 'disk' ? 'The whole disk, sized by space used. Click a tile to open it.' : 'Your home folder, sized by space used. Click a tile to open it.');
+      v.colorSegs = [['category', 'Category'], ['cleanup', 'Cleanup']].map(([id, label]) => ({ label, pick: () => this.setState({ colorBy: id }), bg: st.colorBy === id ? 'var(--raised)' : 'transparent', color: st.colorBy === id ? 'var(--fg)' : 'var(--fg-muted)', shadow: st.colorBy === id ? '0 1px 2px rgba(0,0,0,.12)' : 'none' }));
+      v.legend = st.colorBy === 'category'
+        ? [...CATS.map(c => ({ name: c.name, bg: `var(--cat-${c.id}-dot)`, line: `var(--cat-${c.id}-dot)`, img: 'none' })), { name: 'Safe to remove', bg: 'var(--safe-fill)', line: 'var(--safe-line)', img: HATCH }]
+        : [{ name: 'Safe to remove', bg: 'var(--safe-fill)', line: 'var(--safe-line)', img: HATCH }, { name: 'Needs review', bg: 'var(--review-fill)', line: 'var(--review-line)', img: 'none' }, { name: 'No recommendation', bg: 'var(--surface)', line: 'var(--border-strong)', img: 'none' }];
+
+      const sel = active.filter(r => st.selected.has(r.id));
+      const selTotal = sel.reduce((s, r) => s + recSize(r), 0);
+      const safe = active.filter(r => r.status === 'safe'), rev = active.filter(r => r.status === 'review');
+      const sum = l => l.reduce((s, r) => s + recSize(r), 0);
+      const items = n => n + (n === 1 ? ' item' : ' items');
+      v.stats = [
+        { label: 'Free after cleanup', dotDisplay: 'none', dot: '', value: fmt(freeNow + selTotal), sub: selTotal > 0 ? '+' + fmt(selTotal) : 'nothing selected', subColor: selTotal > 0 ? 'var(--success)' : 'var(--fg-subtle)' },
+        { label: 'Safe to remove', dotDisplay: 'block', dot: 'var(--success)', value: fmt(sum(safe)), sub: items(safe.length), subColor: 'var(--fg-subtle)' },
+        { label: 'Needs review', dotDisplay: 'block', dot: 'var(--warning)', value: fmt(sum(rev)), sub: items(rev.length), subColor: 'var(--fg-subtle)' },
+        { label: 'Not scanned', dotDisplay: 'none', dot: '', value: fmt(DISK_TOTAL - FREE0 - treeTotal), sub: target === 'disk' ? 'snapshots & purgeable' : 'system & apps', subColor: 'var(--fg-subtle)' }];
+      const row = r => { const on = st.selected.has(r.id); return { name: r.name, path: r.path, size: recLabel(r), cbBg: on ? 'var(--accent)' : 'transparent', cbLine: on ? 'var(--accent)' : 'var(--border-strong)', cbCheck: on ? 'block' : 'none', toggle: () => this.toggle(r.id), open: e => { e.stopPropagation(); this.setState({ detail: { type: 'rec', id: r.id } }); } }; };
+      Object.assign(v, {
+        safeRows: safe.map(row), reviewRows: rev.map(row), safeTotal: fmt(sum(safe)), reviewTotal: fmt(sum(rev)),
+        safeEmpty: safe.length === 0, reviewEmpty: rev.length === 0,
+        selTotal: fmt(selTotal), selCount: items(sel.length), trashOpacity: sel.length ? 1 : 0.45,
+        selectSafe: () => this.setState({ selected: new Set(safe.map(r => r.id)) }),
+        trashSelected: () => sel.length && this.openConfirm({ recs: sel.map(r => r.id), total: selTotal }),
+        showList: !st.detail, showDetail: !!st.detail, closeDetail: () => this.setState({ detail: null })
+      });
+      if (st.detail) v.d = this.detailVals(st.detail, target, active, leafVal);
+      v.statusRight = `${(target === 'disk' ? 2914077 : 1240312).toLocaleString('en-US')} files · scanned in ${SCAN_SECONDS} s`;
+    }
+    if (screen === 'home') v.statusRight = 'Ready';
+
+    // Confirm + toast
+    const c = st.confirm;
+    v.confirmOpen = !!c;
+    if (c) {
+      const recs = (c.recs || []).map(id => RECS.find(r => r.id === id));
+      const nodes = c.nodes || [];
+      const list = [...recs.map(r => ({ name: r.name, path: r.path, size: recLabel(r), dot: statusDot(r.status) })), ...nodes.map(n => ({ name: n.name, path: n.path, size: fmt(n.v), dot: 'var(--fg-subtle)' }))];
+      const nrev = recs.filter(r => r.status === 'review').length;
+      const n = list.length;
+      Object.assign(v, {
+        confirmItems: list, confirmTotal: fmt(c.total), confirmTitle: n === 1 ? `Move ${list[0].name} to the Trash?` : `Move ${n} items to the Trash?`,
+        confirmHasReview: nrev > 0 || nodes.length > 0,
+        confirmReviewText: nodes.length ? 'No recommendation covers this folder. Make sure nothing in it is still needed.' : `${nrev} of these ${nrev === 1 ? 'needs' : 'need'} review. Make sure you no longer use ${nrev === 1 ? 'it' : 'them'}.`,
+        trashing: st.trashing, confirmBtn: st.trashing ? 'Moving…' : `Move ${fmt(c.total)} to Trash`
+      });
+    }
+    v.closeConfirm = () => !st.trashing && this.setState({ confirm: null });
+    v.doTrash = this.doTrash;
+    v.toastOpen = !!st.toast;
+    v.toastText = st.toast ? `Moved ${st.toast.count} ${st.toast.count === 1 ? 'item' : 'items'} to the Trash · ${fmt(st.toast.total)} freed` : '';
+    v.undo = this.undo; v.closeToast = () => this.setState({ toast: null });
+    return v;
+  }
+
+  settingsVals(pal, theme, mode, scanStyle) {
+    const st = this.state, S = st.prefs, P = this.props;
+    const set = patch => this.setState(s => ({ prefs: { ...s.prefs, ...patch }, sSelect: null }));
+    const narrow = st.fw < 720;
+    const sel = (id, list, cur, onPick, fontOf) => {
+      const curItem = list.find(([k]) => k === cur) || list[0];
+      return {
+        label: curItem[1], font: fontOf ? fontOf(curItem[0]) : 'inherit', open: st.sSelect === id,
+        toggle: e => { e.stopPropagation(); this.setState(s => ({ sSelect: s.sSelect === id ? null : id })); },
+        options: list.map(([k, label]) => ({ label, check: k === cur ? 'block' : 'none', font: fontOf ? fontOf(k) : 'inherit', pick: e => { e.stopPropagation(); onPick(k); } }))
+      };
+    };
+    const frame = on => ({ frameBorder: on ? '2px solid var(--accent)' : '1px solid var(--border-strong)', framePad: on ? '7px' : '8px', frameBg: on ? 'var(--accent-subtle)' : 'var(--surface)', radio: on ? '4px solid var(--accent)' : '1px solid var(--border-strong)' });
+    const cats = [['appearance', 'Appearance', 'palette'], ['scanning', 'Scanning', 'scan-search'], ['advanced', 'Advanced', 'wrench'], ['about', 'About', 'info']];
+    const cat = st.sCat;
+    const upd = st.upd ?? P.updateState ?? 'idle';
+    const scanCard = id => ({ ...frame(scanStyle === id), defDisplay: id === 'treemap' ? 'inline' : 'none', pick: () => this.setState({ scanStyle: id }) });
+    const SCAN_DESC = { treemap: 'Tiles appear and grow as each folder is read, then settle into the results treemap.', rings: 'A ring split by category fills up as bytes are counted.', ranking: 'The ten largest folders so far, reordering as sizes change.' };
+    return {
+      uiFontCss: UI_FONTS[S.uiFont][1], monoFontCss: MONO_FONTS[S.monoFont][1], uiSizePx: S.uiSize + 'px',
+      sOpen: st.sOpen, openSettings: () => this.setState({ sOpen: true, sSelect: null }),
+      closeSettings: e => { if (e) e.stopPropagation(); this.setState({ sOpen: false, sSelect: null }); },
+      closeSelects: e => { e.stopPropagation(); if (st.sSelect) this.setState({ sSelect: null }); },
+      sDir: narrow ? 'column' : 'row', sNavW: narrow ? 'auto' : '188px', sNavDir: narrow ? 'row' : 'column', sNavPad: narrow ? '8px 10px' : '14px 10px',
+      sNavBR: narrow ? 'none' : '1px solid var(--border)', sNavBB: narrow ? '1px solid var(--border)' : 'none', sWideDisplay: narrow ? 'none' : 'block',
+      sNav: cats.map(([id, label, icon]) => ({ label, icon: ic(icon), bg: id === cat ? 'var(--accent-subtle)' : 'transparent', hover: id === cat ? 'var(--accent-subtle)' : 'var(--hover)', color: id === cat ? 'var(--accent-text)' : 'var(--fg)', weight: id === cat ? 500 : 400, pick: () => this.setState({ sCat: id, sSelect: null }) })),
+      sTitle: (cats.find(c => c[0] === cat) || cats[0])[1],
+      sAppearance: cat === 'appearance', sScanning: cat === 'scanning', sAdvanced: cat === 'advanced', sAbout: cat === 'about', sFooter: cat !== 'about',
+      selLang: sel('lang', [['auto', 'Automatic (English)'], ['en', 'English'], ['es', 'Español'], ['gl', 'Galego'], ['it', 'Italiano']], S.language, k => set({ language: k })),
+      selUi: sel('ui', Object.entries(UI_FONTS).map(([k, f]) => [k, f[0]]), S.uiFont, k => set({ uiFont: k }), k => UI_FONTS[k][1]),
+      selMono: sel('mono', Object.entries(MONO_FONTS).map(([k, f]) => [k, f[0]]), S.monoFont, k => set({ monoFont: k }), k => MONO_FONTS[k][1]),
+      selLog: sel('log', [['off', 'Off'], ['error', 'Error'], ['warn', 'Warn'], ['info', 'Info'], ['debug', 'Debug'], ['trace', 'Trace']], S.logLevel, k => set({ logLevel: k })),
+      themeCards: [['system', 'System', 'light', 'dark'], ['light', 'Light', 'light', 'light'], ['dark', 'Dark', 'dark', 'dark']].map(([id, label, left, right]) => ({ ...frame(theme === id), label, pal, left, right, pick: () => set({ theme: id }) })),
+      palCards: [['indigo', 'Indigo'], ['graphite', 'Graphite'], ['electric', 'Electric blue']].map(([id, label]) => ({ ...frame(pal === id), label, pal: id, left: mode, right: mode, pick: () => set({ pal: id }) })),
+      uiSizeLabel: S.uiSize + ' px',
+      sizeMinus: () => set({ uiSize: Math.max(11, S.uiSize - 1) }), sizePlus: () => set({ uiSize: Math.min(16, S.uiSize + 1) }),
+      scTree: scanCard('treemap'), scRings: scanCard('rings'), scRank: scanCard('ranking'), scanDesc: SCAN_DESC[scanStyle],
+      resetSettings: () => this.setState({ prefs: { language: 'auto', pal: null, theme: null, uiFont: 'geist', uiSize: 13, monoFont: 'geist', logLevel: 'info', checkUpdates: true }, scanStyle: null, sSelect: null }),
+      version: st.version, nextVersion: '0.2.0',
+      updManaged: upd === 'managed', updManagedNot: upd !== 'managed', updReady: upd === 'ready', updChecking: upd === 'checking', updUptodate: upd === 'uptodate', updFailed: upd === 'failed',
+      aboutFooter: upd === 'managed' ? 'Local only. Vano never connects to the internet on its own.' : 'Local only. Vano only contacts GitHub to check for updates.',
+      swBg: S.checkUpdates ? 'var(--accent)' : 'var(--border-strong)', swLeft: S.checkUpdates ? '16px' : '2px', toggleAuto: () => set({ checkUpdates: !S.checkUpdates }),
+      checkOpacity: upd === 'checking' || upd === 'ready' ? 0.45 : 1,
+      checkNow: () => { if (upd === 'checking' || upd === 'ready') return; this.setState({ upd: 'checking' }); clearTimeout(this.updT); this.updT = setTimeout(() => this.setState(s => ({ upd: s.version === '0.1.0' ? 'ready' : 'uptodate' })), 1400); },
+      restartUpdate: () => this.setState({ upd: 'uptodate', version: '0.2.0' }),
+      noop: () => {}
+    };
+  }
+
+  detailVals(det, target, active, leafVal) {
+    const trashBtn = { selDisplay: 'none', selLabel: '', toggleSel: undefined };
+    if (det.type === 'rec') {
+      const r = RECS.find(x => x.id === det.id); const mx = Math.max(...r.inside.map(i => i[1]));
+      const on = this.state.selected.has(r.id);
+      return {
+        name: r.name, path: r.path, size: recLabel(r),
+        badge: r.status === 'safe' ? 'Safe to remove' : 'Review first', badgeFg: statusDot(r.status), badgeDot: statusDot(r.status), badgeBg: r.status === 'safe' ? 'var(--success-subtle)' : 'var(--warning-subtle)',
+        desc: r.desc, hasReason: !!r.reason, reason: r.reason || '', hasInside: true, barColor: r.status === 'safe' ? 'var(--success)' : 'var(--warning)',
+        inside: r.inside.map(([n, x]) => ({ name: n, size: fmt(x), pct: (x / mx * 100).toFixed(1) + '%' })),
+        meta: [{ k: 'Files', v: r.files }, { k: 'Last used', v: r.last }], hasLinks: false, links: [],
+        selDisplay: 'block', selLabel: on ? 'Deselect' : 'Select', toggleSel: () => this.toggle(r.id),
+        trash: () => this.openConfirm({ recs: [r.id], total: recSize(r) })
+      };
+    }
+    const n = this.findNode(target, det.id); const val = n.kids ? n.kids.reduce((s, k) => s + leafVal(k), 0) : leafVal(n);
+    const links = active.filter(r => r.red[n.id]).map(r => ({ name: r.name, size: fmt(r.red[n.id]), dot: statusDot(r.status), open: () => this.setState({ detail: { type: 'rec', id: r.id } }) }));
+    return {
+      ...trashBtn, name: n.name, path: n.path, size: fmt(val),
+      badge: catName(n.cat), badgeFg: 'var(--fg)', badgeDot: `var(--cat-${n.cat}-dot)`, badgeBg: `var(--cat-${n.cat}-fill)`,
+      desc: links.length ? 'Part of this folder is covered by a recommendation. Review it there to remove only what is safe.' : 'No recommendation covers this folder. Vano only suggests items it can explain.',
+      hasReason: false, reason: '', hasInside: false, inside: [], barColor: 'var(--fg-muted)',
+      meta: [{ k: 'Files', v: Math.round(n.base * 7919).toLocaleString('en-US') }, { k: 'Category', v: catName(n.cat) }],
+      hasLinks: links.length > 0, links,
+      trash: () => this.openConfirm({ nodes: [{ id: n.id, v: val, name: n.name, path: n.path }], total: val })
+    };
+  }
+}
+</script>
+</body>
+</html>

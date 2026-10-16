@@ -1,0 +1,62 @@
+# In-app updater (macOS and Windows builds from GitHub, and the Windows portable zip). Glossary and rules: docs/i18n.md
+_version: 2
+"update.setting.title":
+  en: "Updates"
+  es: "Actualizaciones"
+  gl: "Actualizacións"
+  it: "Aggiornamenti"
+"update.setting.check":
+  en: "Check for updates automatically"
+  es: "Buscar actualizaciones automáticamente"
+  gl: "Buscar actualizacións automaticamente"
+  it: "Cerca aggiornamenti automaticamente"
+"update.setting.check_description":
+  en: "Once, a few seconds after launch. Never polls in the background."
+  es: "Una vez, unos segundos tras arrancar. Nunca consulta en segundo plano."
+  gl: "Unha vez, uns segundos tras arrancar. Nunca consulta en segundo plano."
+  it: "Una volta, pochi secondi dopo l'avvio. Non controlla mai in background."
+"update.status.notes":
+  en: "Release notes"
+  es: "Notas de la versión"
+  gl: "Notas da versión"
+  it: "Note di rilascio"
+"update.checking":
+  en: "Checking for updates..."
+  es: "Buscando actualizaciones..."
+  gl: "Buscando actualizacións..."
+  it: "Ricerca di aggiornamenti..."
+"update.up_to_date":
+  en: "Vano is up to date (%{version})"
+  es: "Vano está actualizado (%{version})"
+  gl: "Vano está actualizado (%{version})"
+  it: "Vano è aggiornato (%{version})"
+"update.already_ready":
+  en: "Update %{version} is ready, restart to install it"
+  es: "La actualización %{version} está lista, reinicia para instalarla"
+  gl: "A actualización %{version} está lista, reinicia para instalala"
+  it: "L'aggiornamento %{version} è pronto, riavvia per installarlo"
+"update.found":
+  en: "Update %{version} downloaded, restart to install it"
+  es: "Actualización %{version} descargada, reinicia para instalarla"
+  gl: "Actualización %{version} descargada, reinicia para instalala"
+  it: "Aggiornamento %{version} scaricato, riavvia per installarlo"
+"update.available_manual":
+  en: "Update %{version} is available, download the new portable zip from the release page"
+  es: "La actualización %{version} está disponible, descarga el nuevo zip portable desde la página de la versión"
+  gl: "A actualización %{version} está dispoñible, descarga o novo zip portable desde a páxina da versión"
+  it: "L'aggiornamento %{version} è disponibile, scarica il nuovo zip portatile dalla pagina della release"
+"update.check_failed":
+  en: "Could not check for updates: %{error}"
+  es: "No se pudo buscar actualizaciones: %{error}"
+  gl: "Non se puido buscar actualizacións: %{error}"
+  it: "Impossibile cercare aggiornamenti: %{error}"
+"update.install_failed":
+  en: "Could not install the update: %{error}"
+  es: "No se pudo instalar la actualización: %{error}"
+  gl: "Non se puido instalar a actualización: %{error}"
+  it: "Impossibile installare l'aggiornamento: %{error}"
+"update.fallback":
+  en: "Could not update in place, download the new version from GitHub"
+  es: "No se pudo actualizar en el sitio, descarga la nueva versión desde GitHub"
+  gl: "Non se puido actualizar no sitio, descarga a nova versión desde GitHub"
+  it: "Impossibile aggiornare sul posto, scarica la nuova versione da GitHub"

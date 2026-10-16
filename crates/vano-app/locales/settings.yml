@@ -1,0 +1,267 @@
+# Settings modal. Glossary and rules: docs/i18n.md
+_version: 2
+"settings.title":
+  en: "Settings"
+  es: "Ajustes"
+  gl: "Axustes"
+  it: "Impostazioni"
+"settings.saved_to":
+  en: "Saved to"
+  es: "Guardado en"
+  gl: "Gardado en"
+  it: "Salvato in"
+"settings.category.appearance":
+  en: "Appearance"
+  es: "Apariencia"
+  gl: "Aparencia"
+  it: "Aspetto"
+"settings.category.advanced":
+  en: "Advanced"
+  es: "Avanzado"
+  gl: "Avanzado"
+  it: "Avanzate"
+"settings.footer.applied":
+  en: "Changes apply immediately."
+  es: "Los cambios se aplican al instante."
+  gl: "Os cambios aplícanse ao instante."
+  it: "Le modifiche vengono applicate subito."
+"settings.footer.reset":
+  en: "Reset to defaults"
+  es: "Restablecer valores predeterminados"
+  gl: "Restablecer os valores predeterminados"
+  it: "Ripristina i valori predefiniti"
+"settings.language.title":
+  en: "Language"
+  es: "Idioma"
+  gl: "Idioma"
+  it: "Lingua"
+"settings.language.label":
+  en: "Display language"
+  es: "Idioma de la interfaz"
+  gl: "Idioma da interface"
+  it: "Lingua dell'interfaccia"
+"settings.language.description":
+  en: "Automatic follows your system language."
+  es: "Automático sigue el idioma del sistema."
+  gl: "Automático segue o idioma do sistema."
+  it: "Automatica segue la lingua del sistema."
+"settings.language.auto":
+  en: "Automatic (%{language})"
+  es: "Automático (%{language})"
+  gl: "Automático (%{language})"
+  it: "Automatica (%{language})"
+"settings.theme.title":
+  en: "Theme"
+  es: "Tema"
+  gl: "Tema"
+  it: "Tema"
+"settings.theme.description":
+  en: "System follows your OS light/dark setting and switches live."
+  es: "Sistema sigue el modo claro/oscuro del sistema operativo y cambia al instante."
+  gl: "Sistema segue o modo claro/escuro do sistema operativo e cambia ao instante."
+  it: "Sistema segue l'impostazione chiaro/scuro del sistema operativo e cambia subito."
+"settings.theme.system":
+  en: "System"
+  es: "Sistema"
+  gl: "Sistema"
+  it: "Sistema"
+"settings.theme.light":
+  en: "Light"
+  es: "Claro"
+  gl: "Claro"
+  it: "Chiaro"
+"settings.theme.dark":
+  en: "Dark"
+  es: "Oscuro"
+  gl: "Escuro"
+  it: "Scuro"
+"settings.interface.title":
+  en: "Interface"
+  es: "Interfaz"
+  gl: "Interface"
+  it: "Interfaccia"
+"settings.interface.font_description":
+  en: "Geist is bundled, so every platform looks the same."
+  es: "Geist está incluida, así que todas las plataformas se ven igual."
+  gl: "Geist está incluída, así que todas as plataformas se ven igual."
+  it: "Geist è incluso, quindi tutte le piattaforme appaiono uguali."
+"settings.font":
+  en: "Font"
+  es: "Fuente"
+  gl: "Tipo de letra"
+  it: "Carattere"
+"settings.font_size":
+  en: "Font size"
+  es: "Tamaño de fuente"
+  gl: "Tamaño da letra"
+  it: "Dimensione carattere"
+"settings.font_bundled":
+  en: "%{name} (bundled)"
+  es: "%{name} (incluida)"
+  gl: "%{name} (incluída)"
+  it: "%{name} (incluso)"
+"settings.logging.title":
+  en: "Logging"
+  es: "Registro"
+  gl: "Rexistro"
+  it: "Log"
+"settings.logging.level":
+  en: "Log level"
+  es: "Nivel de registro"
+  gl: "Nivel de rexistro"
+  it: "Livello di log"
+"settings.logging.level_description":
+  en: "Debug and Trace add detail to diagnose problems."
+  es: "Debug y Trace añaden detalle para diagnosticar problemas."
+  gl: "Debug e Trace engaden detalle para diagnosticar problemas."
+  it: "Debug e Trace aggiungono dettagli per diagnosticare i problemi."
+"settings.logging.file":
+  en: "Log file"
+  es: "Archivo de registro"
+  gl: "Ficheiro de rexistro"
+  it: "File di log"
+"settings.logging.open_folder":
+  en: "Open folder"
+  es: "Abrir carpeta"
+  gl: "Abrir cartafol"
+  it: "Apri cartella"
+"settings.logging.rotation":
+  en: "Rotated every %{size} MB, keeping the last %{files} files. The %{variable} environment variable overrides the level at startup."
+  es: "Se rota cada %{size} MB y se conservan los últimos %{files} archivos. La variable de entorno %{variable} sustituye el nivel al iniciar."
+  gl: "Rótase cada %{size} MB e consérvanse os últimos %{files} ficheiros. A variable de contorno %{variable} substitúe o nivel ao iniciar."
+  it: "Ruotato ogni %{size} MB, conservando gli ultimi %{files} file. La variabile d'ambiente %{variable} sostituisce il livello all'avvio."
+"settings.log_level.off":
+  en: "Off"
+  es: "Desactivado"
+  gl: "Desactivado"
+  it: "Disattivato"
+"settings.log_level.error":
+  en: "Error"
+  es: "Error"
+  gl: "Erro"
+  it: "Errore"
+"settings.log_level.warn":
+  en: "Warn"
+  es: "Aviso"
+  gl: "Aviso"
+  it: "Avviso"
+"settings.log_level.info":
+  en: "Info"
+  es: "Info"
+  gl: "Info"
+  it: "Info"
+"settings.log_level.debug":
+  en: "Debug"
+  es: "Debug"
+  gl: "Debug"
+  it: "Debug"
+"settings.log_level.trace":
+  en: "Trace"
+  es: "Trace"
+  gl: "Trace"
+  it: "Trace"
+"settings.category.about":
+  en: "About"
+  es: "Acerca de"
+  gl: "Acerca de"
+  it: "Informazioni"
+"settings.about.version":
+  en: "Version"
+  es: "Versión"
+  gl: "Versión"
+  it: "Versione"
+"settings.about.ready.title":
+  en: "Vano %{version} is ready to install"
+  es: "Vano %{version} está listo para instalar"
+  gl: "Vano %{version} está listo para instalar"
+  it: "Vano %{version} è pronto per l'installazione"
+"settings.about.ready.text":
+  en: "Downloaded and verified. Restarting keeps your open tabs; unsaved changes ask first."
+  es: "Descargado y verificado. Reiniciar conserva tus pestañas abiertas; los cambios sin guardar se preguntan antes."
+  gl: "Descargado e verificado. Reiniciar conserva as túas lapelas abertas; os cambios sen gardar pregúntanse antes."
+  it: "Scaricato e verificato. Il riavvio mantiene le schede aperte; per le modifiche non salvate viene chiesta conferma."
+"settings.about.ready.restart":
+  en: "Restart to update"
+  es: "Reiniciar para actualizar"
+  gl: "Reiniciar para actualizar"
+  it: "Riavvia per aggiornare"
+"settings.about.available.title":
+  en: "Vano %{version} is available"
+  es: "Vano %{version} está disponible"
+  gl: "Vano %{version} está dispoñible"
+  it: "Vano %{version} è disponibile"
+"settings.about.available.text":
+  en: "This portable copy doesn't update itself. Download the new zip, close Vano and replace vano.exe."
+  es: "Esta copia portable no se actualiza sola. Descarga el nuevo zip, cierra Vano y reemplaza vano.exe."
+  gl: "Esta copia portable non se actualiza soa. Descarga o novo zip, pecha Vano e substitúe vano.exe."
+  it: "Questa copia portatile non si aggiorna da sola. Scarica il nuovo zip, chiudi Vano e sostituisci vano.exe."
+"settings.about.available.download":
+  en: "Download"
+  es: "Descargar"
+  gl: "Descargar"
+  it: "Scarica"
+"settings.about.status.failed":
+  en: "The last check failed. The log has the details."
+  es: "La última comprobación falló. El registro tiene los detalles."
+  gl: "A última comprobación fallou. O rexistro ten os detalles."
+  it: "L'ultimo controllo non è riuscito. I dettagli sono nel log."
+"settings.about.check_now":
+  en: "Check now"
+  es: "Comprobar ahora"
+  gl: "Comprobar agora"
+  it: "Controlla ora"
+"settings.about.downloads_to":
+  en: "Downloads to"
+  es: "Se descarga en"
+  gl: "Descárgase en"
+  it: "Scarica in"
+"settings.about.managed.title":
+  en: "Updates come from your package manager"
+  es: "Las actualizaciones vienen de tu gestor de paquetes"
+  gl: "As actualizacións veñen do teu xestor de paquetes"
+  it: "Gli aggiornamenti arrivano dal tuo gestore di pacchetti"
+"settings.about.managed.text":
+  en: "Vano doesn't update itself on Linux. Install it from the apt or dnf repositories and your usual upgrade command will bring new versions. If you use the tarball, download new versions from the releases page."
+  es: "Vano no se actualiza solo en Linux. Instálalo desde los repositorios apt o dnf y tu comando de actualización habitual traerá las nuevas versiones. Si usas el tarball, descarga las nuevas versiones desde la página de releases."
+  gl: "Vano non se actualiza só en Linux. Instálao desde os repositorios apt ou dnf e o teu comando de actualización habitual traerá as novas versións. Se usas o tarball, descarga as novas versións desde a páxina de releases."
+  it: "Vano non si aggiorna da solo su Linux. Installalo dai repository apt o dnf e il tuo solito comando di aggiornamento porterà le nuove versioni. Se usi il tarball, scarica le nuove versioni dalla pagina delle release."
+"settings.about.managed.link":
+  en: "Install instructions"
+  es: "Instrucciones de instalación"
+  gl: "Instrucións de instalación"
+  it: "Istruzioni di installazione"
+"settings.about.unavailable.title":
+  en: "Updates are not available in this build"
+  es: "Las actualizaciones no están disponibles en esta compilación"
+  gl: "As actualizacións non están dispoñibles nesta compilación"
+  it: "Gli aggiornamenti non sono disponibili in questa build"
+"settings.about.unavailable.text":
+  en: "This build of Vano doesn't update itself. Download new versions from GitHub."
+  es: "Esta compilación de Vano no se actualiza sola. Descarga las nuevas versiones desde GitHub."
+  gl: "Esta compilación de Vano non se actualiza soa. Descarga as novas versións desde GitHub."
+  it: "Questa build di Vano non si aggiorna da sola. Scarica le nuove versioni da GitHub."
+"settings.about.installed_from":
+  en: "Installed from"
+  es: "Instalado desde"
+  gl: "Instalado desde"
+  it: "Installato da"
+"settings.about.footer.updater":
+  en: "Local only. Vano only contacts GitHub to check for updates."
+  es: "Solo local. Vano únicamente contacta con GitHub para buscar actualizaciones."
+  gl: "Só local. Vano unicamente contacta con GitHub para buscar actualizacións."
+  it: "Solo locale. Vano contatta GitHub solo per cercare aggiornamenti."
+"settings.about.footer.offline":
+  en: "Local only. Vano never connects to the internet on its own."
+  es: "Solo local. Vano nunca se conecta a internet por su cuenta."
+  gl: "Só local. Vano nunca se conecta a internet por si mesmo."
+  it: "Solo locale. Vano non si connette mai a internet da solo."
+"settings.select.search":
+  en: "Search"
+  es: "Buscar"
+  gl: "Buscar"
+  it: "Cerca"
+"settings.select.no_results":
+  en: "No results"
+  es: "Sin resultados"
+  gl: "Sen resultados"
+  it: "Nessun risultato"

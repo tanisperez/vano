@@ -1,0 +1,131 @@
+# nfpm config for the deb and rpm packages. Driven by package.sh, which sets:
+# Content entries use "expand: true" so nfpm expands the variables in src.
+#   VANO_VERSION  e.g. 0.1.0 or 0.1.0-rc.1 (nfpm maps the pre-release to 0.1.0~rc.1)
+#   VANO_ARCH     amd64 or arm64 (Go style, nfpm converts it for rpm)
+#   VANO_BIN      path to the vano binary
+#   VANO_ROOT     repo root
+name: vano
+arch: ${VANO_ARCH}
+platform: linux
+version: ${VANO_VERSION}
+version_schema: semver
+section: utils
+priority: optional
+maintainer: Estanislao Pérez Nartallo <tanisperez@gmail.com>
+description: |
+  See what fills your disk and clear it safely.
+  Vano is an open source disk analyzer written in Rust. It scans a folder or a drive,
+  shows what takes the space and cleans it up through the trash. No login, no cloud.
+vendor: Vano
+homepage: https://vano.tanis.codes
+license: Apache-2.0
+
+contents:
+  - src: ${VANO_BIN}
+    dst: /usr/bin/vano
+    expand: true
+    file_info:
+      mode: 0755
+  - src: ${VANO_ROOT}/packaging/linux/codes.tanis.vano.desktop
+    dst: /usr/share/applications/codes.tanis.vano.desktop
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/vano.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/codes.tanis.vano.svg
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/png/vano-16.png
+    dst: /usr/share/icons/hicolor/16x16/apps/codes.tanis.vano.png
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/png/vano-24.png
+    dst: /usr/share/icons/hicolor/24x24/apps/codes.tanis.vano.png
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/png/vano-32.png
+    dst: /usr/share/icons/hicolor/32x32/apps/codes.tanis.vano.png
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/png/vano-48.png
+    dst: /usr/share/icons/hicolor/48x48/apps/codes.tanis.vano.png
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/png/vano-64.png
+    dst: /usr/share/icons/hicolor/64x64/apps/codes.tanis.vano.png
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/png/vano-128.png
+    dst: /usr/share/icons/hicolor/128x128/apps/codes.tanis.vano.png
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/png/vano-256.png
+    dst: /usr/share/icons/hicolor/256x256/apps/codes.tanis.vano.png
+    expand: true
+    file_info:
+      mode: 0644
+  - src: ${VANO_ROOT}/packaging/icons/png/vano-512.png
+    dst: /usr/share/icons/hicolor/512x512/apps/codes.tanis.vano.png
+    expand: true
+    file_info:
+      mode: 0644
+  # deb convention: the license under /usr/share/doc/<name>/ (as "copyright"-like file)
+  - src: ${VANO_ROOT}/LICENSE
+    dst: /usr/share/doc/vano/LICENSE
+    expand: true
+    file_info:
+      mode: 0644
+    packager: deb
+  - src: ${VANO_ROOT}/NOTICE
+    dst: /usr/share/doc/vano/NOTICE
+    expand: true
+    file_info:
+      mode: 0644
+    packager: deb
+  # rpm convention: /usr/share/licenses/<name>/, flagged as a license file
+  - src: ${VANO_ROOT}/LICENSE
+    dst: /usr/share/licenses/vano/LICENSE
+    expand: true
+    type: license
+    file_info:
+      mode: 0644
+    packager: rpm
+  - src: ${VANO_ROOT}/NOTICE
+    dst: /usr/share/licenses/vano/NOTICE
+    expand: true
+    type: license
+    file_info:
+      mode: 0644
+    packager: rpm
+
+# Runtime libraries the binary links (libxcb, libxkbcommon, libxkbcommon-x11) or loads with
+# dlopen (wayland-client, wayland-egl, EGL; the names embedded in the binary). Vulkan is only a
+# recommendation: wgpu can use it, but the binary does not name it. Names differ between deb and
+# rpm.
+depends:
+  - libxkbcommon0
+  - libxkbcommon-x11-0
+  - libxcb1
+  - libwayland-client0
+  - libwayland-egl1
+  - libegl1
+recommends:
+  - libvulkan1
+overrides:
+  rpm:
+    depends:
+      - libxkbcommon
+      - libxkbcommon-x11
+      - libxcb
+      - libwayland-client
+      - libwayland-egl
+      - libglvnd-egl
+    recommends:
+      - vulkan-loader

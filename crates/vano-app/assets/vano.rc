@@ -1,0 +1,2 @@
+// Windows resources embedded into vano.exe by build.rs.
+1 ICON "vano.ico"

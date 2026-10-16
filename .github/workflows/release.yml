@@ -1,0 +1,228 @@
+name: Release
+
+# Builds and packages Vano for every platform when a version tag is pushed and attaches the
+# packages to the GitHub release of that tag. The release is normally created by hand as a draft with its
+# notes right after pushing the tag; this workflow creates the draft itself if it is missing, and
+# publishes it only once every asset is uploaded. See docs/releasing.md.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # The tag must be `v` plus the workspace version, optionally followed by a pre-release
+      # suffix (`v0.1.0-rc.1` for version 0.1.0). Tags with a suffix become pre-releases.
+      - name: Compare the tag with the workspace version
+        id: version
+        run: |
+          tag="$GITHUB_REF_NAME"
+          version="${tag#v}"
+          base="${version%%-*}"
+          cargo_version=$(awk -F'"' '
+            /^\[workspace\.package\]/ { section = 1; next }
+            /^\[/ { section = 0 }
+            section && /^version *=/ { print $2; exit }
+          ' Cargo.toml)
+          if [ "$base" != "$cargo_version" ] && [ "$version" != "$cargo_version" ]; then
+            echo "::error::Tag $tag does not match the workspace version $cargo_version"
+            exit 1
+          fi
+          if [ "$version" != "$base" ]; then prerelease=true; else prerelease=false; fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "prerelease=$prerelease" >> "$GITHUB_OUTPUT"
+          echo "Version $version, pre-release: $prerelease"
+
+  build:
+    name: Build ${{ matrix.name }}
+    needs: check
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          # 22.04 (glibc 2.35) so the binary also runs on Debian 12 and older Ubuntu LTS.
+          - name: linux-x86_64
+            os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+          - name: windows-x86_64
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            updater: github
+          - name: macos-arm64
+            os: macos-latest
+            target: aarch64-apple-darwin
+            updater: github
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential pkg-config cmake \
+            libfontconfig-dev libfreetype-dev \
+            libwayland-dev wayland-protocols \
+            libxkbcommon-dev libxkbcommon-x11-dev \
+            libx11-xcb-dev libxcb1-dev \
+            libvulkan-dev
+
+      # No Cargo cache: release builds are rare, and the Build workflow's Linux cache comes from a
+      # newer Ubuntu whose glibc the build scripts restored here could need.
+      # VANO_UPDATER is empty on Linux, which has no in-app updater.
+      - name: Build
+        env:
+          VANO_UPDATER: ${{ matrix.updater }}
+        run: cargo build --release --locked --target ${{ matrix.target }}
+
+      # Tarball, deb and rpm (packaging/linux).
+      - name: Package for Linux
+        if: runner.os == 'Linux'
+        env:
+          NFPM_VERSION: 2.47.0
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/nfpm"
+          curl -sSfL "https://github.com/goreleaser/nfpm/releases/download/v${NFPM_VERSION}/nfpm_${NFPM_VERSION}_Linux_x86_64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP/nfpm" nfpm
+          PATH="$RUNNER_TEMP/nfpm:$PATH" packaging/linux/package.sh "$VERSION" \
+            "target/${{ matrix.target }}/release/vano" dist
+
+      # Vano.app as .dmg and .app.tar.gz (packaging/macos).
+      - name: Package for macOS
+        if: runner.os == 'macOS'
+        env:
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          packaging/macos/bundle.sh "$VERSION" "target/${{ matrix.target }}/release/vano" dist
+
+      # Per-user Inno Setup installer (packaging/windows).
+      - name: Package for Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup --no-progress -y }
+          & $iscc /Q "/DAppVersion=$env:VERSION" `
+            "/DSourceExe=$PWD\target\${{ matrix.target }}\release\vano.exe" `
+            "/DOutputDir=$PWD\dist" packaging\windows\vano.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      # Portable zip, for machines where running an installer is not allowed. Entries sit at the
+      # top level of the zip. It is not part of latest.json: its name does not match the setup
+      # glob there, and the in-app updater of a portable copy never downloads anything.
+      - name: Package the portable zip for Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          $zip = Join-Path $PWD "dist\Vano-$env:VERSION-windows-x86_64-portable.zip"
+          Compress-Archive -Force -DestinationPath $zip -Path `
+            "target\${{ matrix.target }}\release\vano.exe", 'LICENSE', 'NOTICE'
+          Get-Item $zip | Format-List Name, Length
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vano-${{ matrix.name }}
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    name: Publish release
+    needs: [check, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: ${{ github.ref_name }}
+      PRERELEASE: ${{ needs.check.outputs.prerelease }}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      # The manifest the in-app updater reads (vano-update). The asset names are found by
+      # glob, so the step fails if the macOS or Windows package is missing.
+      - name: Write latest.json
+        working-directory: dist
+        run: |
+          version="${TAG#v}"
+          base="https://github.com/$GH_REPO/releases/download/$TAG"
+          mac=$(ls Vano-*-macos-arm64.app.tar.gz 2>/dev/null | head -n 1)
+          win=$(ls Vano-*-windows-x86_64-setup.exe 2>/dev/null | head -n 1)
+          if [ -z "$mac" ] || [ -z "$win" ]; then
+            echo "::error::Missing the macOS app archive or the Windows installer in dist"
+            exit 1
+          fi
+          jq -n \
+            --arg version "$version" \
+            --arg notes_url "https://github.com/$GH_REPO/releases/tag/$TAG" \
+            --arg mac_url "$base/$mac" --arg mac_sha "$(sha256sum "$mac" | cut -d' ' -f1)" \
+            --arg win_url "$base/$win" --arg win_sha "$(sha256sum "$win" | cut -d' ' -f1)" \
+            '{
+              version: $version,
+              notes_url: $notes_url,
+              platforms: {
+                "macos-aarch64": { url: $mac_url, sha256: $mac_sha },
+                "windows-x86_64": { url: $win_url, sha256: $win_sha }
+              }
+            }' > latest.json
+          cat latest.json
+
+      - name: Write SHA256SUMS
+        working-directory: dist
+        run: |
+          sha256sum -- * > SHA256SUMS
+          cat SHA256SUMS
+
+      # `gh release view` also finds draft releases by their tag.
+      - name: Create the draft release if missing
+        run: |
+          if ! gh release view "$TAG" > /dev/null 2>&1; then
+            gh release create "$TAG" --draft --verify-tag --title "$TAG" \
+              --notes "Release notes for $TAG are pending."
+          fi
+
+      - name: Upload assets
+        run: gh release upload "$TAG" dist/* --clobber
+
+      - name: Publish
+        run: |
+          if [ "$PRERELEASE" = true ]; then
+            gh release edit "$TAG" --draft=false --prerelease
+          else
+            gh release edit "$TAG" --draft=false --prerelease=false --latest
+          fi

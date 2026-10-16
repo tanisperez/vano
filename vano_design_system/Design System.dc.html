@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<style>
+@font-face{font-family:"Geist";src:url("site/fonts/Geist-Regular.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Geist";src:url("site/fonts/Geist-Medium.woff2") format("woff2");font-weight:500}
+@font-face{font-family:"Geist";src:url("site/fonts/Geist-SemiBold.woff2") format("woff2");font-weight:600 700}
+@font-face{font-family:"Geist Mono";src:url("site/fonts/GeistMono-Regular.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Geist Mono";src:url("site/fonts/GeistMono-Medium.woff2") format("woff2");font-weight:500 600}
+html,body{margin:0;height:100%}
+body{font-family:"Geist",system-ui,sans-serif}
+button{font-family:inherit}
+a{color:var(--accent-text,#3f47c4);text-decoration:none}
+a:hover{color:var(--fg,#1b1c22)}
+@keyframes sz-spin{to{transform:rotate(360deg)}}
+@keyframes sz-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+[data-mode]{--success:#1d8657;--success-subtle:#e2f4ea;--warning:#9a6500;--warning-subtle:#fbf0d9;--danger:#cf3535;--danger-subtle:#fde7e7;--info:#1c6fb0;--info-subtle:#e1eef9;--danger-fg:#fff;--scrim:#0a0b1073;--shadow:0 12px 32px rgba(20,22,40,.14),0 0 0 1px rgba(20,22,40,.06);--desk:#e2e3e8;--accent-hover:color-mix(in oklab,var(--accent) 86%,#000);--pressed:color-mix(in oklab,var(--hover) 34%,var(--border-strong));--safe-fill:color-mix(in oklab,var(--success) 9%,var(--raised));--safe-hatch:color-mix(in oklab,var(--success) 38%,transparent);--safe-line:color-mix(in oklab,var(--success) 62%,transparent);--review-fill:var(--warning-subtle);--review-line:color-mix(in oklab,var(--warning) 50%,transparent);
+--cat-media-bg:oklch(.975 .018 55);--cat-media-fill:oklch(.935 .045 55);--cat-media-line:oklch(.80 .09 55);--cat-media-dot:oklch(.70 .16 50);
+--cat-other-bg:oklch(.975 .003 260);--cat-other-fill:oklch(.94 .006 260);--cat-other-line:oklch(.82 .012 260);--cat-other-dot:oklch(.64 .02 260);
+--cat-code-bg:oklch(.975 .018 285);--cat-code-fill:oklch(.925 .045 285);--cat-code-line:oklch(.78 .09 285);--cat-code-dot:oklch(.60 .17 285);
+--cat-sdk-bg:oklch(.975 .016 215);--cat-sdk-fill:oklch(.93 .04 215);--cat-sdk-line:oklch(.79 .08 215);--cat-sdk-dot:oklch(.68 .12 215);
+--cat-ai-bg:oklch(.975 .018 350);--cat-ai-fill:oklch(.93 .045 350);--cat-ai-line:oklch(.80 .09 350);--cat-ai-dot:oklch(.64 .19 350);
+--cat-caches-bg:oklch(.975 .016 255);--cat-caches-fill:oklch(.925 .04 255);--cat-caches-line:oklch(.78 .08 255);--cat-caches-dot:oklch(.60 .17 255)}
+[data-mode="dark"]{--success:#4fc88f;--success-subtle:#15302a;--warning:#e8b75a;--warning-subtle:#352b15;--danger:#f27171;--danger-subtle:#3b1e21;--info:#62b3f0;--info-subtle:#162a3b;--shadow:0 12px 32px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.04);--desk:#08090b;--accent-hover:color-mix(in oklab,var(--accent) 86%,#fff);--safe-fill:color-mix(in oklab,var(--success) 12%,var(--raised));--safe-hatch:color-mix(in oklab,var(--success) 34%,transparent);--safe-line:color-mix(in oklab,var(--success) 55%,transparent);--review-line:color-mix(in oklab,var(--warning) 45%,transparent);
+--cat-media-bg:oklch(.245 .025 55);--cat-media-fill:oklch(.30 .05 55);--cat-media-line:oklch(.46 .08 55);--cat-media-dot:oklch(.76 .13 55);
+--cat-other-bg:oklch(.24 .004 260);--cat-other-fill:oklch(.29 .008 260);--cat-other-line:oklch(.42 .012 260);--cat-other-dot:oklch(.66 .02 260);
+--cat-code-bg:oklch(.24 .03 285);--cat-code-fill:oklch(.30 .06 285);--cat-code-line:oklch(.46 .09 285);--cat-code-dot:oklch(.72 .14 285);
+--cat-sdk-bg:oklch(.24 .022 215);--cat-sdk-fill:oklch(.30 .045 215);--cat-sdk-line:oklch(.46 .07 215);--cat-sdk-dot:oklch(.76 .11 215);
+--cat-ai-bg:oklch(.24 .028 350);--cat-ai-fill:oklch(.30 .055 350);--cat-ai-line:oklch(.46 .09 350);--cat-ai-dot:oklch(.74 .15 350);
+--cat-caches-bg:oklch(.24 .026 255);--cat-caches-fill:oklch(.30 .05 255);--cat-caches-line:oklch(.46 .085 255);--cat-caches-dot:oklch(.72 .13 255)}
+[data-pal="indigo"]{--bg:#fcfcfd;--surface:#f4f5f7;--raised:#ffffff;--overlay:#ffffff;--border:#e3e5ea;--border-strong:#cdd0d8;--fg:#1b1c22;--fg-muted:#5c606e;--fg-subtle:#8b8e9a;--hover:#eceef2;--accent:#4f57d8;--accent-fg:#ffffff;--accent-text:#3f47c4;--accent-subtle:#e8e9fd}
+[data-pal="indigo"][data-mode="dark"]{--bg:#15161a;--surface:#1b1c21;--raised:#23252c;--overlay:#262830;--border:#2c2e36;--border-strong:#3b3e48;--fg:#e9eaee;--fg-muted:#a0a3ae;--fg-subtle:#6f7280;--hover:#25272e;--accent:#5b63e6;--accent-fg:#ffffff;--accent-text:#a3a9ff;--accent-subtle:#272b4d}
+[data-pal="graphite"]{--bg:#fcfcfc;--surface:#f5f5f5;--raised:#ffffff;--overlay:#ffffff;--border:#e5e5e5;--border-strong:#d0d0d0;--fg:#171717;--fg-muted:#5e5e5e;--fg-subtle:#8f8f8f;--hover:#eeeeee;--accent:#171717;--accent-fg:#ffffff;--accent-text:#171717;--accent-subtle:#ececec}
+[data-pal="graphite"][data-mode="dark"]{--bg:#141414;--surface:#1a1a1a;--raised:#232323;--overlay:#262626;--border:#2d2d2d;--border-strong:#3d3d3d;--fg:#ededed;--fg-muted:#a3a3a3;--fg-subtle:#717171;--hover:#262626;--accent:#ededed;--accent-fg:#141414;--accent-text:#ffffff;--accent-subtle:#2e2e2e}
+[data-pal="electric"]{--bg:#fbfcfe;--surface:#f2f5f9;--raised:#ffffff;--overlay:#ffffff;--border:#e0e6ee;--border-strong:#c9d2de;--fg:#111827;--fg-muted:#556070;--fg-subtle:#8792a2;--hover:#e9eef5;--accent:#0b63f6;--accent-fg:#ffffff;--accent-text:#0052d6;--accent-subtle:#e3edff}
+[data-pal="electric"][data-mode="dark"]{--bg:#0f131a;--surface:#141922;--raised:#1b222d;--overlay:#1f2632;--border:#263040;--border-strong:#344156;--fg:#e8edf5;--fg-muted:#9aa6b8;--fg-subtle:#677489;--hover:#1f2733;--accent:#2f7bff;--accent-fg:#ffffff;--accent-text:#8db8ff;--accent-subtle:#15284a}
+</style>
+</helmet>
+<div data-pal="indigo" data-mode="light" style="min-height:100vh; background:var(--surface); font-family:'Geist', system-ui, sans-serif; font-size:13px; line-height:1.4; color:var(--fg); -webkit-font-smoothing:antialiased; padding:56px; box-sizing:border-box; display:flex; flex-direction:column; gap:56px;">
+
+  <section style="max-width:880px; display:flex; flex-direction:column; gap:12px;">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div style="width:48px; height:48px; border-radius:12px; background:var(--accent); color:var(--accent-fg); font-size:24px; font-weight:700; display:flex; align-items:center; justify-content:center;">V</div>
+      <div>
+        <div style="font-size:26px; font-weight:600; letter-spacing:-0.01em;">Vano design system</div>
+        <div style="font-size:14px; color:var(--fg-muted);">Postino's tokens, metrics and components, extended for a disk analyzer.</div>
+      </div>
+    </div>
+    <div style="font-size:13px; color:var(--fg-muted); max-width:720px; text-wrap:pretty; line-height:1.5;">Surfaces, text, states, radii and type come straight from <span style="font-family:'Geist Mono', monospace; color:var(--fg);">theme/palette.rs</span> and <span style="font-family:'Geist Mono', monospace; color:var(--fg);">theme/metrics.rs</span>. New here: three accent palettes, six category colors for the treemap, two cleanup treatments, and the motion rules for the scan. Light or dark follows the system through <span style="font-family:'Geist Mono', monospace; color:var(--fg);">Theme::sync_system_appearance</span>, the same call Postino uses.</div>
+  </section>
+
+  <section style="display:flex; flex-direction:column; gap:20px;">
+    <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">1 · Accent palettes</div>
+    <sc-for list="{{ palettes }}" as="p" hint-placeholder-count="3">
+      <div id="{{ p.anchor }}" style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">
+          <span style="height:22px; padding:0 8px; display:inline-flex; align-items:center; border-radius:6px; background:var(--fg); color:var(--bg); font-family:'Geist Mono', monospace; font-size:12px; font-weight:500;">{{ p.anchor }}</span>
+          <span style="font-size:20px; font-weight:600;">{{ p.title }}</span>
+          <span style="font-size:13px; color:var(--fg-muted);">{{ p.note }}</span>
+        </div>
+        <div style="display:flex; gap:20px; flex-wrap:wrap;">
+          <sc-for list="{{ p.modes }}" as="m" hint-placeholder-count="2">
+            <div data-pal="{{ p.pal }}" data-mode="{{ m.mode }}" style="width:620px; background:var(--bg); color:var(--fg); border:1px solid var(--border); border-radius:14px; overflow:hidden; display:flex; flex-direction:column;">
+              <div style="height:40px; display:flex; align-items:center; gap:8px; padding:0 14px; background:var(--surface); border-bottom:1px solid var(--border);">
+                <div style="width:18px; height:18px; border-radius:5px; background:var(--accent); color:var(--accent-fg); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;">V</div>
+                <span style="font-weight:600;">Vano</span>
+                <span style="flex:1;"></span>
+                <span style="font-family:'Geist Mono', monospace; font-size:11px; color:var(--fg-subtle);">{{ m.label }}</span>
+              </div>
+              <div style="padding:16px; display:flex; flex-direction:column; gap:16px;">
+                <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:8px;">
+                  <sc-for list="{{ m.tokens }}" as="s" hint-placeholder-count="14">
+                    <div style="display:flex; flex-direction:column; gap:4px; min-width:0;">
+                      <div style="height:36px; border-radius:6px; background:var(--{{ s.v }}); box-shadow:inset 0 0 0 1px var(--border);"></div>
+                      <div style="font-size:10.5px; color:var(--fg-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ s.v }}</div>
+                      <div style="font-family:'Geist Mono', monospace; font-size:10px; color:var(--fg-subtle);">{{ s.hex }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display:flex; gap:12px; align-items:stretch;">
+                  <div style="flex:1; background:var(--raised); border:1px solid var(--border); border-radius:10px; padding:12px 14px; display:flex; flex-direction:column; gap:10px;">
+                    <div style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--fg-muted);"><span style="width:6px; height:6px; border-radius:3px; background:var(--success);"></span>Safe to remove</div>
+                    <div style="display:flex; align-items:baseline; gap:8px;"><span style="font-family:'Geist Mono', monospace; font-size:24px; font-weight:500; letter-spacing:-0.02em;">41.7 GB</span><span style="font-family:'Geist Mono', monospace; font-size:12px; color:var(--fg-subtle);">5 items</span></div>
+                    <div style="height:2px; background:var(--hover); border-radius:1px;"><div style="height:100%; width:62%; background:var(--accent);"></div></div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                      <span style="height:30px; padding:0 12px; display:inline-flex; align-items:center; border-radius:8px; background:var(--accent); color:var(--accent-fg); font-weight:500;">Move to Trash</span>
+                      <span style="height:30px; padding:0 12px; display:inline-flex; align-items:center; border-radius:8px; background:var(--raised); border:1px solid var(--border-strong); font-weight:500; box-sizing:border-box;">Select safe</span>
+                    </div>
+                  </div>
+                  <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+                    <div style="display:flex; padding:2px; gap:2px; border-radius:7px; background:var(--surface); border:1px solid var(--border); align-self:flex-start;">
+                      <span style="height:22px; padding:0 10px; display:flex; align-items:center; border-radius:5px; font-size:12px; background:var(--raised); box-shadow:0 1px 2px rgba(0,0,0,.12);">Category</span>
+                      <span style="height:22px; padding:0 10px; display:flex; align-items:center; border-radius:5px; font-size:12px; color:var(--fg-muted);">Cleanup</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; background:var(--accent-subtle);">
+                      <span style="width:16px; height:16px; border-radius:4px; background:var(--accent); flex:none;"></span>
+                      <span style="flex:1; font-weight:500; color:var(--accent-text);">npm cache</span>
+                      <span style="font-family:'Geist Mono', monospace; font-weight:500;">13.4 GB</span>
+                    </div>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                      <span style="height:22px; padding:0 8px; display:flex; align-items:center; gap:5px; border-radius:6px; background:var(--success-subtle); color:var(--success); font-size:12px; font-weight:600;"><span style="width:6px; height:6px; border-radius:3px; background:currentColor;"></span>Safe to remove</span>
+                      <span style="height:22px; padding:0 8px; display:flex; align-items:center; gap:5px; border-radius:6px; background:var(--warning-subtle); color:var(--warning); font-size:12px; font-weight:600;"><span style="width:6px; height:6px; border-radius:3px; background:currentColor;"></span>Review first</span>
+                    </div>
+                    <div style="font-size:12px; color:var(--accent-text);">Link and selected label · accent_text</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="display:flex; flex-direction:column; gap:16px;">
+    <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">2 · Treemap colors (shared by every palette)</div>
+    <div style="font-size:13px; color:var(--fg-muted); max-width:720px; line-height:1.5;">One hue per category, same lightness and chroma across hues. A folder tile uses <span style="font-family:'Geist Mono', monospace;">bg</span>, the folders inside it use <span style="font-family:'Geist Mono', monospace;">fill</span>, both outlined in <span style="font-family:'Geist Mono', monospace;">line</span>. <span style="font-family:'Geist Mono', monospace;">dot</span> is for legends, rings and bars. Anything safe to remove is hatched in <span style="font-family:'Geist Mono', monospace;">success</span>, in both views.</div>
+    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+      <sc-for list="{{ catModes }}" as="m" hint-placeholder-count="2">
+        <div data-pal="indigo" data-mode="{{ m.mode }}" style="width:620px; background:var(--raised); color:var(--fg); border:1px solid var(--border); border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:14px; box-sizing:border-box;">
+          <div style="font-family:'Geist Mono', monospace; font-size:11px; color:var(--fg-subtle);">{{ m.label }}</div>
+          <sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="width:150px; flex:none; font-size:12.5px;">{{ c.name }}</span>
+              <div style="flex:1; height:44px; display:flex; gap:4px; padding:4px; border-radius:6px; background:var(--cat-{{ c.id }}-bg); border:1px solid var(--cat-{{ c.id }}-line); box-sizing:border-box;">
+                <div style="flex:3; border-radius:5px; background:var(--cat-{{ c.id }}-fill); border:1px solid var(--cat-{{ c.id }}-line);"></div>
+                <div style="flex:2; border-radius:5px; background:var(--cat-{{ c.id }}-fill); border:1px solid var(--cat-{{ c.id }}-line);"></div>
+                <div style="flex:1; border-radius:5px; background-color:var(--safe-fill); background-image:repeating-linear-gradient(135deg, var(--safe-hatch) 0 1.5px, transparent 1.5px 7px); border:1px solid var(--safe-line);"></div>
+              </div>
+              <span style="width:10px; height:10px; border-radius:3px; background:var(--cat-{{ c.id }}-dot); flex:none;"></span>
+              <span style="width:44px; font-family:'Geist Mono', monospace; font-size:11px; color:var(--fg-subtle);">h {{ c.hue }}</span>
+            </div>
+          </sc-for>
+          <div style="display:flex; gap:12px; padding-top:12px; border-top:1px solid var(--border); flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--fg-muted);"><span style="width:40px; height:24px; border-radius:5px; background-color:var(--safe-fill); background-image:repeating-linear-gradient(135deg, var(--safe-hatch) 0 1.5px, transparent 1.5px 7px); border:1px solid var(--safe-line);"></span>safe_fill + safe_hatch</div>
+            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--fg-muted);"><span style="width:40px; height:24px; border-radius:5px; background:var(--review-fill); border:1px solid var(--review-line);"></span>review (Cleanup view)</div>
+            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--fg-muted);"><span style="width:40px; height:24px; border-radius:5px; background:var(--surface); border:1px solid var(--border);"></span>no recommendation</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start;">
+    <div style="width:620px; background:var(--raised); border:1px solid var(--border); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:14px; box-sizing:border-box;">
+      <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">3 · Type (Geist, Geist Mono)</div>
+      <sc-for list="{{ type }}" as="t" hint-placeholder-count="9">
+        <div style="display:flex; align-items:baseline; gap:16px; border-top:1px solid var(--border); padding-top:10px;">
+          <span style="width:130px; flex:none; font-family:'Geist Mono', monospace; font-size:11px; color:var(--fg-subtle);">{{ t.spec }}</span>
+          <span style="font-family:{{ t.family }}; font-size:{{ t.size }}px; font-weight:{{ t.weight }}; letter-spacing:{{ t.track }}; text-transform:{{ t.case }}; color:var(--fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ t.sample }}</span>
+        </div>
+      </sc-for>
+      <div style="font-size:12px; color:var(--fg-muted); line-height:1.5;">Every size is mono with tabular figures, so counters do not jitter while they climb during a scan.</div>
+    </div>
+    <div style="width:620px; background:var(--raised); border:1px solid var(--border); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:14px; box-sizing:border-box;">
+      <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">4 · Metrics (px)</div>
+      <div style="display:grid; grid-template-columns:1fr auto; gap:8px 24px; font-size:12.5px;">
+        <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="14">
+          <span style="color:var(--fg-muted);">{{ m.k }}</span>
+          <span style="font-family:'Geist Mono', monospace; font-size:12px; text-align:right;">{{ m.v }}</span>
+        </sc-for>
+      </div>
+    </div>
+    <div style="width:620px; background:var(--raised); border:1px solid var(--border); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:14px; box-sizing:border-box;">
+      <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">5 · Motion</div>
+      <sc-for list="{{ motion }}" as="m" hint-placeholder-count="5">
+        <div style="display:flex; gap:16px; border-top:1px solid var(--border); padding-top:10px;">
+          <span style="width:150px; flex:none; font-weight:500;">{{ m.k }}</span>
+          <span style="flex:1; font-size:12.5px; color:var(--fg-muted); line-height:1.45;">{{ m.v }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="width:620px; background:var(--raised); border:1px solid var(--border); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:12px; box-sizing:border-box;">
+      <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">6 · In Rust (theme/palette.rs)</div>
+      <pre style="margin:0; padding:14px; border-radius:8px; background:var(--surface); border:1px solid var(--border); font-family:'Geist Mono', monospace; font-size:11.5px; line-height:1.55; color:var(--fg); white-space:pre-wrap;">{{ rust }}</pre>
+    </div>
+  </section>
+
+  <section style="display:flex; flex-direction:column; gap:16px;">
+    <div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-subtle);">7 · App icon</div>
+    <div style="font-size:13px; color:var(--fg-muted); max-width:720px; line-height:1.5;">Built like Postino's: accent square, radius 71 of 256, a "V" in Geist Bold outlined to a path, same cap height. Master in <span style="font-family:'Geist Mono', monospace; color:var(--fg);">packaging/icons/vano.svg</span>; PNGs, .ico and the site logo are generated from it.</div>
+    <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:stretch;">
+      <div data-pal="indigo" data-mode="light" style="width:620px; padding:24px; box-sizing:border-box; background:var(--raised); border:1px solid var(--border); border-radius:14px; display:flex; align-items:flex-end; gap:24px; flex-wrap:wrap;">
+        <sc-for list="{{ iconSizes }}" as="s" hint-placeholder-count="6">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <img src="{{ s.src }}" width="{{ s.px }}" height="{{ s.px }}" style="display:block;">
+            <span style="font-family:'Geist Mono', monospace; font-size:11px; color:var(--fg-subtle);">{{ s.px }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div data-pal="indigo" data-mode="dark" style="width:620px; padding:24px; box-sizing:border-box; background:var(--bg); border:1px solid var(--border); border-radius:14px; display:flex; align-items:center; gap:24px; color:var(--fg);">
+        <div style="display:flex; gap:10px; padding:10px 14px; border-radius:18px; background:var(--raised); border:1px solid var(--border);">
+          <img src="packaging/icons/vano.svg" width="56" height="56" style="display:block;">
+          <img src="packaging/icons/alternatives/vano-electric.svg" width="56" height="56" style="display:block;">
+          <img src="packaging/icons/alternatives/vano-graphite.svg" width="56" height="56" style="display:block; box-shadow:0 0 0 1px var(--border-strong); border-radius:16px;">
+        </div>
+        <div style="font-size:12.5px; color:var(--fg-muted); line-height:1.5;">Indigo (master), Electric and Graphite, on a dark dock. Graphite needs the 1 px outline to stay visible on dark backgrounds.</div>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const NEUTRAL = ['bg', 'surface', 'raised', 'border', 'border-strong', 'hover', 'fg-subtle', 'fg-muted', 'fg', 'accent', 'accent-text', 'accent-subtle', 'success', 'warning'];
+const HEX = {
+  indigo: { light: ['#fcfcfd', '#f4f5f7', '#ffffff', '#e3e5ea', '#cdd0d8', '#eceef2', '#8b8e9a', '#5c606e', '#1b1c22', '#4f57d8', '#3f47c4', '#e8e9fd', '#1d8657', '#9a6500'], dark: ['#15161a', '#1b1c21', '#23252c', '#2c2e36', '#3b3e48', '#25272e', '#6f7280', '#a0a3ae', '#e9eaee', '#5b63e6', '#a3a9ff', '#272b4d', '#4fc88f', '#e8b75a'] },
+  graphite: { light: ['#fcfcfc', '#f5f5f5', '#ffffff', '#e5e5e5', '#d0d0d0', '#eeeeee', '#8f8f8f', '#5e5e5e', '#171717', '#171717', '#171717', '#ececec', '#1d8657', '#9a6500'], dark: ['#141414', '#1a1a1a', '#232323', '#2d2d2d', '#3d3d3d', '#262626', '#717171', '#a3a3a3', '#ededed', '#ededed', '#ffffff', '#2e2e2e', '#4fc88f', '#e8b75a'] },
+  electric: { light: ['#fbfcfe', '#f2f5f9', '#ffffff', '#e0e6ee', '#c9d2de', '#e9eef5', '#8792a2', '#556070', '#111827', '#0b63f6', '#0052d6', '#e3edff', '#1d8657', '#9a6500'], dark: ['#0f131a', '#141922', '#1b222d', '#263040', '#344156', '#1f2733', '#677489', '#9aa6b8', '#e8edf5', '#2f7bff', '#8db8ff', '#15284a', '#4fc88f', '#e8b75a'] }
+};
+const PALS = [
+  { pal: 'indigo', anchor: '1a', title: 'Indigo', note: "Postino's own palette, unchanged. The default." },
+  { pal: 'graphite', anchor: '1b', title: 'Graphite', note: 'Pure neutrals, the accent is ink. Closest to the reference screenshot; the treemap carries all the color.' },
+  { pal: 'electric', anchor: '1c', title: 'Electric blue', note: 'Cooler neutrals and a saturated blue accent. Reads as a system utility.' }];
+const RUST = `pub enum Accent { Indigo, Graphite, Electric }
+
+// Tokens gains one field per category tone,
+// written once in LIGHT and DARK like the rest:
+cat_code_bg: "oklch(.975 .018 285)",
+cat_code_fill: "oklch(.925 .045 285)",
+cat_code_line: "oklch(.78 .09 285)",
+cat_code_dot: "oklch(.60 .17 285)",
+// ... media 55, sdk 215, ai 350, caches 255, other 260
+
+impl Palette {
+    pub fn category(&self, c: Category) -> CategoryColors { .. }
+    pub fn safe_hatch(&self) -> Hsla {
+        self.success.opacity(0.38)
+    }
+}
+
+// Accent swaps only surfaces, text and accent tokens.
+// States and categories are shared by all three.`;
+
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      palettes: PALS.map(p => ({ ...p, modes: ['light', 'dark'].map(mode => ({ mode, label: `${p.pal} · ${mode}`, tokens: NEUTRAL.map((v, i) => ({ v, hex: HEX[p.pal][mode][i] })) })) })),
+      catModes: [{ mode: 'light', label: 'light' }, { mode: 'dark', label: 'dark' }],
+      cats: [['code', 'Code projects', 285], ['ai', 'AI models', 350], ['caches', 'Package caches', 255], ['sdk', 'iOS & Android SDKs', 215], ['media', 'Documents & media', 55], ['other', 'Dev tools & other', 260]].map(([id, name, hue]) => ({ id, name, hue })),
+      type: [
+        ['26 / 600', "'Geist'", 26, 600, '-0.01em', 'none', 'Vano'],
+        ['15 / 600', "'Geist'", 15, 600, '0', 'none', 'Recommendations'],
+        ['13 / 500', "'Geist'", 13, 500, '0', 'none', 'Move to Trash · row names'],
+        ['13 / 400', "'Geist'", 13, 400, '0', 'none', 'Body and descriptions'],
+        ['12 / 400', "'Geist'", 12, 400, '0', 'none', 'Card subtitles, legend'],
+        ['11 / 600 caps', "'Geist'", 11, 600, '.06em', 'uppercase', 'Section label'],
+        ['mono 26 / 500', "'Geist Mono'", 26, 500, '-0.02em', 'none', '92.0 GB'],
+        ['mono 13 / 500', "'Geist Mono'", 13, 500, '0', 'none', '13.4 GB'],
+        ['mono 11.5 / 400', "'Geist Mono'", 11.5, 400, '0', 'none', '~/Library/Developer/Xcode']
+      ].map(([spec, family, size, weight, track, cs, sample]) => ({ spec, family, size, weight, track, case: cs, sample })),
+      metrics: [['Title bar', '40'], ['Status bar', '24'], ['Controls, buttons', '30'], ['Primary scan button', '32'], ['Segmented item', '22'], ['Status badge', '22'], ['Recommendation row', '56'], ['Recent row', '34'], ['Card padding', '14 / 16'], ['Page gap', '16'], ['Tile gap / folder header', '4 / 27'], ['Radius chip, checkbox', '4'], ['Radius tile, badge', '5 / 6'], ['Radius input, button', '8'], ['Radius card', '10'], ['Radius modal', '14'], ['Stats: 4 columns from', '760 wide'], ['Side panel wraps under', '~890 wide']].map(([k, v]) => ({ k, v })),
+      motion: [
+        ['Treemap re-layout', 'Positions recompute every 250 ms while scanning and ease over 450 ms, cubic-bezier(.2,.7,.2,1). Tiles fade in at 400 ms when their folder is first read.'],
+        ['Rings', 'Category arcs grow with counted bytes. A soft highlight sweeps the ring while reading and stops when the scan ends.'],
+        ['Ranking', 'Top ten folders swap places over 500 ms; bars follow bytes linearly.'],
+        ['Found so far', 'Each recommendation enters with a 400 ms fade and 4 px rise, in the order it was found.'],
+        ['Idle rule', "As in Postino: no timer runs outside a scan. Results and the home screen only repaint on input."]
+      ].map(([k, v]) => ({ k, v })),
+      rust: RUST,
+      iconSizes: [[1024, 128], [256, 96], [128, 64], [64, 48], [64, 32], [32, 24], [32, 16]].map(([file, px]) => ({ src: `packaging/icons/png/vano-${file}.png`, px }))
+    };
+  }
+}
+</script>
+</body>
+</html>

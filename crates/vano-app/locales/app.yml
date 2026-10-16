@@ -1,0 +1,662 @@
+# Vano screens: home, scan, results, status bar, toasts. Glossary: docs/i18n.md
+_version: 2
+"common.files.one":
+  en: "%{n} file"
+  es: "%{n} archivo"
+  gl: "%{n} ficheiro"
+  it: "%{n} file"
+"common.files.other":
+  en: "%{n} files"
+  es: "%{n} archivos"
+  gl: "%{n} ficheiros"
+  it: "%{n} file"
+"common.items.one":
+  en: "%{n} item"
+  es: "%{n} elemento"
+  gl: "%{n} elemento"
+  it: "%{n} elemento"
+"common.items.other":
+  en: "%{n} items"
+  es: "%{n} elementos"
+  gl: "%{n} elementos"
+  it: "%{n} elementi"
+"confirm.button":
+  en: "Move %{size} to Trash"
+  es: "Mover %{size} a la papelera"
+  gl: "Mover %{size} ao lixo"
+  it: "Sposta %{size} nel cestino"
+"confirm.review.one":
+  en: "%{n} of these needs review. Make sure you no longer use it."
+  es: "%{n} de estos elementos necesita revisión. Asegúrate de que ya no lo usas."
+  gl: "%{n} destes elementos precisa revisión. Asegúrate de que xa non o usas."
+  it: "%{n} di questi elementi va controllato. Assicurati di non usarlo più."
+"confirm.review.other":
+  en: "%{n} of these need review. Make sure you no longer use them."
+  es: "%{n} de estos elementos necesitan revisión. Asegúrate de que ya no los usas."
+  gl: "%{n} destes elementos precisan revisión. Asegúrate de que xa non os usas."
+  it: "%{n} di questi elementi vanno controllati. Assicurati di non usarli più."
+"confirm.text":
+  en: "These items go to the Trash. You can put them back from there until you empty it."
+  es: "Estos elementos van a la papelera. Puedes recuperarlos desde allí hasta que la vacíes."
+  gl: "Estes elementos van ao lixo. Podes recuperalos desde alí ata que o baleires."
+  it: "Questi elementi vanno nel cestino. Puoi ripristinarli da lì finché non lo svuoti."
+"confirm.title_many":
+  en: "Move %{count} items to the Trash?"
+  es: "¿Mover %{count} elementos a la papelera?"
+  gl: "Mover %{count} elementos ao lixo?"
+  it: "Spostare %{count} elementi nel cestino?"
+"confirm.title_one":
+  en: "Move %{name} to the Trash?"
+  es: "¿Mover %{name} a la papelera?"
+  gl: "Mover %{name} ao lixo?"
+  it: "Spostare %{name} nel cestino?"
+"confirm.total":
+  en: "Total"
+  es: "Total"
+  gl: "Total"
+  it: "Totale"
+"confirm.uncovered":
+  en: "No recommendation covers this folder. Make sure nothing in it is still needed."
+  es: "Ninguna recomendación cubre esta carpeta. Asegúrate de que no necesitas nada de su contenido."
+  gl: "Ningunha recomendación cobre este cartafol. Asegúrate de que non precisas nada do seu contido."
+  it: "Nessun suggerimento copre questa cartella. Assicurati che nulla al suo interno serva ancora."
+"explorer.more.one":
+  en: "%{n} more"
+  es: "%{n} más"
+  gl: "%{n} máis"
+  it: "Altri %{n}"
+"explorer.more.other":
+  en: "%{n} more"
+  es: "%{n} más"
+  gl: "%{n} máis"
+  it: "Altri %{n}"
+"format.days_ago.one":
+  en: "%{n} day ago"
+  es: "Hace %{n} día"
+  gl: "Hai %{n} día"
+  it: "%{n} giorno fa"
+"format.days_ago.other":
+  en: "%{n} days ago"
+  es: "Hace %{n} días"
+  gl: "Hai %{n} días"
+  it: "%{n} giorni fa"
+"format.weeks_ago.one":
+  en: "%{n} week ago"
+  es: "Hace %{n} semana"
+  gl: "Hai %{n} semana"
+  it: "%{n} settimana fa"
+"format.weeks_ago.other":
+  en: "%{n} weeks ago"
+  es: "Hace %{n} semanas"
+  gl: "Hai %{n} semanas"
+  it: "%{n} settimane fa"
+"format.months_ago.one":
+  en: "%{n} month ago"
+  es: "Hace %{n} mes"
+  gl: "Hai %{n} mes"
+  it: "%{n} mese fa"
+"format.months_ago.other":
+  en: "%{n} months ago"
+  es: "Hace %{n} meses"
+  gl: "Hai %{n} meses"
+  it: "%{n} mesi fa"
+"format.years_ago.one":
+  en: "%{n} year ago"
+  es: "Hace %{n} año"
+  gl: "Hai %{n} ano"
+  it: "%{n} anno fa"
+"format.years_ago.other":
+  en: "%{n} years ago"
+  es: "Hace %{n} años"
+  gl: "Hai %{n} anos"
+  it: "%{n} anni fa"
+"format.today":
+  en: "Today"
+  es: "Hoy"
+  gl: "Hoxe"
+  it: "Oggi"
+"format.yesterday":
+  en: "Yesterday"
+  es: "Ayer"
+  gl: "Onte"
+  it: "Ieri"
+"home.choose":
+  en: "Choose a folder…"
+  es: "Elegir una carpeta…"
+  gl: "Escoller un cartafol…"
+  it: "Scegli una cartella…"
+"home.disk_caption":
+  en: "%{used} used of %{total}"
+  es: "%{used} usados de %{total}"
+  gl: "%{used} usados de %{total}"
+  it: "%{used} usati su %{total}"
+"home.folder_caption":
+  en: "Opens the system folder picker."
+  es: "Abre el selector de carpetas del sistema."
+  gl: "Abre o selector de cartafoles do sistema."
+  it: "Apre il selettore di cartelle del sistema."
+"home.folder_change":
+  en: "Click to pick another folder."
+  es: "Haz clic para elegir otra carpeta."
+  gl: "Preme para escoller outro cartafol."
+  it: "Fai clic per scegliere un'altra cartella."
+"home.folder_path":
+  en: "Any folder or external drive"
+  es: "Cualquier carpeta o disco externo"
+  gl: "Calquera cartafol ou disco externo"
+  it: "Qualsiasi cartella o disco esterno"
+"home.footer":
+  en: "Vano only reads file sizes. Nothing is removed until you confirm, and removed items go to the Trash."
+  es: "Vano solo lee el tamaño de los archivos. No se elimina nada hasta que lo confirmas, y lo eliminado va a la papelera."
+  gl: "Vano só le o tamaño dos ficheiros. Non se elimina nada ata que o confirmas, e o eliminado vai ao lixo."
+  it: "Vano legge solo le dimensioni dei file. Nulla viene rimosso finché non confermi, e ciò che rimuovi va nel cestino."
+"home.home_caption":
+  en: "Your files, projects and caches."
+  es: "Tus archivos, proyectos y cachés."
+  gl: "Os teus ficheiros, proxectos e cachés."
+  it: "I tuoi file, progetti e cache."
+"home.open_results":
+  en: "Open results"
+  es: "Abrir resultados"
+  gl: "Abrir resultados"
+  it: "Apri risultati"
+"home.recent":
+  en: "Recent"
+  es: "Recientes"
+  gl: "Recentes"
+  it: "Recenti"
+"home.scan":
+  en: "Scan %{target}"
+  es: "Analizar %{target}"
+  gl: "Analizar %{target}"
+  it: "Analizza %{target}"
+"home.tagline":
+  en: "See what fills your disk and clear it safely."
+  es: "Mira qué llena tu disco y libéralo con seguridad."
+  gl: "Mira que enche o teu disco e libérao con seguridade."
+  it: "Scopri cosa riempie il disco e liberalo in sicurezza."
+"home.what":
+  en: "What to scan"
+  es: "Qué analizar"
+  gl: "Que analizar"
+  it: "Cosa analizzare"
+"results.color.category":
+  en: "Category"
+  es: "Categoría"
+  gl: "Categoría"
+  it: "Categoria"
+"results.color.cleanup":
+  en: "Cleanup"
+  es: "Limpieza"
+  gl: "Limpeza"
+  it: "Pulizia"
+"results.covered_by":
+  en: "Covered by"
+  es: "Cubierto por"
+  gl: "Cuberto por"
+  it: "Coperto da"
+"results.deselect":
+  en: "Deselect"
+  es: "Desmarcar"
+  gl: "Desmarcar"
+  it: "Deseleziona"
+"results.explorer.sub_disk":
+  en: "The whole disk, sized by space used. Click a tile to open it."
+  es: "Todo el disco, según el espacio que ocupa. Haz clic en un bloque para abrirlo."
+  gl: "Todo o disco, segundo o espazo que ocupa. Preme nun bloque para abrilo."
+  it: "Tutto il disco, in base allo spazio usato. Fai clic su un riquadro per aprirlo."
+"results.explorer.sub_folder":
+  en: "This folder, sized by space used. Click a tile to open it."
+  es: "Esta carpeta, según el espacio que ocupa. Haz clic en un bloque para abrirlo."
+  gl: "Este cartafol, segundo o espazo que ocupa. Preme nun bloque para abrilo."
+  it: "Questa cartella, in base allo spazio usato. Fai clic su un riquadro per aprirlo."
+"results.explorer.sub_home":
+  en: "Your home folder, sized by space used. Click a tile to open it."
+  es: "Tu carpeta personal, según el espacio que ocupa. Haz clic en un bloque para abrirlo."
+  gl: "O teu cartafol persoal, segundo o espazo que ocupa. Preme nun bloque para abrilo."
+  it: "La tua cartella home, in base allo spazio usato. Fai clic su un riquadro per aprirlo."
+"results.explorer.sub_zoomed":
+  en: "Click a folder to open it, a file for details. Backspace goes back."
+  es: "Haz clic en una carpeta para abrirla o en un archivo para ver detalles. Retroceso vuelve atrás."
+  gl: "Preme nun cartafol para abrilo ou nun ficheiro para ver detalles. Retroceso volve atrás."
+  it: "Fai clic su una cartella per aprirla, su un file per i dettagli. Backspace torna indietro."
+"results.explorer.title":
+  en: "Explorer"
+  es: "Explorador"
+  gl: "Explorador"
+  it: "Esplora"
+"results.free_after":
+  en: "Free after cleanup"
+  es: "Libre tras limpiar"
+  gl: "Libre tras limpar"
+  it: "Libero dopo la pulizia"
+"results.group_empty":
+  en: "Nothing left in this group."
+  es: "No queda nada en este grupo."
+  gl: "Non queda nada neste grupo."
+  it: "Non resta nulla in questo gruppo."
+"results.largest_inside":
+  en: "Largest inside"
+  es: "Lo más grande"
+  gl: "O máis grande"
+  it: "I più grandi"
+"results.legend.none":
+  en: "No recommendation"
+  es: "Sin recomendación"
+  gl: "Sen recomendación"
+  it: "Nessun suggerimento"
+"results.legend.review":
+  en: "Needs review"
+  es: "Revisar"
+  gl: "Revisar"
+  it: "Da controllare"
+"results.legend.safe":
+  en: "Safe to remove"
+  es: "Seguro de eliminar"
+  gl: "Seguro de eliminar"
+  it: "Rimozione sicura"
+"results.meta.category":
+  en: "Category"
+  es: "Categoría"
+  gl: "Categoría"
+  it: "Categoria"
+"results.meta.files":
+  en: "Files"
+  es: "Archivos"
+  gl: "Ficheiros"
+  it: "File"
+"results.meta.last_used":
+  en: "Last used"
+  es: "Último uso"
+  gl: "Último uso"
+  it: "Ultimo uso"
+"results.meta.modified":
+  en: "Modified"
+  es: "Modificado"
+  gl: "Modificado"
+  it: "Modificato"
+"results.move_to_trash":
+  en: "Move to Trash"
+  es: "Mover a la papelera"
+  gl: "Mover ao lixo"
+  it: "Sposta nel cestino"
+"results.node.covered":
+  en: "Part of this folder is covered by a recommendation. Review it there to remove only what is safe."
+  es: "Parte de esta carpeta la cubre una recomendación. Revísala allí para eliminar solo lo que es seguro."
+  gl: "Parte deste cartafol cóbrea unha recomendación. Revísaa alí para eliminar só o que é seguro."
+  it: "Parte di questa cartella è coperta da un suggerimento. Controllalo lì per rimuovere solo ciò che è sicuro."
+"results.node.uncovered":
+  en: "No recommendation covers this. Vano only suggests items it can explain."
+  es: "Ninguna recomendación cubre esto. Vano solo sugiere lo que puede explicar."
+  gl: "Ningunha recomendación cobre isto. Vano só suxire o que pode explicar."
+  it: "Nessun suggerimento copre questo elemento. Vano suggerisce solo ciò che sa spiegare."
+"results.not_scanned":
+  en: "Not scanned"
+  es: "Sin analizar"
+  gl: "Sen analizar"
+  it: "Non analizzato"
+"results.not_scanned_disk":
+  en: "unreadable & metadata"
+  es: "sin permiso y metadatos"
+  gl: "sen permiso e metadatos"
+  it: "illeggibile e metadati"
+"results.not_scanned_folder":
+  en: "rest of the disk"
+  es: "resto del disco"
+  gl: "resto do disco"
+  it: "resto del disco"
+"results.not_scanned_home":
+  en: "system & apps"
+  es: "sistema y apps"
+  gl: "sistema e apps"
+  it: "sistema e app"
+"results.nothing_selected":
+  en: "nothing selected"
+  es: "nada seleccionado"
+  gl: "nada seleccionado"
+  it: "nessuna selezione"
+"results.open":
+  en: "Open"
+  es: "Abrir"
+  gl: "Abrir"
+  it: "Apri"
+"results.recs.sub":
+  en: "Select items to move to the Trash."
+  es: "Selecciona lo que quieres mover a la papelera."
+  gl: "Selecciona o que queres mover ao lixo."
+  it: "Seleziona cosa spostare nel cestino."
+"results.recs.title":
+  en: "Recommendations"
+  es: "Recomendaciones"
+  gl: "Recomendacións"
+  it: "Suggerimenti"
+"results.review":
+  en: "Needs review"
+  es: "Revisar"
+  gl: "Revisar"
+  it: "Da controllare"
+"results.review_group":
+  en: "Review first"
+  es: "Revisar antes"
+  gl: "Revisar antes"
+  it: "Controlla prima"
+"results.safe":
+  en: "Safe to remove"
+  es: "Seguro de eliminar"
+  gl: "Seguro de eliminar"
+  it: "Rimozione sicura"
+"results.safe_group":
+  en: "Safe to remove"
+  es: "Seguro de eliminar"
+  gl: "Seguro de eliminar"
+  it: "Rimozione sicura"
+"results.select":
+  en: "Select"
+  es: "Marcar"
+  gl: "Marcar"
+  it: "Seleziona"
+"results.select_safe":
+  en: "Select safe"
+  es: "Marcar seguros"
+  gl: "Marcar seguros"
+  it: "Seleziona sicuri"
+"results.selected":
+  en: "selected"
+  es: "seleccionado"
+  gl: "seleccionado"
+  it: "selezionati"
+"results.show_in_folder":
+  en: "Show in folder"
+  es: "Mostrar en la carpeta"
+  gl: "Amosar no cartafol"
+  it: "Mostra nella cartella"
+"scan.cancel":
+  en: "Cancel scan"
+  es: "Cancelar análisis"
+  gl: "Cancelar análise"
+  it: "Annulla analisi"
+"scan.complete":
+  en: "Scan complete. %{files} files in %{seconds}"
+  es: "Análisis completo. %{files} archivos en %{seconds}"
+  gl: "Análise completa. %{files} ficheiros en %{seconds}"
+  it: "Analisi completata. %{files} file in %{seconds}"
+"scan.counted":
+  en: "Counted"
+  es: "Contado"
+  gl: "Contado"
+  it: "Contati"
+"scan.elapsed":
+  en: "Elapsed"
+  es: "Tiempo"
+  gl: "Tempo"
+  it: "Tempo"
+"scan.files":
+  en: "Files scanned"
+  es: "Archivos leídos"
+  gl: "Ficheiros lidos"
+  it: "File analizzati"
+"scan.found.empty":
+  en: "Reading the first folders…"
+  es: "Leyendo las primeras carpetas…"
+  gl: "Lendo os primeiros cartafoles…"
+  it: "Lettura delle prime cartelle…"
+"scan.found.reclaimable":
+  en: "reclaimable so far"
+  es: "recuperables por ahora"
+  gl: "recuperables polo de agora"
+  it: "recuperabili finora"
+"scan.found.sub":
+  en: "Recommendations appear as each folder finishes."
+  es: "Las recomendaciones aparecen al terminar cada carpeta."
+  gl: "As recomendacións aparecen ao rematar cada cartafol."
+  it: "I suggerimenti compaiono quando ogni cartella è finita."
+"scan.found.title":
+  en: "Found so far"
+  es: "Encontrado hasta ahora"
+  gl: "Atopado ata agora"
+  it: "Trovato finora"
+"scan.live.sub":
+  en: "Sizes grow as folders are read. Nothing on disk changes."
+  es: "Los tamaños crecen al leer las carpetas. No se cambia nada en el disco."
+  gl: "Os tamaños medran ao ler os cartafoles. Non se cambia nada no disco."
+  it: "Le dimensioni crescono man mano che le cartelle vengono lette. Nulla cambia sul disco."
+"scan.live.title":
+  en: "Live view"
+  es: "Vista en directo"
+  gl: "Vista en directo"
+  it: "Vista dal vivo"
+"scan.of_estimate":
+  en: "of ~%{size}"
+  es: "de ~%{size}"
+  gl: "de ~%{size}"
+  it: "di ~%{size}"
+"scan.starting":
+  en: "Starting…"
+  es: "Empezando…"
+  gl: "Comezando…"
+  it: "Avvio…"
+"scan.throughput":
+  en: "Throughput"
+  es: "Velocidad"
+  gl: "Velocidade"
+  it: "Velocità"
+"scan.view.ranking":
+  en: "Ranking"
+  es: "Ranking"
+  gl: "Clasificación"
+  it: "Classifica"
+"scan.view.rings":
+  en: "Rings"
+  es: "Anillos"
+  gl: "Aneis"
+  it: "Anelli"
+"scan.view.treemap":
+  en: "Treemap"
+  es: "Treemap"
+  gl: "Treemap"
+  it: "Treemap"
+"scan.view_results":
+  en: "View results"
+  es: "Ver resultados"
+  gl: "Ver resultados"
+  it: "Vedi risultati"
+"settings.accent.description":
+  en: "Changes the accent and the neutrals. Treemap and status colors stay the same."
+  es: "Cambia el color de acento y los neutros. Los colores del treemap y de estado no cambian."
+  gl: "Cambia a cor de acento e os neutros. As cores do treemap e de estado non cambian."
+  it: "Cambia l'accento e i toni neutri. I colori della treemap e degli stati restano uguali."
+"settings.accent.electric":
+  en: "Electric blue"
+  es: "Azul eléctrico"
+  gl: "Azul eléctrico"
+  it: "Blu elettrico"
+"settings.accent.graphite":
+  en: "Graphite"
+  es: "Grafito"
+  gl: "Grafito"
+  it: "Grafite"
+"settings.accent.indigo":
+  en: "Indigo"
+  es: "Índigo"
+  gl: "Índigo"
+  it: "Indaco"
+"settings.accent.title":
+  en: "Accent"
+  es: "Acento"
+  gl: "Acento"
+  it: "Accento"
+"settings.category.scanning":
+  en: "Scanning"
+  es: "Análisis"
+  gl: "Análise"
+  it: "Analisi"
+"settings.live_view.description":
+  en: "What the left panel shows while Vano reads the disk. You can also switch it during a scan."
+  es: "Lo que muestra el panel izquierdo mientras Vano lee el disco. También puedes cambiarlo durante el análisis."
+  gl: "O que amosa o panel esquerdo mentres Vano le o disco. Tamén podes cambialo durante a análise."
+  it: "Cosa mostra il pannello sinistro mentre Vano legge il disco. Puoi cambiarlo anche durante l'analisi."
+"settings.live_view.ranking_desc":
+  en: "The ten largest folders so far, reordering as sizes change."
+  es: "Las diez carpetas más grandes hasta ahora, reordenándose según cambian los tamaños."
+  gl: "Os dez cartafoles máis grandes ata agora, reordenándose segundo cambian os tamaños."
+  it: "Le dieci cartelle più grandi finora, riordinate al variare delle dimensioni."
+"settings.live_view.rings_desc":
+  en: "A ring split by category fills up as bytes are counted."
+  es: "Un anillo dividido por categorías se llena según se cuentan los bytes."
+  gl: "Un anel dividido por categorías énchese segundo se contan os bytes."
+  it: "Un anello diviso per categoria si riempie man mano che i byte vengono contati."
+"settings.live_view.title":
+  en: "Live view"
+  es: "Vista en directo"
+  gl: "Vista en directo"
+  it: "Vista dal vivo"
+"settings.live_view.treemap_desc":
+  en: "Tiles appear and grow as each folder is read, then settle into the results treemap."
+  es: "Los bloques aparecen y crecen al leer cada carpeta, y se asientan en el treemap de resultados."
+  gl: "Os bloques aparecen e medran ao ler cada cartafol, e asentan no treemap de resultados."
+  it: "I riquadri compaiono e crescono man mano che ogni cartella viene letta, poi si assestano nella treemap dei risultati."
+"settings.mono.font":
+  en: "Monospace font"
+  es: "Fuente monoespaciada"
+  gl: "Fonte monoespazada"
+  it: "Carattere monospaziato"
+"settings.mono.font_description":
+  en: "Used for sizes, paths and counters."
+  es: "Para tamaños, rutas y contadores."
+  gl: "Para tamaños, rutas e contadores."
+  it: "Per dimensioni, percorsi e contatori."
+"settings.mono.title":
+  en: "Sizes and paths"
+  es: "Tamaños y rutas"
+  gl: "Tamaños e rutas"
+  it: "Dimensioni e percorsi"
+"shell.palette.check_for_updates":
+  en: "Check for updates"
+  es: "Buscar actualizaciones"
+  gl: "Buscar actualizacións"
+  it: "Cerca aggiornamenti"
+"status.complete":
+  en: "Scan complete"
+  es: "Análisis completo"
+  gl: "Análise completa"
+  it: "Analisi completata"
+"status.disk":
+  en: "%{disk} · %{free} free of %{total}"
+  es: "%{disk} · %{free} libres de %{total}"
+  gl: "%{disk} · %{free} libres de %{total}"
+  it: "%{disk} · %{free} liberi su %{total}"
+"status.ready":
+  en: "Ready"
+  es: "Listo"
+  gl: "Listo"
+  it: "Pronto"
+"status.results":
+  en: "%{files} · scanned in %{seconds}"
+  es: "%{files} · analizado en %{seconds}"
+  gl: "%{files} · analizado en %{seconds}"
+  it: "%{files} · analizzato in %{seconds}"
+"status.scanning":
+  en: "Scanning %{target}"
+  es: "Analizando %{target}"
+  gl: "Analizando %{target}"
+  it: "Analisi di %{target}"
+"status.scanning_pct":
+  en: "Scanning %{target} · %{pct}%"
+  es: "Analizando %{target} · %{pct}%"
+  gl: "Analizando %{target} · %{pct}%"
+  it: "Analisi di %{target} · %{pct}%"
+"status.trashing":
+  en: "Moving to the Trash…"
+  es: "Moviendo a la papelera…"
+  gl: "Movendo ao lixo…"
+  it: "Spostamento nel cestino…"
+"status.update_ready":
+  en: "Vano %{version} is ready · Restart"
+  es: "Vano %{version} está listo · Reiniciar"
+  gl: "Vano %{version} está listo · Reiniciar"
+  it: "Vano %{version} è pronto · Riavvia"
+"target.file_system":
+  en: "File system"
+  es: "Sistema de archivos"
+  gl: "Sistema de ficheiros"
+  it: "File system"
+"target.home":
+  en: "Home folder"
+  es: "Carpeta personal"
+  gl: "Cartafol persoal"
+  it: "Cartella home"
+"target.home_short":
+  en: "Home"
+  es: "Inicio"
+  gl: "Inicio"
+  it: "Home"
+"target.local_disk":
+  en: "Local disk"
+  es: "Disco local"
+  gl: "Disco local"
+  it: "Disco locale"
+"title.rescan":
+  en: "Rescan"
+  es: "Volver a analizar"
+  gl: "Volver analizar"
+  it: "Rianalizza"
+"toast.freed":
+  en: "%{size} freed"
+  es: "%{size} liberados"
+  gl: "%{size} liberados"
+  it: "%{size} liberati"
+"toast.moved.one":
+  en: "Moved %{n} item to the Trash"
+  es: "%{n} elemento movido a la papelera"
+  gl: "%{n} elemento movido ao lixo"
+  it: "%{n} elemento spostato nel cestino"
+"toast.moved.other":
+  en: "Moved %{n} items to the Trash"
+  es: "%{n} elementos movidos a la papelera"
+  gl: "%{n} elementos movidos ao lixo"
+  it: "%{n} elementi spostati nel cestino"
+"toast.restore_failed":
+  en: "Could not put the items back: %{error}"
+  es: "No se pudieron recuperar los elementos: %{error}"
+  gl: "Non se puideron recuperar os elementos: %{error}"
+  it: "Impossibile ripristinare gli elementi: %{error}"
+"toast.restored.one":
+  en: "Put %{n} item back"
+  es: "%{n} elemento recuperado"
+  gl: "%{n} elemento recuperado"
+  it: "%{n} elemento ripristinato"
+"toast.restored.other":
+  en: "Put %{n} items back"
+  es: "%{n} elementos recuperados"
+  gl: "%{n} elementos recuperados"
+  it: "%{n} elementi ripristinati"
+"toast.trash_failed":
+  en: "Could not move to the Trash: %{error}"
+  es: "No se pudo mover a la papelera: %{error}"
+  gl: "Non se puido mover ao lixo: %{error}"
+  it: "Impossibile spostare nel cestino: %{error}"
+"toast.undo":
+  en: "Undo"
+  es: "Deshacer"
+  gl: "Desfacer"
+  it: "Annulla"
+"results.explorer.sub_ranking":
+  en: "The largest entries of this folder. Click a folder to open it."
+  es: "Lo más grande de esta carpeta. Haz clic en una carpeta para abrirla."
+  gl: "O máis grande deste cartafol. Preme nun cartafol para abrilo."
+  it: "Le voci più grandi di questa cartella. Fai clic su una cartella per aprirla."
+"results.explorer.sub_rings":
+  en: "This folder split by category."
+  es: "Esta carpeta dividida por categorías."
+  gl: "Este cartafol dividido por categorías."
+  it: "Questa cartella divisa per categoria."
+"results.rings_of_used":
+  en: "of %{size} used on the disk"
+  es: "de %{size} ocupados en el disco"
+  gl: "de %{size} ocupados no disco"
+  it: "su %{size} occupati sul disco"
+"status.reserved":
+  en: "%{size} reserved for the system"
+  es: "%{size} reservados para el sistema"
+  gl: "%{size} reservados para o sistema"
+  it: "%{size} riservati al sistema"

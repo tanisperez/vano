@@ -1,0 +1,482 @@
+# Recommendation rules and treemap categories (crate vano-rules).
+_version: 2
+"category.media":
+  en: "Documents & media"
+  es: "Documentos y multimedia"
+  gl: "Documentos e multimedia"
+  it: "Documenti e media"
+"category.other":
+  en: "Dev tools & other"
+  es: "Herramientas de desarrollo y otros"
+  gl: "Ferramentas de desenvolvemento e outros"
+  it: "Strumenti di sviluppo e altro"
+"category.code":
+  en: "Code projects"
+  es: "Proyectos de código"
+  gl: "Proxectos de código"
+  it: "Progetti di codice"
+"category.sdk":
+  en: "SDKs & emulators"
+  es: "SDK y emuladores"
+  gl: "SDK e emuladores"
+  it: "SDK ed emulatori"
+"category.ai":
+  en: "AI models"
+  es: "Modelos de IA"
+  gl: "Modelos de IA"
+  it: "Modelli IA"
+"category.caches":
+  en: "Package caches"
+  es: "Cachés de paquetes"
+  gl: "Cachés de paquetes"
+  it: "Cache dei pacchetti"
+"rules.npm.name":
+  en: "npm cache"
+  es: "Caché de npm"
+  gl: "Caché de npm"
+  it: "Cache di npm"
+"rules.npm.desc":
+  en: "Packages npm downloaded before. npm fetches them again the next time a project installs them."
+  es: "Paquetes que npm descargó antes. npm los vuelve a descargar la próxima vez que un proyecto los instale."
+  gl: "Paquetes que npm descargou antes. npm volve descargalos a próxima vez que un proxecto os instale."
+  it: "Pacchetti che npm ha scaricato in precedenza. npm li scarica di nuovo alla prossima installazione di un progetto."
+"rules.yarn_pnpm.name":
+  en: "Yarn & pnpm caches"
+  es: "Cachés de Yarn y pnpm"
+  gl: "Cachés de Yarn e pnpm"
+  it: "Cache di Yarn e pnpm"
+"rules.yarn_pnpm.desc":
+  en: "Packages downloaded by Yarn and pnpm. They are fetched again when a project installs its dependencies."
+  es: "Paquetes descargados por Yarn y pnpm. Se vuelven a descargar cuando un proyecto instala sus dependencias."
+  gl: "Paquetes descargados por Yarn e pnpm. Volven descargarse cando un proxecto instala as súas dependencias."
+  it: "Pacchetti scaricati da Yarn e pnpm. Vengono scaricati di nuovo quando un progetto installa le sue dipendenze."
+"rules.cargo_cache.name":
+  en: "Cargo registry & git caches"
+  es: "Cachés de registro y git de Cargo"
+  gl: "Cachés de rexistro e git de Cargo"
+  it: "Cache di registro e git di Cargo"
+"rules.cargo_cache.desc":
+  en: "Downloaded crates and git checkouts. Cargo downloads them again on the next build. Installed tools in ~/.cargo/bin are not touched."
+  es: "Crates descargados y copias de repositorios git. Cargo los descarga de nuevo en la próxima compilación. Las herramientas instaladas en ~/.cargo/bin no se tocan."
+  gl: "Crates descargados e copias de repositorios git. Cargo descárgaos de novo na próxima compilación. As ferramentas instaladas en ~/.cargo/bin non se tocan."
+  it: "Crate scaricati e copie di repository git. Cargo li scarica di nuovo alla prossima compilazione. Gli strumenti installati in ~/.cargo/bin non vengono toccati."
+"rules.rust_target.name":
+  en: "Rust build output"
+  es: "Compilación de Rust"
+  gl: "Compilación de Rust"
+  it: "Output di compilazione Rust"
+"rules.rust_target.desc":
+  en: "The target folders of Rust projects. Cargo builds them again the next time you compile."
+  es: "Las carpetas target de los proyectos de Rust. Cargo las genera de nuevo la próxima vez que compilas."
+  gl: "As carpetas target dos proxectos de Rust. Cargo xéraas de novo a próxima vez que compilas."
+  it: "Le cartelle target dei progetti Rust. Cargo le rigenera alla prossima compilazione."
+"rules.gradle_cache.name":
+  en: "Gradle caches"
+  es: "Cachés de Gradle"
+  gl: "Cachés de Gradle"
+  it: "Cache di Gradle"
+"rules.gradle_cache.desc":
+  en: "Dependency and build caches. Gradle downloads what it needs on the next build."
+  es: "Cachés de dependencias y compilación. Gradle descarga lo que necesita en la próxima compilación."
+  gl: "Cachés de dependencias e compilación. Gradle descarga o que precisa na próxima compilación."
+  it: "Cache di dipendenze e compilazione. Gradle scarica ciò che serve alla prossima compilazione."
+"rules.python_caches.name":
+  en: "pip, uv & Poetry caches"
+  es: "Cachés de pip, uv y Poetry"
+  gl: "Cachés de pip, uv e Poetry"
+  it: "Cache di pip, uv e Poetry"
+"rules.python_caches.desc":
+  en: "Python packages and wheels downloaded before. They are fetched again when a project needs them."
+  es: "Paquetes y wheels de Python descargados antes. Se vuelven a descargar cuando un proyecto los necesita."
+  gl: "Paquetes e wheels de Python descargados antes. Volven descargarse cando un proxecto os precisa."
+  it: "Pacchetti e wheel di Python scaricati in precedenza. Vengono scaricati di nuovo quando un progetto ne ha bisogno."
+"rules.browser_downloads.name":
+  en: "Puppeteer & Playwright browsers"
+  es: "Navegadores de Puppeteer y Playwright"
+  gl: "Navegadores de Puppeteer e Playwright"
+  it: "Browser di Puppeteer e Playwright"
+"rules.browser_downloads.desc":
+  en: "Browser builds downloaded for test automation. They are downloaded again when a project installs them."
+  es: "Navegadores descargados para automatizar pruebas. Se descargan de nuevo cuando un proyecto los instala."
+  gl: "Navegadores descargados para automatizar probas. Descárganse de novo cando un proxecto os instala."
+  it: "Browser scaricati per l'automazione dei test. Vengono scaricati di nuovo quando un progetto li installa."
+"rules.go_cache.name":
+  en: "Go build & module caches"
+  es: "Cachés de compilación y módulos de Go"
+  gl: "Cachés de compilación e módulos de Go"
+  it: "Cache di build e moduli di Go"
+"rules.go_cache.desc":
+  en: "Compiled packages and downloaded modules. Go rebuilds and downloads them when needed."
+  es: "Paquetes compilados y módulos descargados. Go los recompila y los descarga cuando hace falta."
+  gl: "Paquetes compilados e módulos descargados. Go recompílaos e descárgaos cando fai falta."
+  it: "Pacchetti compilati e moduli scaricati. Go li ricompila e li scarica quando serve."
+"rules.js_build.name":
+  en: "Next.js & Turbo build output"
+  es: "Compilación de Next.js y Turbo"
+  gl: "Compilación de Next.js e Turbo"
+  it: "Output di build di Next.js e Turbo"
+"rules.js_build.desc":
+  en: "Build artifacts. The next build or dev server creates them again."
+  es: "Artefactos de compilación. La próxima compilación o el servidor de desarrollo los crea de nuevo."
+  gl: "Artefactos de compilación. A próxima compilación ou o servidor de desenvolvemento créaos de novo."
+  it: "Artefatti di build. La prossima build o il server di sviluppo li ricrea."
+"rules.python_bytecode.name":
+  en: "Python bytecode & tool caches"
+  es: "Bytecode y cachés de herramientas de Python"
+  gl: "Bytecode e cachés de ferramentas de Python"
+  it: "Bytecode e cache degli strumenti Python"
+"rules.python_bytecode.desc":
+  en: "__pycache__ and the caches of pytest, mypy and ruff. Python and these tools create them again as they run."
+  es: "__pycache__ y las cachés de pytest, mypy y ruff. Python y estas herramientas las crean de nuevo al ejecutarse."
+  gl: "__pycache__ e as cachés de pytest, mypy e ruff. Python e estas ferramentas créanas de novo ao executarse."
+  it: "__pycache__ e le cache di pytest, mypy e ruff. Python e questi strumenti le ricreano durante l'esecuzione."
+"rules.thumbnails.name":
+  en: "Thumbnail cache"
+  es: "Caché de miniaturas"
+  gl: "Caché de miniaturas"
+  it: "Cache delle miniature"
+"rules.thumbnails.desc":
+  en: "Previews of images and files. Your file manager creates them again when you open a folder."
+  es: "Vistas previas de imágenes y archivos. Tu gestor de archivos las crea de nuevo al abrir una carpeta."
+  gl: "Vistas previas de imaxes e ficheiros. O teu xestor de ficheiros créaas de novo ao abrir un cartafol."
+  it: "Anteprime di immagini e file. Il gestore file le ricrea quando apri una cartella."
+"rules.shader_cache.name":
+  en: "Shader & font caches"
+  es: "Cachés de shaders y fuentes"
+  gl: "Cachés de shaders e tipos de letra"
+  it: "Cache di shader e font"
+"rules.shader_cache.desc":
+  en: "Compiled graphics shaders and font lists. They are rebuilt on demand, so a game may stutter once."
+  es: "Shaders gráficos compilados y listas de fuentes. Se reconstruyen cuando hacen falta, así que un juego puede ir a tirones una vez."
+  gl: "Shaders gráficos compilados e listas de tipos de letra. Reconstrúense cando fan falta, así que un xogo pode ir a tiróns unha vez."
+  it: "Shader grafici compilati ed elenchi di font. Vengono ricostruiti quando servono, quindi un gioco può scattare una volta."
+"rules.browser_cache.name":
+  en: "Browser caches"
+  es: "Cachés de navegadores"
+  gl: "Cachés de navegadores"
+  it: "Cache dei browser"
+"rules.browser_cache.desc":
+  en: "Web pages and files your browsers saved to load sites faster. They fill up again as you browse."
+  es: "Páginas y archivos web que tus navegadores guardaron para cargar los sitios más rápido. Se vuelven a llenar al navegar."
+  gl: "Páxinas e ficheiros web que os teus navegadores gardaron para cargar os sitios máis rápido. Volven encherse ao navegar."
+  it: "Pagine e file web salvati dai browser per caricare i siti più in fretta. Si riempiono di nuovo mentre navighi."
+"rules.jetbrains_cache.name":
+  en: "JetBrains caches"
+  es: "Cachés de JetBrains"
+  gl: "Cachés de JetBrains"
+  it: "Cache di JetBrains"
+"rules.jetbrains_cache.desc":
+  en: "Indexes and caches of JetBrains IDEs. The IDE rebuilds them the next time it opens a project."
+  es: "Índices y cachés de los IDE de JetBrains. El IDE los reconstruye la próxima vez que abre un proyecto."
+  gl: "Índices e cachés dos IDE de JetBrains. O IDE reconstrúeos a próxima vez que abre un proxecto."
+  it: "Indici e cache degli IDE JetBrains. L'IDE li ricostruisce alla prossima apertura di un progetto."
+"rules.pub_cache.name":
+  en: "Dart & Flutter package cache"
+  es: "Caché de paquetes de Dart y Flutter"
+  gl: "Caché de paquetes de Dart e Flutter"
+  it: "Cache dei pacchetti Dart e Flutter"
+"rules.pub_cache.desc":
+  en: "Packages downloaded by pub. Dart and Flutter fetch them again when a project needs them."
+  es: "Paquetes descargados por pub. Dart y Flutter los vuelven a descargar cuando un proyecto los necesita."
+  gl: "Paquetes descargados por pub. Dart e Flutter volven descargalos cando un proxecto os precisa."
+  it: "Pacchetti scaricati da pub. Dart e Flutter li scaricano di nuovo quando un progetto ne ha bisogno."
+"rules.dart_build.name":
+  en: "Flutter & Dart build output"
+  es: "Compilación de Flutter y Dart"
+  gl: "Compilación de Flutter e Dart"
+  it: "Output di build di Flutter e Dart"
+"rules.dart_build.desc":
+  en: "The build and .dart_tool folders of Dart and Flutter projects. The next build creates them again."
+  es: "Las carpetas build y .dart_tool de los proyectos de Dart y Flutter. La próxima compilación las crea de nuevo."
+  gl: "As carpetas build e .dart_tool dos proxectos de Dart e Flutter. A próxima compilación créaas de novo."
+  it: "Le cartelle build e .dart_tool dei progetti Dart e Flutter. La prossima build le ricrea."
+"rules.gradle_build.name":
+  en: "Gradle build output"
+  es: "Compilación de Gradle"
+  gl: "Compilación de Gradle"
+  it: "Output di build di Gradle"
+"rules.gradle_build.desc":
+  en: "The build and .gradle folders of Gradle projects, such as Android apps. The next build creates them again."
+  es: "Las carpetas build y .gradle de los proyectos de Gradle, como las apps de Android. La próxima compilación las crea de nuevo."
+  gl: "As carpetas build e .gradle dos proxectos de Gradle, como as apps de Android. A próxima compilación créaas de novo."
+  it: "Le cartelle build e .gradle dei progetti Gradle, come le app Android. La prossima build le ricrea."
+"rules.maven_target.name":
+  en: "Maven build output"
+  es: "Compilación de Maven"
+  gl: "Compilación de Maven"
+  it: "Output di build di Maven"
+"rules.maven_target.desc":
+  en: "The target folders of Maven projects. Maven builds them again with the next package or install."
+  es: "Las carpetas target de los proyectos de Maven. Maven las genera de nuevo en el próximo package o install."
+  gl: "As carpetas target dos proxectos de Maven. Maven xéraas de novo no próximo package ou install."
+  it: "Le cartelle target dei progetti Maven. Maven le rigenera al prossimo package o install."
+"rules.xcode_derived.name":
+  en: "Xcode build data"
+  es: "Datos de compilación de Xcode"
+  gl: "Datos de compilación de Xcode"
+  it: "Dati di build di Xcode"
+"rules.xcode_derived.desc":
+  en: "DerivedData and device support files. Xcode creates them again when you open a project or connect a device."
+  es: "Archivos DerivedData y de soporte de dispositivos. Xcode los crea de nuevo al abrir un proyecto o conectar un dispositivo."
+  gl: "Ficheiros DerivedData e de soporte de dispositivos. Xcode créaos de novo ao abrir un proxecto ou conectar un dispositivo."
+  it: "File DerivedData e di supporto dei dispositivi. Xcode li ricrea quando apri un progetto o colleghi un dispositivo."
+"rules.mac_caches.name":
+  en: "Homebrew, CocoaPods & Xcode caches"
+  es: "Cachés de Homebrew, CocoaPods y Xcode"
+  gl: "Cachés de Homebrew, CocoaPods e Xcode"
+  it: "Cache di Homebrew, CocoaPods e Xcode"
+"rules.mac_caches.desc":
+  en: "Downloads and caches of developer tools in Library/Caches. Each tool creates them again when needed."
+  es: "Descargas y cachés de herramientas de desarrollo en Library/Caches. Cada herramienta las crea de nuevo cuando hace falta."
+  gl: "Descargas e cachés de ferramentas de desenvolvemento en Library/Caches. Cada ferramenta créaas de novo cando fai falta."
+  it: "Download e cache degli strumenti di sviluppo in Library/Caches. Ogni strumento li ricrea quando serve."
+"rules.flatpak_cache.name":
+  en: "Flatpak app caches"
+  es: "Cachés de apps Flatpak"
+  gl: "Cachés de apps Flatpak"
+  it: "Cache delle app Flatpak"
+"rules.flatpak_cache.desc":
+  en: "The cache folder of each Flatpak app. Apps recreate it as they run; their data and settings stay."
+  es: "La carpeta de caché de cada app Flatpak. Las apps la recrean al ejecutarse; sus datos y ajustes se conservan."
+  gl: "O cartafol de caché de cada app Flatpak. As apps recréano ao executarse; os seus datos e axustes consérvanse."
+  it: "La cartella cache di ogni app Flatpak. Le app la ricreano durante l'uso; dati e impostazioni restano."
+"rules.maven_repo.name":
+  en: "Maven repository"
+  es: "Repositorio de Maven"
+  gl: "Repositorio de Maven"
+  it: "Repository Maven"
+"rules.maven_repo.desc":
+  en: "Dependencies Maven downloaded to ~/.m2. They are downloaded again on the next build."
+  es: "Dependencias que Maven descargó en ~/.m2. Se descargan de nuevo en la próxima compilación."
+  gl: "Dependencias que Maven descargou en ~/.m2. Descárganse de novo na próxima compilación."
+  it: "Dipendenze che Maven ha scaricato in ~/.m2. Vengono scaricate di nuovo alla prossima build."
+"rules.maven_repo.reason":
+  en: "It can also hold artifacts you installed locally with mvn install, which cannot be downloaded again."
+  es: "También puede guardar artefactos que instalaste en local con mvn install y que no se pueden descargar de nuevo."
+  gl: "Tamén pode gardar artefactos que instalaches en local con mvn install e que non se poden descargar de novo."
+  it: "Può contenere anche artefatti installati in locale con mvn install, che non si possono scaricare di nuovo."
+"rules.package_manager_cache.name":
+  en: "Package manager caches"
+  es: "Cachés del gestor de paquetes"
+  gl: "Cachés do xestor de paquetes"
+  it: "Cache del gestore di pacchetti"
+"rules.package_manager_cache.desc":
+  en: "Package files that pacman or apt downloaded when installing and updating software."
+  es: "Archivos de paquetes que pacman o apt descargaron al instalar y actualizar software."
+  gl: "Ficheiros de paquetes que pacman ou apt descargaron ao instalar e actualizar software."
+  it: "File di pacchetti che pacman o apt hanno scaricato installando e aggiornando il software."
+"rules.package_manager_cache.reason":
+  en: "Removing them needs administrator rights. Downgrading a package later means downloading it again."
+  es: "Borrarlos requiere permisos de administrador. Volver a una versión anterior de un paquete obliga a descargarlo otra vez."
+  gl: "Borralos require permisos de administrador. Volver a unha versión anterior dun paquete obriga a descargalo outra vez."
+  it: "Rimuoverli richiede i permessi di amministratore. Tornare a una versione precedente di un pacchetto richiede di scaricarla di nuovo."
+"rules.journal_logs.name":
+  en: "System journal logs"
+  es: "Registros del diario del sistema"
+  gl: "Rexistros do diario do sistema"
+  it: "Log del journal di sistema"
+"rules.journal_logs.desc":
+  en: "Logs that systemd keeps about the system and its services."
+  es: "Registros que systemd guarda sobre el sistema y sus servicios."
+  gl: "Rexistros que systemd garda sobre o sistema e os seus servizos."
+  it: "Log che systemd conserva sul sistema e sui suoi servizi."
+"rules.journal_logs.reason":
+  en: "Removing them needs administrator rights, and old logs help to diagnose problems. journalctl --vacuum-size trims them safely."
+  es: "Borrarlos requiere permisos de administrador y los registros antiguos ayudan a diagnosticar problemas. journalctl --vacuum-size los reduce con seguridad."
+  gl: "Borralos require permisos de administrador e os rexistros antigos axudan a diagnosticar problemas. journalctl --vacuum-size redúceos con seguridade."
+  it: "Rimuoverli richiede i permessi di amministratore e i log vecchi aiutano a diagnosticare i problemi. journalctl --vacuum-size li riduce in sicurezza."
+"rules.trash.name":
+  en: "Trash"
+  es: "Papelera"
+  gl: "Lixo"
+  it: "Cestino"
+"rules.trash.desc":
+  en: "Files you already deleted that still take up space."
+  es: "Archivos que ya borraste y que siguen ocupando espacio."
+  gl: "Ficheiros que xa borraches e que seguen ocupando espazo."
+  it: "File già eliminati che occupano ancora spazio."
+"rules.trash.reason":
+  en: "It is already in the Trash. Empty it from your file manager."
+  es: "Ya está en la Papelera. Vacíala desde tu gestor de archivos."
+  gl: "Xa está no Lixo. Baleira o Lixo desde o teu xestor de ficheiros."
+  it: "È già nel Cestino. Svuotalo dal gestore file."
+"rules.android_sdk.name":
+  en: "Android SDK & emulators"
+  es: "SDK y emuladores de Android"
+  gl: "SDK e emuladores de Android"
+  it: "SDK ed emulatori Android"
+"rules.android_sdk.desc":
+  en: "SDK platforms, build tools and emulator system images."
+  es: "Plataformas del SDK, herramientas de compilación e imágenes de sistema de los emuladores."
+  gl: "Plataformas do SDK, ferramentas de compilación e imaxes de sistema dos emuladores."
+  it: "Piattaforme SDK, strumenti di build e immagini di sistema degli emulatori."
+"rules.android_sdk.reason":
+  en: "Android Studio needs the SDK to build apps. Remove only what you no longer use."
+  es: "Android Studio necesita el SDK para compilar apps. Elimina solo lo que ya no uses."
+  gl: "Android Studio necesita o SDK para compilar apps. Elimina só o que xa non uses."
+  it: "Android Studio ha bisogno dell'SDK per compilare le app. Rimuovi solo ciò che non usi più."
+"rules.ollama.name":
+  en: "Ollama models"
+  es: "Modelos de Ollama"
+  gl: "Modelos de Ollama"
+  it: "Modelli Ollama"
+"rules.ollama.desc":
+  en: "Weights of the language models you pulled with Ollama."
+  es: "Pesos de los modelos de lenguaje que descargaste con Ollama."
+  gl: "Pesos dos modelos de linguaxe que descargaches con Ollama."
+  it: "Pesi dei modelli linguistici che hai scaricato con Ollama."
+"rules.ollama.reason":
+  en: "A removed model has to be downloaded again with ollama pull."
+  es: "Un modelo eliminado hay que descargarlo de nuevo con ollama pull."
+  gl: "Un modelo eliminado hai que descargalo de novo con ollama pull."
+  it: "Un modello rimosso va scaricato di nuovo con ollama pull."
+"rules.huggingface.name":
+  en: "Hugging Face cache"
+  es: "Caché de Hugging Face"
+  gl: "Caché de Hugging Face"
+  it: "Cache di Hugging Face"
+"rules.huggingface.desc":
+  en: "Models and datasets downloaded by Hugging Face libraries."
+  es: "Modelos y conjuntos de datos descargados por las librerías de Hugging Face."
+  gl: "Modelos e conxuntos de datos descargados polas bibliotecas de Hugging Face."
+  it: "Modelli e dataset scaricati dalle librerie di Hugging Face."
+"rules.huggingface.reason":
+  en: "They are downloaded again when a script asks for them, which can take a long time for large models."
+  es: "Se descargan de nuevo cuando un script los pide, lo que puede tardar mucho con modelos grandes."
+  gl: "Descárganse de novo cando un script os pide, o que pode tardar moito con modelos grandes."
+  it: "Vengono scaricati di nuovo quando uno script li richiede, il che può richiedere molto tempo per i modelli grandi."
+"rules.lm_studio.name":
+  en: "LM Studio models"
+  es: "Modelos de LM Studio"
+  gl: "Modelos de LM Studio"
+  it: "Modelli LM Studio"
+"rules.lm_studio.desc":
+  en: "Language models you downloaded with LM Studio."
+  es: "Modelos de lenguaje que descargaste con LM Studio."
+  gl: "Modelos de linguaxe que descargaches con LM Studio."
+  it: "Modelli linguistici che hai scaricato con LM Studio."
+"rules.lm_studio.reason":
+  en: "A removed model has to be downloaded again from LM Studio."
+  es: "Un modelo eliminado hay que descargarlo de nuevo desde LM Studio."
+  gl: "Un modelo eliminado hai que descargalo de novo desde LM Studio."
+  it: "Un modello rimosso va scaricato di nuovo da LM Studio."
+"rules.node_modules.name":
+  en: "node_modules in idle projects"
+  es: "node_modules en proyectos inactivos"
+  gl: "node_modules en proxectos inactivos"
+  it: "node_modules nei progetti inattivi"
+"rules.node_modules.desc":
+  en: "Installed dependencies of projects with no changes in 60 days."
+  es: "Dependencias instaladas de proyectos sin cambios en 60 días."
+  gl: "Dependencias instaladas de proxectos sen cambios en 60 días."
+  it: "Dipendenze installate di progetti senza modifiche da 60 giorni."
+"rules.node_modules.reason":
+  en: "Reinstalling needs network access and the lockfile of each project."
+  es: "Reinstalarlas requiere conexión a internet y el lockfile de cada proyecto."
+  gl: "Reinstalalas require conexión a internet e o lockfile de cada proxecto."
+  it: "Reinstallarle richiede una connessione di rete e il lockfile di ogni progetto."
+"rules.worktrees.name":
+  en: "Git worktrees"
+  es: "Worktrees de git"
+  gl: "Worktrees de git"
+  it: "Worktree di git"
+"rules.worktrees.desc":
+  en: "Extra git worktrees created under .claude/worktrees. The size is an estimate."
+  es: "Worktrees de git adicionales creados en .claude/worktrees. El tamaño es una estimación."
+  gl: "Worktrees de git adicionais creados en .claude/worktrees. O tamaño é unha estimación."
+  it: "Worktree git aggiuntivi creati in .claude/worktrees. La dimensione è una stima."
+"rules.worktrees.reason":
+  en: "Worktrees can hold uncommitted changes. Check them with git worktree list first."
+  es: "Los worktrees pueden contener cambios sin confirmar. Revísalos antes con git worktree list."
+  gl: "Os worktrees poden conter cambios sen confirmar. Revísaos antes con git worktree list."
+  it: "I worktree possono contenere modifiche non salvate. Controllali prima con git worktree list."
+"rules.docker.name":
+  en: "Docker data"
+  es: "Datos de Docker"
+  gl: "Datos de Docker"
+  it: "Dati di Docker"
+"rules.docker.desc":
+  en: "Images, containers and volumes stored by Docker."
+  es: "Imágenes, contenedores y volúmenes guardados por Docker."
+  gl: "Imaxes, contedores e volumes gardados por Docker."
+  it: "Immagini, container e volumi memorizzati da Docker."
+"rules.docker.reason":
+  en: "Volumes may hold data that exists nowhere else. docker system prune removes only what is unused."
+  es: "Los volúmenes pueden contener datos que no existen en ningún otro sitio. docker system prune elimina solo lo que no se usa."
+  gl: "Os volumes poden conter datos que non existen en ningún outro sitio. docker system prune elimina só o que non se usa."
+  it: "I volumi possono contenere dati che non esistono altrove. docker system prune rimuove solo ciò che non è in uso."
+"rules.installers.name":
+  en: "Old installers"
+  es: "Instaladores antiguos"
+  gl: "Instaladores antigos"
+  it: "Vecchi installer"
+"rules.installers.desc":
+  en: "Installers and disk images in Downloads that are more than 30 days old."
+  es: "Instaladores e imágenes de disco de Descargas con más de 30 días."
+  gl: "Instaladores e imaxes de disco de Descargas con máis de 30 días."
+  it: "Installer e immagini disco in Download vecchi di più di 30 giorni."
+"rules.installers.reason":
+  en: "Keep an installer if you cannot download that version again."
+  es: "Conserva un instalador si no puedes descargar esa versión de nuevo."
+  gl: "Conserva un instalador se non podes descargar esa versión de novo."
+  it: "Conserva un installer se non puoi scaricare di nuovo quella versione."
+"rules.recordings.name":
+  en: "Screen recordings & big videos"
+  es: "Grabaciones de pantalla y vídeos grandes"
+  gl: "Gravacións de pantalla e vídeos grandes"
+  it: "Registrazioni dello schermo e video grandi"
+"rules.recordings.desc":
+  en: "Videos over 100 MB on the Desktop or in Screencasts."
+  es: "Vídeos de más de 100 MB en el Escritorio o en Screencasts."
+  gl: "Vídeos de máis de 100 MB no Escritorio ou en Screencasts."
+  it: "Video di oltre 100 MB sul Desktop o in Screencasts."
+"rules.recordings.reason":
+  en: "These are your own files. Keep any you still need."
+  es: "Son archivos tuyos. Conserva los que aún necesites."
+  gl: "Son ficheiros teus. Conserva os que aínda precises."
+  it: "Sono file tuoi. Conserva quelli che ti servono ancora."
+"rules.python_venv.name":
+  en: "Python virtual environments"
+  es: "Entornos virtuales de Python"
+  gl: "Contornos virtuais de Python"
+  it: "Ambienti virtuali Python"
+"rules.python_venv.desc":
+  en: "The .venv folders of Python projects, with their installed packages."
+  es: "Las carpetas .venv de los proyectos de Python, con sus paquetes instalados."
+  gl: "Os cartafoles .venv dos proxectos de Python, cos seus paquetes instalados."
+  it: "Le cartelle .venv dei progetti Python, con i pacchetti installati."
+"rules.python_venv.reason":
+  en: "Recreating one needs network access and the project's requirements."
+  es: "Recrearlos requiere conexión a internet y los requisitos del proyecto."
+  gl: "Recrealos require conexión a internet e os requisitos do proxecto."
+  it: "Ricrearli richiede una connessione di rete e i requisiti del progetto."
+"rules.cocoapods.name":
+  en: "CocoaPods dependencies"
+  es: "Dependencias de CocoaPods"
+  gl: "Dependencias de CocoaPods"
+  it: "Dipendenze CocoaPods"
+"rules.cocoapods.desc":
+  en: "The Pods folders of iOS and macOS projects."
+  es: "Las carpetas Pods de los proyectos de iOS y macOS."
+  gl: "As carpetas Pods dos proxectos de iOS e macOS."
+  it: "Le cartelle Pods dei progetti iOS e macOS."
+"rules.cocoapods.reason":
+  en: "The project does not build until you run pod install again."
+  es: "El proyecto no compila hasta que vuelvas a ejecutar pod install."
+  gl: "O proxecto non compila ata que volvas executar pod install."
+  it: "Il progetto non compila finché non esegui di nuovo pod install."
+"rules.ios_simulators.name":
+  en: "iOS simulators"
+  es: "Simuladores de iOS"
+  gl: "Simuladores de iOS"
+  it: "Simulatori iOS"
+"rules.ios_simulators.desc":
+  en: "Simulator devices and the apps installed on them."
+  es: "Dispositivos del simulador y las apps instaladas en ellos."
+  gl: "Dispositivos do simulador e as apps instaladas neles."
+  it: "Dispositivi del simulatore e le app installate su di essi."
+"rules.ios_simulators.reason":
+  en: "Deleting a device also deletes its app data."
+  es: "Eliminar un dispositivo también elimina los datos de sus apps."
+  gl: "Eliminar un dispositivo tamén elimina os datos das súas apps."
+  it: "Eliminare un dispositivo elimina anche i dati delle sue app."

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Vano
+GenericName=Disk Usage Analyzer
+Comment=See what fills your disk and clear it safely
+Exec=vano
+Icon=codes.tanis.vano
+Terminal=false
+Categories=System;Utility;Filesystem;FileTools;
+Keywords=disk;storage;space;cleanup;treemap;
+StartupNotify=true
+StartupWMClass=codes.tanis.vano
