@@ -545,11 +545,6 @@ _version: 2
   es: "%{disk} · %{free} libres de %{total}"
   gl: "%{disk} · %{free} libres de %{total}"
   it: "%{disk} · %{free} liberi su %{total}"
-"status.ready":
-  en: "Ready"
-  es: "Listo"
-  gl: "Listo"
-  it: "Pronto"
 "status.results":
   en: "%{files} · scanned in %{seconds}"
   es: "%{files} · analizado en %{seconds}"

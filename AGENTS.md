@@ -86,6 +86,6 @@ On KDE Wayland, run the app through XWayland (`env -u WAYLAND_DISPLAY`) to drive
 
 ## Working rules
 
-- No git repository yet: the user creates it later. Commit messages, issues and pull requests in
-  English when there is one.
+- The repository is `git@github.com:tanisperez/vano.git` (branch `main`). Commit messages,
+  issues and pull requests in English.
 - Keep changes small and traceable to the request.

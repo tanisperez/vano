@@ -41,7 +41,7 @@ impl AppView {
             None => disk_name(),
         };
         let right = match self.screen {
-            Screen::Home => t!("status.ready").into_owned(),
+            Screen::Home => String::new(),
             Screen::Scanning => match self.scan.as_ref() {
                 Some(session) if session.finished => t!("status.complete").into_owned(),
                 Some(session) => match session.fraction() {
