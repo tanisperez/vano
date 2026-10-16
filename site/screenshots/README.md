@@ -40,7 +40,10 @@ machine's own root file system.
 
 `record-video.sh` records the demo video of the website into `site/video/`: `demo.webm` (AV1),
 `demo.mp4` (H.264, for browsers without AV1) and `demo-poster.webp`. Run it from anywhere, or
-with `make video`. It takes about 2 minutes.
+with `make video`. It takes about 2 minutes. With `--cold`
+(`site/screenshots/record-video.sh --cold`, from a terminal) it asks for `sudo` first and drops the
+page cache right before recording, so the scan reads a cold disk and the live view stays on screen
+a little longer.
 
 ## What it does
 

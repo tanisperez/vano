@@ -1,5 +1,6 @@
 #!/bin/bash
 # Records the website demo video into site/video/ (WebM AV1, MP4 H.264 and a poster).
+# With --cold the scan reads a cold disk: it asks for sudo first, to drop the page cache.
 # See site/screenshots/README.md for the requirements.
 set -u
 
@@ -18,6 +19,8 @@ OUT="$ROOT/site/video"
 HOME_DIR="$WORK/home"
 DEMO_HOME=/home/alex
 REC_PID=""
+COLD=0
+[ "${1:-}" = "--cold" ] && COLD=1
 
 cleanup() {
     [ -n "$REC_PID" ] && kill -INT "$REC_PID" 2>/dev/null
@@ -37,6 +40,9 @@ if [ "$(busctl --user call org.freedesktop.ScreenSaver /ScreenSaver org.freedesk
     die "the screen is locked, unlock it first"
 fi
 pgrep -x vano >/dev/null && die "a vano process is already running, close it first"
+if [ "$COLD" = 1 ]; then
+    sudo -v || die "--cold needs sudo to drop the page cache"
+fi
 
 # XWayland runs at the largest display scale: X11 coordinates are physical pixels times it, and
 # xdotool pointer moves are divided by it again. The screenshots and the recording are physical.
@@ -110,6 +116,11 @@ read -r CW CH CX CY < <(magick "$WORK/window.png" -alpha extract -threshold 99% 
 REGION="${CW}x${CH}+$((20 + CX))+$((20 + CY))"
 
 glide 980 860
+# The app reads nothing of the home before the scan, so the cache is dropped before recording.
+if [ "$COLD" = 1 ]; then
+    sync
+    sudo -n sh -c 'echo 3 > /proc/sys/vm/drop_caches' || die "the page cache could not be dropped"
+fi
 gpu-screen-recorder -w "$REGION" -f 60 -k h264 -q ultra -fm cfr -cursor yes \
     -o "$WORK/raw.mp4" >"$WORK/recorder.log" 2>&1 &
 REC_PID=$!
@@ -135,6 +146,8 @@ click 1243 677 3.2     # confirms: the demo home's own files go to its own Trash
 kill -INT "$REC_PID"
 wait "$REC_PID"
 REC_PID=""
+COLD=0
+[ "${1:-}" = "--cold" ] && COLD=1
 
 # The window's rounded corners are cropped by the page (border-radius), not here.
 ffmpeg -v error -y -i "$WORK/raw.mp4" -vf "scale=1600:-2:flags=lanczos" -an -c:v libx264 \
