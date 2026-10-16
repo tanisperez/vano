@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help run build release dist install install-latest uninstall check lint lint-fix format format-check test clean screenshots site
+.PHONY: help run build release dist install install-latest uninstall check lint lint-fix format format-check test clean screenshots video site
 
 help:
 	@echo "Usage: make [target]"
@@ -20,6 +20,7 @@ help:
 	@echo "  test          Run all tests"
 	@echo "  clean         Remove build artifacts"
 	@echo "  screenshots   Regenerate the website screenshots (site/img)"
+	@echo "  video         Record the website demo video (site/video)"
 	@echo "  site          Serve the website on http://localhost:8000"
 
 run:
@@ -108,6 +109,9 @@ clean:
 
 screenshots:
 	site/screenshots/capture.sh
+
+video:
+	site/screenshots/record-video.sh
 
 site:
 	python3 -m http.server -d site 8000

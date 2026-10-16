@@ -17,8 +17,10 @@ without the user documentation.
   Postino's site.
 - `img/`: the logo (`packaging/icons/vano.svg`), the 512 px icon and the app screenshots, WebP
   only.
+- `video/`: the demo video of the home page, as AV1 WebM, H.264 MP4 and a WebP poster. It plays
+  muted and in a loop; `js/demo.js` stops it and shows the controls with reduced motion.
 - `screenshots/`: the tooling that regenerates `img/*-light.webp` and `img/*-dark.webp`
-  (`make screenshots`). It is not published.
+  (`make screenshots`) and the video (`make video`). It is not published.
 
 The numbers of the "Fast and light" section were measured by hand on Linux (a home folder of
 782,747 files and 208 GB, warm cache, release build): the scan time from the app's log, the

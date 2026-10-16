@@ -563,6 +563,33 @@ kbd {
     font-size: 18px;
 }
 
+/* Demo video. Mobile first: edge to edge on phones, framed like the screenshots from 641px. */
+
+.demo-video {
+    margin: 0 calc(-1 * var(--gutter));
+}
+
+.demo-video video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--surface);
+    border-block: 1px solid var(--border);
+}
+
+@media (min-width: 641px) {
+    .demo-video {
+        max-width: 1240px;
+        margin: 0 auto;
+    }
+
+    .demo-video video {
+        border: 1px solid var(--border);
+        border-radius: var(--r-xl);
+        box-shadow: 0 24px 64px -24px rgba(0, 0, 0, 0.35);
+    }
+}
+
 /* Files section: text next to two code panels */
 
 /* Speed and memory, in numbers */

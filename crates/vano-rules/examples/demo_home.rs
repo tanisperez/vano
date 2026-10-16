@@ -4,6 +4,9 @@
 //! Run with `cargo run -p vano-rules --example demo_home -- <home> <config dir> <cache dir>`.
 //! It writes `<cache dir>/vano/scans/demo.vtree` and `<config dir>/vano/recents.json`, and
 //! prints the recommendations the rules find in the tree. `site/screenshots/capture.sh` runs it.
+//! With a fourth argument it also writes there a manifest of every folder and file (one per line,
+//! tab separated: `D path` or `F path size mtime`, paths relative to the home), which
+//! `site/screenshots/record-video.sh` turns into real files so the app can scan the made-up home live.
 
 use std::collections::VecDeque;
 use std::path::{Path, PathBuf};
@@ -552,11 +555,31 @@ fn build(home: &Path, specs: Vec<Spec>) -> Tree {
     tree
 }
 
+/// Appends one line per folder and file of `specs`, parents before their children.
+fn write_manifest(specs: &[Spec], parent: &str, out: &mut String) {
+    for spec in specs {
+        match spec {
+            Spec::Dir(name, kids) => {
+                let path = format!("{parent}{name}");
+                out.push_str(&format!("D\t{path}\n"));
+                write_manifest(kids, &format!("{path}/"), out);
+            }
+            Spec::File(name, size, mtime) => {
+                out.push_str(&format!("F\t{parent}{name}\t{size}\t{mtime}\n"));
+            }
+        }
+    }
+}
+
 fn main() {
     let args: Vec<PathBuf> = std::env::args_os().skip(1).map(PathBuf::from).collect();
-    let [home, config, cache] = args.as_slice() else {
-        eprintln!("usage: demo_home <home> <config dir> <cache dir>");
-        std::process::exit(2);
+    let (home, config, cache, manifest) = match args.as_slice() {
+        [home, config, cache] => (home, config, cache, None),
+        [home, config, cache, manifest] => (home, config, cache, Some(manifest)),
+        _ => {
+            eprintln!("usage: demo_home <home> <config dir> <cache dir> [manifest]");
+            std::process::exit(2);
+        }
     };
     let now = SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -567,6 +590,14 @@ fn main() {
         now,
     };
     let specs = generator.home();
+    if let Some(manifest) = manifest {
+        let mut lines = String::new();
+        write_manifest(&specs, "", &mut lines);
+        if let Err(error) = std::fs::write(manifest, lines) {
+            eprintln!("demo_home: {error}");
+            std::process::exit(1);
+        }
+    }
     let tree = build(home, specs);
     let root = tree.node(ROOT);
     let (size, files) = (root.size, root.files);
