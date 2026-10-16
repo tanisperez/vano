@@ -147,6 +147,8 @@ pre {
 }
 
 code {
+    /* Long paths break instead of widening the page. Code blocks and nowrap cells are unaffected. */
+    overflow-wrap: anywhere;
     font-size: 0.9em;
     padding: 0.1em 0.35em;
     border-radius: 4px;
@@ -962,6 +964,8 @@ kbd {
 
 .channels {
     display: grid;
+    /* minmax(0, 1fr): without it the column grows to the longest code line on phones. */
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
     max-width: 880px;
     margin: 0 auto;
