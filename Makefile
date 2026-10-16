@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help run build release dist check lint lint-fix format format-check test clean
+.PHONY: help run build release dist check lint lint-fix format format-check test clean screenshots site
 
 help:
 	@echo "Usage: make [target]"
@@ -16,6 +16,8 @@ help:
 	@echo "  format-check  Check formatting without modifying files"
 	@echo "  test          Run all tests"
 	@echo "  clean         Remove build artifacts"
+	@echo "  screenshots   Regenerate the website screenshots (site/img)"
+	@echo "  site          Serve the website on http://localhost:8000"
 
 run:
 	cargo run
@@ -58,3 +60,9 @@ test:
 
 clean:
 	cargo clean
+
+screenshots:
+	site/screenshots/capture.sh
+
+site:
+	python3 -m http.server -d site 8000

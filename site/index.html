@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vano, see what fills your disk and clear it safely</title>
+    <meta name="description" content="Vano is a light, native, open source disk analyzer for Linux, Windows and macOS. It scans in a blink, shows where the space goes in a treemap and recommends what can go to the Trash.">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#15161a" media="(prefers-color-scheme: dark)">
+    <link rel="canonical" href="https://vano.tanis.codes/">
+    <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="img/icon-512.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Vano, see what fills your disk and clear it safely">
+    <meta property="og:description" content="A light, native disk analyzer. It scans in a blink, explains what can go, and moves it to the Trash, never deletes it.">
+    <meta property="og:url" content="https://vano.tanis.codes/">
+    <meta property="og:image" content="https://vano.tanis.codes/img/icon-512.png">
+    <link rel="preload" href="fonts/Geist-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/Geist-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js"></script>
+</head>
+<body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="./">
+                <img src="img/logo.svg" alt="" width="28" height="28">
+                Vano
+            </a>
+            <nav class="nav" aria-label="Main">
+                <a class="nav-wide" href="#features">Features</a>
+                <a href="install.html">Download</a>
+                <a class="nav-github" href="https://github.com/tanisperez/vano" aria-label="Vano on GitHub">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    <span>GitHub</span>
+                </a>
+                <button class="theme-toggle" type="button" aria-label="Dark theme" title="Switch between light and dark">
+                    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main">
+        <section class="hero">
+            <div class="wrap">
+                <span class="eyebrow"><span class="pill">Open source</span> Free for everyone, Apache-2.0</span>
+                <h1>See what fills your disk and <span class="accent">clear it safely</span></h1>
+                <p class="lead">Vano is a light, native disk analyzer. It scans your home folder in a blink, shows where the space goes in a treemap you can zoom into, and tells you what can go and why. Nothing is deleted: it all goes to the Trash.</p>
+                <div class="actions">
+                    <a class="btn btn-primary" href="install.html">Download Vano</a>
+                    <a class="btn btn-secondary" href="https://github.com/tanisperez/vano">
+                        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        View on GitHub
+                    </a>
+                </div>
+                <p class="platforms">For Linux, Windows and macOS</p>
+
+                <div class="hero-shot">
+                    <div class="shot">
+                        <img class="light" src="img/hero-light.webp" width="1680" height="1000" fetchpriority="high"
+                            alt="Vano's results for a home folder: the space freed after cleanup, a treemap of the folders colored by category, and the list of recommendations.">
+                        <img class="dark" src="img/hero-dark.webp" width="1680" height="1000" fetchpriority="high"
+                            alt="Vano's results for a home folder: the space freed after cleanup, a treemap of the folders colored by category, and the list of recommendations.">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="highlights" aria-label="Highlights">
+            <div class="wrap">
+                <ul>
+                    <li><strong>Native, not a browser</strong><span>Written in Rust on gpui, the GPU accelerated UI framework behind the Zed editor.</span></li>
+                    <li><strong>Instant</strong><span>Every folder is read in parallel, so a home folder with hundreds of thousands of files takes a fraction of a second.</span></li>
+                    <li><strong>Nothing is deleted</strong><span>What you clean goes to the system Trash, and you can put it back.</span></li>
+                    <li><strong>Local first</strong><span>No sign in, no telemetry. Vano only reads file sizes on your machine.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="fast">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="kicker">Fast and light</span>
+                    <h2>Done before you notice it started</h2>
+                    <p>No web engine inside, no background service, no index to keep up to date. Vano reads the disk when you ask and then gets out of the way.</p>
+                </div>
+                <ul class="stats">
+                    <li class="stat">
+                        <strong>0.4<small>s</small></strong>
+                        <h3>To scan 780,000 files</h3>
+                        <p>Work stealing threads read one folder each and a single thread builds the tree, about five times faster than <code>du</code>.</p>
+                    </li>
+                    <li class="stat">
+                        <strong>60<small>MB</small></strong>
+                        <h3>Of memory at rest</h3>
+                        <p>Under 200 MB with those 780,000 files loaded: each file or folder costs 40 bytes in one flat array.</p>
+                    </li>
+                    <li class="stat">
+                        <strong>0<small>%</small></strong>
+                        <h3>CPU while you read</h3>
+                        <p>An idle window runs no timers and draws no frames. Vano only works while something moves.</p>
+                    </li>
+                </ul>
+                <p class="stats-note">Measured on Linux with a home folder of 208 GB, warm file cache, release build.</p>
+            </div>
+        </section>
+
+        <section class="section section-alt" id="features">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="kicker">Features</span>
+                    <h2>From a full disk to free space in a few clicks</h2>
+                    <p>Scan, look around, pick what goes. Every step shows you what it is about to do.</p>
+                </div>
+
+                <div class="features">
+                    <article class="feature">
+                        <div class="copy">
+                            <h3>Zoom in, folder by folder</h3>
+                            <div class="text">
+                                <p>The treemap shows every folder sized by the space it takes, two levels at a time. Click one to grow it to the whole area, press <kbd>Backspace</kbd> to step back. Tiles spring to their new places, so you never lose track of where you are.</p>
+                                <ul class="checks">
+                                    <li>Colored by what fills it: code, caches, SDKs, AI models, media</li>
+                                    <li>Rings and a ranking of the biggest entries, for the same folder</li>
+                                    <li>Sizes are the real space on disk, with hard links counted once</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="shot">
+                            <img class="light" src="img/explore-light.webp" width="1680" height="1000" loading="lazy"
+                                alt="The explorer zoomed into the dev folder: Rust, Python, web, Android and Flutter projects, with their build outputs hatched as safe to remove.">
+                            <img class="dark" src="img/explore-dark.webp" width="1680" height="1000" loading="lazy"
+                                alt="The explorer zoomed into the dev folder: Rust, Python, web, Android and Flutter projects, with their build outputs hatched as safe to remove.">
+                        </div>
+                    </article>
+
+                    <article class="feature">
+                        <div class="copy">
+                            <h3>Recommendations it can explain</h3>
+                            <div class="text">
+                                <p>Vano knows where package managers, compilers, browsers and SDKs keep their data. What their tool rebuilds by itself is <strong>safe to remove</strong>. What you may still need, like SDKs, models or old installers, is marked <strong>review first</strong>, with the reason.</p>
+                                <ul class="checks">
+                                    <li>Each recommendation says what it is and lists the biggest folders inside</li>
+                                    <li>Cleanup coloring shows where the reclaimable space sits in the tree</li>
+                                    <li>Conservative by design: a build folder only counts next to the file that proves it</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="shot">
+                            <img class="light" src="img/cleanup-light.webp" width="1680" height="1000" loading="lazy"
+                                alt="The treemap in Cleanup coloring, with safe items hatched in green and review items in amber, and the detail of the Rust build output recommendation.">
+                            <img class="dark" src="img/cleanup-dark.webp" width="1680" height="1000" loading="lazy"
+                                alt="The treemap in Cleanup coloring, with safe items hatched in green and review items in amber, and the detail of the Rust build output recommendation.">
+                        </div>
+                    </article>
+
+                    <article class="feature">
+                        <div class="copy">
+                            <h3>To the Trash, never deleted</h3>
+                            <div class="text">
+                                <p>Select the recommendations you want, or any folder of the treemap, and confirm. Vano lists every item and the total before it moves anything, and moves it to the system Trash, where it stays until you empty it.</p>
+                                <ul class="checks">
+                                    <li>Undo right away from the notice that follows</li>
+                                    <li>A warning when a folder is not covered by any recommendation</li>
+                                    <li>The treemap and the totals update as soon as the items are gone</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="shot">
+                            <img class="light" src="img/trash-light.webp" width="1680" height="1000" loading="lazy"
+                                alt="The confirmation to move the Rust build output, 33.4 GB, to the Trash.">
+                            <img class="dark" src="img/trash-dark.webp" width="1680" height="1000" loading="lazy"
+                                alt="The confirmation to move the Rust build output, 33.4 GB, to the Trash.">
+                        </div>
+                    </article>
+
+                    <article class="feature">
+                        <div class="copy">
+                            <h3>The big picture at a glance</h3>
+                            <div class="text">
+                                <p>Switch the explorer to rings to see a folder split by category, or to a ranking of its largest entries. While a scan runs, the same views grow live as each folder is read.</p>
+                            </div>
+                        </div>
+                        <div class="shot">
+                            <img class="light" src="img/rings-light.webp" width="1680" height="1000" loading="lazy"
+                                alt="The home folder as a ring split by category, with the size of each category in the legend.">
+                            <img class="dark" src="img/rings-dark.webp" width="1680" height="1000" loading="lazy"
+                                alt="The home folder as a ring split by category, with the size of each category in the legend.">
+                        </div>
+                    </article>
+
+                    <article class="feature">
+                        <div class="copy">
+                            <h3>Your home, the whole disk or any folder</h3>
+                            <div class="text">
+                                <p>Pick what to scan and go. Recent scans are kept, so their results open again at once, without scanning twice. Other file systems mounted inside are left alone.</p>
+                            </div>
+                        </div>
+                        <div class="shot">
+                            <img class="light" src="img/home-light.webp" width="1680" height="1000" loading="lazy"
+                                alt="The home screen: scan the home folder, the file system or a chosen folder, and the recent scans below.">
+                            <img class="dark" src="img/home-dark.webp" width="1680" height="1000" loading="lazy"
+                                alt="The home screen: scan the home folder, the file system or a chosen folder, and the recent scans below.">
+                        </div>
+                    </article>
+
+                    <article class="feature">
+                        <div class="copy">
+                            <h3>Made to feel at home</h3>
+                            <div class="text">
+                                <p>Light and dark themes, or follow your system. Three accents: Indigo, Graphite and Electric blue. Pick the interface fonts and sizes. Vano speaks English, Spanish, Galician and Italian.</p>
+                            </div>
+                        </div>
+                        <div class="shot">
+                            <img class="light" src="img/settings-light.webp" width="1680" height="1000" loading="lazy"
+                                alt="The Settings window with the language, theme and accent options.">
+                            <img class="dark" src="img/settings-dark.webp" width="1680" height="1000" loading="lazy"
+                                alt="The Settings window with the language, theme and accent options.">
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="themes">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="kicker">Light or dark</span>
+                    <h2>Two themes, one design. You choose.</h2>
+                    <p>Both themes are built from the same palette, treemap colors included, so neither one feels like an afterthought.</p>
+                </div>
+                <div class="themes">
+                    <img class="light" src="img/hero-light.webp" width="1680" height="1000" loading="lazy"
+                        alt="Vano in its light theme.">
+                    <img class="dark" src="img/hero-dark.webp" width="1680" height="1000" loading="lazy"
+                        alt="Vano in its dark theme, over the right half of the same window.">
+                </div>
+                <div class="themes-labels" aria-hidden="true"><span>Light</span><span>Dark</span></div>
+                <p class="themes-note">Every screenshot on this page comes in both themes. Use the button at the top to switch.</p>
+            </div>
+        </section>
+
+        <section class="section section-alt" id="more">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="kicker">What it finds</span>
+                    <h2>The usual suspects, recognized by name</h2>
+                    <p>A few of the places Vano checks on every scan.</p>
+                </div>
+                <ul class="grid">
+                    <li class="card">
+                        <span class="badge">~/.npm ~/.cargo ~/.gradle</span>
+                        <h3>Package caches</h3>
+                        <p>npm, Yarn, pnpm, Cargo, Gradle, pip, uv, Poetry, Go and Dart. They download it all again when needed.</p>
+                    </li>
+                    <li class="card">
+                        <span class="badge">target/ .next/ build/</span>
+                        <h3>Build outputs</h3>
+                        <p>Rust, Maven, Gradle, Flutter and JavaScript builds, Python bytecode and Xcode derived data.</p>
+                    </li>
+                    <li class="card">
+                        <span class="badge">node_modules .venv</span>
+                        <h3>Idle dependencies</h3>
+                        <p><code>node_modules</code> of projects untouched for two months, and Python virtual environments.</p>
+                    </li>
+                    <li class="card">
+                        <span class="badge">Cache Code Cache</span>
+                        <h3>Browser and editor caches</h3>
+                        <p>Chrome, Brave, Edge and Firefox caches, JetBrains caches, and the browsers that Playwright and Puppeteer download.</p>
+                    </li>
+                    <li class="card">
+                        <span class="badge">Android/Sdk .ollama</span>
+                        <h3>SDKs and AI models</h3>
+                        <p>Android SDKs and emulators, iOS simulators, and models from Ollama, Hugging Face and LM Studio. Marked for review.</p>
+                    </li>
+                    <li class="card">
+                        <span class="badge">*.iso *.dmg *.deb</span>
+                        <h3>Old downloads</h3>
+                        <p>Installers and disk images left in Downloads for over a month, big screen recordings, and the Trash itself.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="wrap">
+                <div class="cta-box">
+                    <img src="img/logo.svg" alt="" width="64" height="64">
+                    <h2>Give Vano a try</h2>
+                    <p>Free and open source, for Linux, Windows and macOS. No account needed, just download and scan.</p>
+                    <div class="actions">
+                        <a class="btn btn-primary" href="install.html">Download Vano</a>
+                        <a class="btn btn-secondary" href="https://github.com/tanisperez/vano">View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <span>Vano is open source under the Apache License 2.0.</span>
+            <nav aria-label="Footer">
+                <a href="https://github.com/tanisperez/vano">GitHub</a>
+                <a href="https://github.com/tanisperez/vano/releases">Releases</a>
+                <a href="https://github.com/tanisperez/vano/issues">Report an issue</a>
+                <a href="https://tanis.codes">tanis.codes</a>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>

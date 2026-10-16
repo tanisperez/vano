@@ -3,8 +3,11 @@
 Publishing a version means pushing a tag. The `Release` workflow
 (`.github/workflows/release.yml`) builds Vano for every platform, attaches the binaries to the
 GitHub release of that tag and publishes it. The `Build` workflow (`build.yml`) is the per-push CI.
-There is no website, APT, DNF, Homebrew or winget automation yet: only the AUR `PKGBUILD` template
-exists, and it is published by hand.
+The `Website` workflow (`website.yml`) publishes `site/` to GitHub Pages (vano.tanis.codes) on
+every push to `main` that touches it, rebuilt from scratch each time, with no gh-pages branch; its
+download links point to the latest release, so it needs no step of its own here. There is no APT,
+DNF, Homebrew or winget automation yet: only the AUR `PKGBUILD` template exists, and it is
+published by hand.
 
 ## Versions and tags
 
@@ -142,4 +145,4 @@ updates on Linux, so the updater exists only on macOS and Windows.
 ## Later
 
 macOS signing and notarization, ARM builds, signing `latest.json`, Windows code signing, APT and
-DNF repositories, Homebrew and winget channels, a website.
+DNF repositories, Homebrew and winget channels.

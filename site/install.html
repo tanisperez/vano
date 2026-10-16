@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Download Vano for Linux, Windows and macOS</title>
+    <meta name="description" content="Download Vano, the native open source disk analyzer, for Linux (deb, rpm, tarball), Windows (installer or portable) and macOS.">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#15161a" media="(prefers-color-scheme: dark)">
+    <link rel="canonical" href="https://vano.tanis.codes/install.html">
+    <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="img/icon-512.png">
+    <link rel="preload" href="fonts/Geist-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/Geist-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js"></script>
+</head>
+<body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="./">
+                <img src="img/logo.svg" alt="" width="28" height="28">
+                Vano
+            </a>
+            <nav class="nav" aria-label="Main">
+                <a class="nav-wide" href="./#features">Features</a>
+                <a href="install.html" aria-current="page">Download</a>
+                <a class="nav-github" href="https://github.com/tanisperez/vano" aria-label="Vano on GitHub">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    <span>GitHub</span>
+                </a>
+                <button class="theme-toggle" type="button" aria-label="Dark theme" title="Switch between light and dark">
+                    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main">
+        <section class="page-head">
+            <div class="wrap">
+                <h1>Download Vano</h1>
+                <p>Free and open source. Pick your system below. Every file is attached to the latest release on GitHub, with its SHA-256 checksum.</p>
+            </div>
+        </section>
+
+        <section aria-label="Downloads">
+            <div class="wrap">
+                <ul class="downloads">
+                    <li class="download">
+                        <h2>Windows</h2>
+                        <p>Windows 10 and 11, 64 bit. The installer is for your user only, needs no administrator rights and updates itself. The portable zip needs no installer at all, for machines where installing is not allowed.</p>
+                        <a class="btn btn-primary" href="https://github.com/tanisperez/vano/releases/latest">Download the installer</a>
+                        <span class="alt">File <code>Vano-…-windows-x86_64-setup.exe</code></span>
+                        <a class="btn btn-secondary" href="https://github.com/tanisperez/vano/releases/latest">Download the portable zip</a>
+                        <span class="alt">File <code>Vano-…-windows-x86_64-portable.zip</code></span>
+                    </li>
+                    <li class="download">
+                        <h2>macOS</h2>
+                        <p>Apple silicon (M1 and later). Drag Vano to Applications. Updates itself.</p>
+                        <a class="btn btn-primary" href="https://github.com/tanisperez/vano/releases/latest">Download the disk image</a>
+                        <span class="alt">File <code>Vano-…-macos-arm64.dmg</code></span>
+                    </li>
+                    <li class="download">
+                        <h2>Linux</h2>
+                        <p>x86_64. A <code>.deb</code> for Debian and Ubuntu, an <code>.rpm</code> for Fedora and openSUSE, and a tarball for everything else.</p>
+                        <a class="btn btn-primary" href="https://github.com/tanisperez/vano/releases/latest">Download a package</a>
+                        <span class="alt">Files <code>.deb</code>, <code>.rpm</code>, <code>.tar.gz</code></span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="linux">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="kicker">Linux</span>
+                    <h2>Install the package</h2>
+                    <p>From the folder you downloaded it to. To update, install the package of the new version the same way.</p>
+                </div>
+
+                <div class="channels">
+                    <article class="channel" id="debian">
+                        <h3>Debian and Ubuntu <small>apt</small></h3>
+                        <p>apt resolves the dependencies of the downloaded file.</p>
+                        <div class="code">
+<pre><span class="prompt">$ </span>sudo apt install ./vano_*_amd64.deb</pre>
+                        </div>
+                    </article>
+
+                    <article class="channel" id="fedora">
+                        <h3>Fedora and openSUSE <small>dnf, zypper</small></h3>
+                        <p>The same file works on both.</p>
+                        <div class="code">
+<pre><span class="cm"># Fedora</span>
+<span class="prompt">$ </span>sudo dnf install ./vano-*.x86_64.rpm
+
+<span class="cm"># openSUSE</span>
+<span class="prompt">$ </span>sudo zypper install ./vano-*.x86_64.rpm</pre>
+                        </div>
+                    </article>
+
+                    <article class="channel" id="tarball">
+                        <h3>Any distribution <small>tar.gz</small></h3>
+                        <p>The tarball has a <code>/usr</code>-like layout: the binary in <code>bin/</code>, plus the desktop entry and the icons in <code>share/</code>.</p>
+                        <div class="code">
+<pre><span class="prompt">$ </span>tar -xzf vano-*-linux-x86_64.tar.gz
+<span class="prompt">$ </span>./vano-*/bin/vano</pre>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-alt" id="first-launch">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="kicker">First launch</span>
+                    <h2>A note on unsigned builds</h2>
+                    <p>Vano is not code signed yet, so your system asks once before opening it. Updates are not affected.</p>
+                </div>
+                <div class="channels">
+                    <article class="channel">
+                        <h3>macOS</h3>
+                        <p>If macOS says it cannot verify the developer, open System Settings, Privacy and Security, and choose <strong>Open Anyway</strong>. Or run this once:</p>
+                        <div class="code">
+<pre><span class="prompt">$ </span>xattr -dr com.apple.quarantine /Applications/Vano.app</pre>
+                        </div>
+                    </article>
+                    <article class="channel">
+                        <h3>Windows</h3>
+                        <p>If SmartScreen shows <strong>Windows protected your PC</strong>, choose <strong>More info</strong> and then <strong>Run anyway</strong>.</p>
+                    </article>
+                    <article class="channel">
+                        <h3>Build from source</h3>
+                        <p>Vano builds with the stable Rust toolchain. Clone the repository and run <code>cargo run --release</code>. See the <a href="https://github.com/tanisperez/vano#building-from-source">README</a> for the system libraries each platform needs.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <span>Vano is open source under the Apache License 2.0.</span>
+            <nav aria-label="Footer">
+                <a href="https://github.com/tanisperez/vano">GitHub</a>
+                <a href="https://github.com/tanisperez/vano/releases">Releases</a>
+                <a href="https://github.com/tanisperez/vano/issues">Report an issue</a>
+                <a href="https://tanis.codes">tanis.codes</a>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>

@@ -5,8 +5,13 @@ native, open source disk analyzer. See what fills your disk in an instant and cl
 it shows where the space goes in a treemap you can zoom into folder by folder, and
 recommends what can go to the Trash, where everything can still be put back.
 
-[Download](https://github.com/tanisperez/vano/releases/latest) ·
+[Website](https://vano.tanis.codes) · [Download](https://vano.tanis.codes/install.html) ·
 [Documentation](#documentation)
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/img/hero-dark.webp">
+  <img src="site/img/hero-light.webp" alt="Vano's results for a home folder: the space freed after cleanup, a treemap of the folders colored by category, and the list of recommendations.">
+</picture>
 
 > Status: verified on Linux. Windows and macOS builds have not been verified yet.
 
