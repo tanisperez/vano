@@ -13,7 +13,7 @@ recommends what can go to the Trash, where everything can still be put back.
   <img src="site/img/hero-light.webp" alt="Vano's results for a home folder: the space freed after cleanup, a treemap of the folders colored by category, and the list of recommendations.">
 </picture>
 
-> Status: verified on Linux. Windows and macOS builds have not been verified yet.
+> Status: verified on Linux and Windows. macOS builds have not been verified yet.
 
 ## Fast and light
 
