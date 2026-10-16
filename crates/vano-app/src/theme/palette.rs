@@ -1,5 +1,5 @@
 //! Vano's color palette: one [`Palette`] per accent (Indigo, Graphite, Electric blue) and mode
-//! (light, dark), built from the design tokens of `vano_design_system/Design System.dc.html`, and
+//! (light, dark), built from the design tokens of `docs/design-system.md`, and
 //! [`PaletteExt`], the extension trait views use to reach the active one.
 //!
 //! Every hex literal is written once, below. The accent changes the accent color and the

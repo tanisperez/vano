@@ -10,9 +10,9 @@ folder, shows what fills it in an animated treemap, and recommends what can be m
 Trash safely. Targets: Linux first, then macOS and Windows. Nothing is ever deleted directly:
 items go to the system Trash and can be put back.
 
-The design system (screens, palettes, icons, the interactive prototype) is in
-`vano_design_system/`. `Disk Analyzer.dc.html` is the reference for every screen; open it with
-Chrome and change the props at the end of the file to see a given state.
+The design system (palettes, type, metrics, screens, motion, icon) is summarized in
+`docs/design-system.md`; the code is its source of truth. The original mockups are kept in git
+history under the tag `design-mockups`.
 
 ## Architecture
 
