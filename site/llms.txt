@@ -1,0 +1,29 @@
+# Vano
+
+> Vano is a light, native, open source disk analyzer for Linux, Windows and macOS. It scans the home folder, the whole disk or any folder in a fraction of a second, shows where the space goes in an animated treemap (also as rings or a ranking), and recommends what can be removed safely. Nothing is deleted directly: items go to the system Trash after confirmation and can be put back.
+
+Key facts:
+
+- Free and open source under the Apache License 2.0. Written in Rust, with the UI drawn on the GPU by gpui (the framework behind the Zed editor). No Electron, no web view.
+- Fast: a parallel scanner reads a home folder of 780,000 files and 208 GB in under half a second with a warm cache, about 5 times faster than `du`.
+- Light: about 60 MB of memory idle, under 200 MB with 780,000 files loaded. An idle window uses no CPU.
+- Recommendations are marked Safe (package caches, build outputs such as Rust `target` folders, `.next`, Gradle and Dart builds, npm, yarn, pip, Cargo, Go and Gradle caches, browser and editor caches, thumbnails) or Review (Android SDKs and emulators, AI models from Ollama, Hugging Face and LM Studio, Docker data, Python virtual environments, idle `node_modules`, old installers and disk images in Downloads, big screen recordings, the Trash), each with an explanation.
+- No account, no telemetry, no online sync. Vano only reads file sizes on the machine. On macOS and Windows it makes an optional update check that sends no identifiers.
+- Status: verified on Linux and Windows. macOS builds have not been verified yet.
+
+## Website
+
+- [Home](https://vano.tanis.codes/): features, a demo video and screenshots.
+- [Download](https://vano.tanis.codes/install.html): installers for Windows (installer or portable), macOS, and Linux (deb, rpm, tar.gz), with install commands.
+
+## Source and releases
+
+- [Source code on GitHub](https://github.com/tanisperez/vano): the README covers the features and building from source.
+- [Releases](https://github.com/tanisperez/vano/releases): every download, with SHA-256 checksums.
+- [Issues](https://github.com/tanisperez/vano/issues): bug reports and feature requests.
+
+## Optional
+
+- [Architecture](https://github.com/tanisperez/vano/blob/main/AGENTS.md): the crates, the scanner, the treemap and its animation.
+- [Design system](https://github.com/tanisperez/vano/blob/main/docs/design-system.md): colors, type, metrics, screens and motion.
+- [Author](https://tanis.codes): Estanislao Pérez Nartallo.

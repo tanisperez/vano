@@ -854,6 +854,7 @@ kbd {
     box-shadow: 0 10px 30px -8px var(--glow);
 }
 
+.cta h1,
 .cta h2 {
     font-size: clamp(30px, 4.2vw, 44px);
     letter-spacing: -0.03em;

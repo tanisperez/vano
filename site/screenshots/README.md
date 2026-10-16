@@ -67,3 +67,9 @@ The same as `capture.sh`, plus `vano` in the `PATH`, `gpu-screen-recorder`, `ffm
 `libsvtav1` and `libx264`, and about 50 GB free on the disk of the repository. XWayland runs at
 the largest display scale, read from `kscreen-doctor -o`. The window is placed on the display at
 the top left corner of the desktop.
+
+# Open Graph card
+
+`og-image.sh` renders `og.html` with headless Chrome into `site/img/og.png` (1200x630): the logo,
+the tagline and `img/hero-dark.webp`, with the website's fonts. Run it again after the
+screenshots change.

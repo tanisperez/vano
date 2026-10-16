@@ -1,0 +1,13 @@
+{
+    "name": "Vano",
+    "short_name": "Vano",
+    "description": "A light, native, open source disk analyzer.",
+    "start_url": "/",
+    "display": "browser",
+    "icons": [
+        { "src": "/img/icon-512.png", "sizes": "512x512", "type": "image/png" },
+        { "src": "/img/logo.svg", "sizes": "any", "type": "image/svg+xml" }
+    ],
+    "theme_color": "#4f57d8",
+    "background_color": "#fcfcfd"
+}
