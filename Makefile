@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help run build release dist check lint lint-fix format format-check test clean screenshots site
+.PHONY: help run build release dist install install-latest uninstall check lint lint-fix format format-check test clean screenshots site
 
 help:
 	@echo "Usage: make [target]"
@@ -9,6 +9,9 @@ help:
 	@echo "  build         Build in debug mode"
 	@echo "  release       Build an optimized release binary"
 	@echo "  dist          Build the release packages for this OS into target/dist"
+	@echo "  install       Linux: build and install for this user under ~/.local (PREFIX=...)"
+	@echo "  install-latest Linux: download the latest release and install it the same way"
+	@echo "  uninstall     Linux: remove what make install or install-latest put under PREFIX"
 	@echo "  check         Fast type-check without producing a binary"
 	@echo "  lint          Run Clippy (warnings are errors)"
 	@echo "  lint-fix      Run Clippy and apply automatic fixes"
@@ -39,6 +42,48 @@ dist: release
 	Darwin) packaging/macos/bundle.sh $(VERSION) target/release/vano target/dist ;; \
 	*) echo "make dist supports Linux and macOS; see packaging/windows/README.md"; exit 1 ;; \
 	esac
+
+# Linux only: the binary, the desktop entry and the icons, laid out like the tarball. The desktop
+# entry is what gives the window its icon on Wayland (matched by the app id). Its Exec line gets
+# the absolute path, so the menu entry works even when PREFIX/bin is not on the session's PATH.
+PREFIX ?= $(HOME)/.local
+APP_ID := codes.tanis.vano
+# The same sizes as packaging/linux/package.sh.
+ICON_SIZES := 16 24 32 48 64 128 256 512
+ICONS_DIR = $(PREFIX)/share/icons/hicolor
+
+install: release
+	@[ "$$(uname -s)" = Linux ] || { echo "make install is for Linux, see packaging/ for the others"; exit 1; }
+	install -Dm755 target/release/vano $(PREFIX)/bin/vano
+	sed 's|^Exec=vano$$|Exec=$(PREFIX)/bin/vano|' packaging/linux/$(APP_ID).desktop \
+		| install -Dm644 /dev/stdin $(PREFIX)/share/applications/$(APP_ID).desktop
+	install -Dm644 packaging/icons/vano.svg $(ICONS_DIR)/scalable/apps/$(APP_ID).svg
+	for size in $(ICON_SIZES); do \
+		install -Dm644 packaging/icons/png/vano-$$size.png \
+			$(ICONS_DIR)/$${size}x$${size}/apps/$(APP_ID).png; \
+	done
+	$(MAKE) --no-print-directory refresh-desktop-caches
+
+# The latest published release instead of a local build, checked against its SHA256SUMS.
+install-latest:
+	packaging/linux/install-latest.sh $(PREFIX)
+	$(MAKE) --no-print-directory refresh-desktop-caches
+
+uninstall:
+	rm -f $(PREFIX)/bin/vano $(PREFIX)/share/applications/$(APP_ID).desktop
+	rm -f $(ICONS_DIR)/scalable/apps/$(APP_ID).svg \
+		$(foreach size,$(ICON_SIZES),$(ICONS_DIR)/$(size)x$(size)/apps/$(APP_ID).png)
+	$(MAKE) --no-print-directory refresh-desktop-caches
+
+# Best effort: the tools may be missing, and an icon cache is only refreshed if there is one.
+.PHONY: refresh-desktop-caches
+refresh-desktop-caches:
+	@if command -v update-desktop-database >/dev/null; then \
+		update-desktop-database -q $(PREFIX)/share/applications || true; \
+	fi
+	@if [ -f $(ICONS_DIR)/icon-theme.cache ] && command -v gtk-update-icon-cache >/dev/null; then \
+		gtk-update-icon-cache -q -t $(ICONS_DIR) || true; \
+	fi
 
 check:
 	cargo check --all-targets
