@@ -1,0 +1,52 @@
+# Saves the repository traffic and the release download counts to the `stats` branch every day,
+# since GitHub keeps traffic data for 14 days only (docs/releasing.md, "Download and traffic
+# stats"). The traffic API needs the STATS_TOKEN secret; without it only downloads are saved.
+# The commit is pushed with GITHUB_TOKEN, so it never starts the Build workflow.
+name: Stats
+
+on:
+  schedule:
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stats
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The stats branch is an orphan branch with only the CSV files. The first run creates it.
+      - name: Check out the stats branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch --depth 1 origin stats; then
+            git worktree add stats FETCH_HEAD
+            git -C stats switch -c stats
+          else
+            git worktree add --orphan -b stats stats
+          fi
+
+      - name: Collect the stats
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+        run: python3 -I .github/scripts/stats.py stats
+
+      - name: Commit and push
+        working-directory: stats
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git commit -q -m "Stats for $(date -u +%F)"
+          git push origin stats

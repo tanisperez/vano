@@ -142,6 +142,24 @@ updates on Linux, so the updater exists only on macOS and Windows.
   (or `xattr -dr com.apple.quarantine /Applications/Vano.app`) and Windows SmartScreen shows
   "More info, Run anyway". Self updates are not affected.
 
+## Download and traffic stats
+
+GitHub keeps the repository traffic (views, clones, referrers, popular pages) for 14 days only.
+The `Stats` workflow (`.github/workflows/stats.yml`, script in `.github/scripts/stats.py`) runs
+every day at 06:23 UTC, or by hand with `gh workflow run stats.yml`, and commits CSV files to the
+orphan `stats` branch, so `main` gets no daily commits:
+
+- `traffic/views.csv`, `traffic/clones.csv`: one row per day, merged with the previous runs.
+- `traffic/referrers.csv`, `traffic/paths.csv`: the 14 day top lists, one snapshot per run date.
+- `downloads.csv`: the download count of every release asset, one snapshot per run date.
+- `repo.csv`: stars, forks and watchers per run date.
+
+The traffic API does not accept `GITHUB_TOKEN`, it needs the `STATS_TOKEN` secret: a fine-grained
+personal access token limited to this repository with the "Administration" permission set to
+read-only. Without it, the workflow saves only the downloads and the counters. Read the data with
+`git fetch origin stats && git show origin/stats:downloads.csv`. Clones are not a measure of
+interest: every workflow checkout counts as one.
+
 ## Later
 
 macOS signing and notarization, ARM builds, signing `latest.json`, Windows code signing, APT and
