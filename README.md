@@ -1,5 +1,10 @@
 # Vano
 
+[![Latest release](https://img.shields.io/github/v/release/tanisperez/vano)](https://github.com/tanisperez/vano/releases/latest)
+[![Build](https://img.shields.io/github/actions/workflow/status/tanisperez/vano/build.yml?branch=main&label=build)](https://github.com/tanisperez/vano/actions/workflows/build.yml)
+[![License](https://img.shields.io/github/license/tanisperez/vano)](LICENSE)
+[![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20Windows%20%7C%20macOS-blue)](https://vano.tanis.codes/install.html)
+
 Vano (Italian word for an empty space) is a light, native, open source disk analyzer. 
 See what fills your disk in an instant and clear it safely:
 it shows where the space goes in a treemap you can zoom into folder by folder, and
