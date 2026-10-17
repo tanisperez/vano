@@ -1,0 +1,10 @@
+date,tag,asset,downloads
+2026-10-17,v0.1.0,latest.json,26
+2026-10-17,v0.1.0,SHA256SUMS,3
+2026-10-17,v0.1.0,vano-0.1.0-1.x86_64.rpm,0
+2026-10-17,v0.1.0,vano-0.1.0-linux-x86_64.tar.gz,3
+2026-10-17,v0.1.0,Vano-0.1.0-macos-arm64.app.tar.gz,0
+2026-10-17,v0.1.0,Vano-0.1.0-macos-arm64.dmg,4
+2026-10-17,v0.1.0,Vano-0.1.0-windows-x86_64-portable.zip,10
+2026-10-17,v0.1.0,Vano-0.1.0-windows-x86_64-setup.exe,16
+2026-10-17,v0.1.0,vano_0.1.0_amd64.deb,5
