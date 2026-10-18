@@ -24,7 +24,7 @@ jobs:
       version: ${{ steps.version.outputs.version }}
       prerelease: ${{ steps.version.outputs.prerelease }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # The tag must be `v` plus the workspace version, optionally followed by a pre-release
       # suffix (`v0.1.0-rc.1` for version 0.1.0). Tags with a suffix become pre-releases.
@@ -71,7 +71,7 @@ jobs:
             updater: github
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -150,7 +150,7 @@ jobs:
           Get-Item $zip | Format-List Name, Length
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: vano-${{ matrix.name }}
           path: dist/*
@@ -169,7 +169,7 @@ jobs:
       PRERELEASE: ${{ needs.check.outputs.prerelease }}
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true

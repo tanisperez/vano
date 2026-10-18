@@ -20,7 +20,7 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # The stats branch is an orphan branch with only the CSV files. The first run creates it.
       - name: Check out the stats branch
