@@ -2,6 +2,16 @@
 
 Guidance for AI agents working on Vano.
 
+The rules shared by every Rust desktop app (design first, stack, telaio, performance,
+translations, logging, CLI, docs, releases, packaging, CI, testing) are imported below. This file
+only adds what is specific to Vano, and wins where the two differ.
+
+@~/.claude/rust/RULES.md
+
+Vano does not use telaio yet: its migration is tracked in tanisperez/postino#139. Until then,
+where the shared rules say telaio, the app's own `theme/` and `views/components/` apply, and a fix
+to one of those components should be made in telaio too.
+
 ## Project
 
 Vano is a native desktop disk analyzer written in Rust with `gpui` (through `gpui-kit` 0.7.0,
