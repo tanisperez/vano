@@ -15,11 +15,6 @@ _version: 2
   es: "Una vez, unos segundos tras arrancar. Nunca consulta en segundo plano."
   gl: "Unha vez, uns segundos tras arrancar. Nunca consulta en segundo plano."
   it: "Una volta, pochi secondi dopo l'avvio. Non controlla mai in background."
-"update.status.notes":
-  en: "Release notes"
-  es: "Notas de la versión"
-  gl: "Notas da versión"
-  it: "Note di rilascio"
 "update.checking":
   en: "Checking for updates..."
   es: "Buscando actualizaciones..."

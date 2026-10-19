@@ -15,6 +15,8 @@ gpui-kit = "0.7.0"
 # The design system and standard components shared with Postino and Nastro. Same gpui-kit pin.
 telaio-ui = { git = "https://github.com/tanisperez/telaio", tag = "v0.2.0" }
 telaio-update = { git = "https://github.com/tanisperez/telaio", tag = "v0.2.0" }
+# The application shell: logging, language, numbers, paths, window bootstrap, About header.
+telaio-app = { git = "https://github.com/tanisperez/telaio", tag = "v0.2.0" }
 serde = "1"
 serde_json = "1"
 anyhow = "1"
@@ -25,12 +27,8 @@ dirs = "7"
 dunce = "1"
 toml = "0.8"
 log = "0.4"
-# Already built by gpui-component (translations) and cosmic-text (OS language); same versions.
+# Already built by gpui-component (translations); same version.
 rust-i18n = "4.2"
-sys-locale = "0.3"
-# Number formatting with CLDR data (compiled data, only the four UI languages are ever asked for).
-icu_decimal = { version = "2.3", features = ["alloc"] }
-icu_locale_core = "2.3"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 crossbeam-deque = "0.8"
 crossbeam-utils = "0.8"

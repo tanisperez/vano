@@ -6349,6 +6349,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "telaio-app"
+version = "0.2.0"
+source = "git+https://github.com/tanisperez/telaio?tag=v0.2.0#2822122e2939bf32e78652ccbf9caaa83b232f33"
+dependencies = [
+ "chrono",
+ "dirs 7.0.0",
+ "gpui-kit",
+ "icu_decimal",
+ "icu_locale_core",
+ "log",
+ "rust-i18n",
+ "serde",
+ "sys-locale",
+ "telaio-ui",
+ "windows-sys 0.61.2",
+]
+
+[[package]]
 name = "telaio-ui"
 version = "0.2.0"
 source = "git+https://github.com/tanisperez/telaio?tag=v0.2.0#2822122e2939bf32e78652ccbf9caaa83b232f33"
@@ -7025,14 +7043,12 @@ dependencies = [
  "dunce",
  "embed-resource",
  "gpui-kit",
- "icu_decimal",
- "icu_locale_core",
  "log",
  "pretty_assertions",
  "rust-i18n",
  "serde",
  "serde_json",
- "sys-locale",
+ "telaio-app",
  "telaio-ui",
  "telaio-update",
  "tempfile",

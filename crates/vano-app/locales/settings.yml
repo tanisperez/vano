@@ -115,46 +115,11 @@ _version: 2
   es: "Se rota cada %{size} MB y se conservan los últimos %{files} archivos. La variable de entorno %{variable} sustituye el nivel al iniciar."
   gl: "Rótase cada %{size} MB e consérvanse os últimos %{files} ficheiros. A variable de contorno %{variable} substitúe o nivel ao iniciar."
   it: "Ruotato ogni %{size} MB, conservando gli ultimi %{files} file. La variabile d'ambiente %{variable} sostituisce il livello all'avvio."
-"settings.log_level.off":
-  en: "Off"
-  es: "Desactivado"
-  gl: "Desactivado"
-  it: "Disattivato"
-"settings.log_level.error":
-  en: "Error"
-  es: "Error"
-  gl: "Erro"
-  it: "Errore"
-"settings.log_level.warn":
-  en: "Warn"
-  es: "Aviso"
-  gl: "Aviso"
-  it: "Avviso"
-"settings.log_level.info":
-  en: "Info"
-  es: "Info"
-  gl: "Info"
-  it: "Info"
-"settings.log_level.debug":
-  en: "Debug"
-  es: "Debug"
-  gl: "Debug"
-  it: "Debug"
-"settings.log_level.trace":
-  en: "Trace"
-  es: "Trace"
-  gl: "Trace"
-  it: "Trace"
 "settings.category.about":
   en: "About"
   es: "Acerca de"
   gl: "Acerca de"
   it: "Informazioni"
-"settings.about.version":
-  en: "Version"
-  es: "Versión"
-  gl: "Versión"
-  it: "Versione"
 "settings.about.ready.title":
   en: "Vano %{version} is ready to install"
   es: "Vano %{version} está listo para instalar"

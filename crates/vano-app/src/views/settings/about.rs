@@ -9,7 +9,7 @@ use gpui_kit::prelude::*;
 use gpui_kit::*;
 use rust_i18n::t;
 
-use crate::state::about::{self, AboutInfo};
+use crate::state::about::{AboutInfo, IDENTITY};
 use crate::state::update::{CheckStatus, ReadyUpdate, updater_enabled};
 use crate::theme::Palette;
 use crate::theme::metrics::{CONTROL_HEIGHT, RADIUS_LG};
@@ -51,7 +51,7 @@ pub(super) fn render_about(
     pane: &AboutPane,
 ) -> Vec<AnyElement> {
     vec![
-        render_identity(palette, mono_font_family, &pane.info),
+        telaio_app::about::header(&IDENTITY, &pane.info.platform, palette, mono_font_family),
         divider(palette),
         render_updates(weak, palette, mono_font_family, pane),
     ]
@@ -74,73 +74,6 @@ pub(super) fn render_about_footer(palette: &Palette) -> AnyElement {
         .text_color(palette.fg_subtle)
         .text_size(px(12.0))
         .child(text)
-        .into_any_element()
-}
-
-/// The logo, the name with its version and platform, and the two link buttons.
-fn render_identity(
-    palette: &Palette,
-    mono_font_family: &SharedString,
-    info: &AboutInfo,
-) -> AnyElement {
-    let notes_url = about::release_notes_url(info.version);
-    h_flex()
-        .items_center()
-        .gap(px(14.0))
-        .child(
-            div()
-                .flex_none()
-                .size(px(44.0))
-                .rounded(px(11.0))
-                .bg(palette.accent)
-                .text_color(palette.accent_fg)
-                .text_size(px(22.0))
-                .font_weight(FontWeight::BOLD)
-                .flex()
-                .items_center()
-                .justify_center()
-                .child("P"),
-        )
-        .child(
-            v_flex()
-                .flex_1()
-                .min_w_0()
-                .gap(px(3.0))
-                .child(
-                    div()
-                        .text_size(px(16.0))
-                        .font_weight(FontWeight::SEMIBOLD)
-                        .child("Vano"),
-                )
-                .child(
-                    h_flex()
-                        .gap(px(4.0))
-                        .text_color(palette.fg_muted)
-                        .child(t!("settings.about.version"))
-                        .child(
-                            div()
-                                .font_family(mono_font_family.clone())
-                                .text_color(palette.fg)
-                                .child(info.version),
-                        )
-                        .child(format!("\u{b7} {}", info.platform)),
-                ),
-        )
-        .child(
-            h_flex()
-                .flex_none()
-                .gap(px(6.0))
-                .child(
-                    SecondaryButton::new("about-release-notes", t!("update.status.notes"))
-                        .icon(Icon::new(gpui_kit::assets::IconName::FileText))
-                        .on_click(move |_, _, cx| cx.open_url(&notes_url)),
-                )
-                .child(
-                    SecondaryButton::new("about-github", "GitHub")
-                        .icon(Icon::new(gpui_kit::assets::IconName::Github))
-                        .on_click(|_, _, cx| cx.open_url(about::REPO_URL)),
-                ),
-        )
         .into_any_element()
 }
 
@@ -383,7 +316,7 @@ fn render_distro_updates(
                                     t!("settings.about.managed.link"),
                                 )
                                 .icon(Icon::new(gpui_kit::assets::IconName::ExternalLink))
-                                .on_click(|_, _, cx| cx.open_url(about::INSTALL_URL)),
+                                .on_click(|_, _, cx| cx.open_url(crate::state::about::INSTALL_URL)),
                             ),
                         )
                     }),
