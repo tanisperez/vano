@@ -17,7 +17,9 @@ use gpui_kit::*;
 use telaio_app::window::WindowSizes;
 use telaio_app::{logging, window};
 
-use actions::{ChooseFolder, CloseDetail, OpenSettings, StartScan, ZoomForward, ZoomOut};
+use actions::{
+    ChooseFolder, CloseDetail, OpenSettings, OpenShortcuts, StartScan, ZoomForward, ZoomOut,
+};
 use state::about::IDENTITY;
 use state::settings::ThemeChoice;
 use views::AppView;
@@ -119,6 +121,11 @@ fn bind_keys(cx: &mut App) {
         KeyBinding::new("ctrl-o", ChooseFolder, context),
     ]);
     cx.bind_keys([
+        KeyBinding::new(
+            telaio_ui::components::OPEN_SHORTCUTS_KEYSTROKE,
+            OpenShortcuts,
+            None,
+        ),
         KeyBinding::new("enter", StartScan, context),
         KeyBinding::new("backspace", ZoomOut, context),
         KeyBinding::new("alt-left", ZoomOut, context),

@@ -11,6 +11,8 @@ pub use telaio_ui::metrics::*;
 pub const TITLE_BAR_HEIGHT: f32 = 40.0;
 /// Height of the status bar.
 pub const STATUS_BAR_HEIGHT: f32 = 24.0;
+/// Side length of the status bar's keyboard shortcuts button, a little under its height.
+pub const STATUS_BAR_BUTTON: f32 = 20.0;
 /// Height of the small title bar controls (target switcher, gear, Rescan).
 pub const ENV_PILL_HEIGHT: f32 = 26.0;
 

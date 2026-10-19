@@ -32,7 +32,7 @@ vano-app ──> vano-scan ──> vano-core
 
 From telaio: `vano-app` uses `telaio-ui` (design system and standard components), `telaio-update`
 (the in-app updater) and `telaio-app` (logging, language, numbers, paths, window bootstrap and the
-About header), all at tag `v0.2.0`, the same pin as Postino.
+About header), all at tag `v0.3.0`.
 
 - `vano-core`: the scanned tree (one flat arena of 40 byte nodes, children of a folder have
   consecutive ids, names in one buffer), its binary encoding (`persist`), the squarified treemap

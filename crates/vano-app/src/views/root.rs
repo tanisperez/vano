@@ -21,7 +21,9 @@ use vano_core::{NodeId, ROOT, Tree};
 use vano_rules::{Context as RulesContext, LiveRules, Recommendation, Status};
 use vano_scan::{DiskUsage, Progress, ScanHandle, ScanOptions};
 
-use crate::actions::{ChooseFolder, CloseDetail, OpenSettings, StartScan, ZoomForward, ZoomOut};
+use crate::actions::{
+    ChooseFolder, CloseDetail, OpenSettings, OpenShortcuts, StartScan, ZoomForward, ZoomOut,
+};
 use crate::state::about::AboutInfo;
 use crate::state::debug_open::DebugOpenTarget;
 use crate::state::motion::{LIVE_SPRING, Motion, SPRING};
@@ -941,6 +943,20 @@ impl AppView {
         }
     }
 
+    fn on_open_shortcuts(
+        &mut self,
+        _: &OpenShortcuts,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        self.open_shortcuts(window, cx);
+    }
+
+    /// Opens telaio's cheat sheet with Vano's shortcuts.
+    pub(crate) fn open_shortcuts(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        telaio_ui::components::open_shortcuts_dialog(crate::state::shortcuts::groups(), window, cx);
+    }
+
     fn on_zoom_forward(&mut self, _: &ZoomForward, _window: &mut Window, cx: &mut Context<Self>) {
         if self.screen == Screen::Results {
             self.zoom_forward(cx);
@@ -1013,6 +1029,7 @@ impl Render for AppView {
             .on_action(cx.listener(Self::on_choose_folder))
             .on_action(cx.listener(Self::on_zoom_out))
             .on_action(cx.listener(Self::on_zoom_forward))
+            .on_action(cx.listener(Self::on_open_shortcuts))
             .child(navigation_buttons(cx.weak_entity()))
             .on_action(cx.listener(Self::on_close_detail))
             .child(title_bar)

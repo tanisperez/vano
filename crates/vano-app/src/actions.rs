@@ -11,5 +11,6 @@ actions!(
         ZoomForward,
         CloseDetail,
         ChooseFolder,
+        OpenShortcuts,
     ]
 );

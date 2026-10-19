@@ -12,8 +12,9 @@ use vano_core::ROOT;
 use crate::state::format;
 use crate::state::target::disk_name;
 use crate::theme::PaletteExt;
-use crate::theme::metrics::STATUS_BAR_HEIGHT;
+use crate::theme::metrics::{STATUS_BAR_BUTTON, STATUS_BAR_HEIGHT};
 
+use super::components::IconButton;
 use super::root::{AppView, Screen};
 
 impl AppView {
@@ -135,6 +136,12 @@ impl AppView {
                         .on_click(cx.listener(|view, _, _, cx| view.cancel_trash(cx))),
                 )
             })
+            .child(
+                IconButton::new("status-shortcuts", gpui_kit::assets::IconName::Keyboard)
+                    .box_size(STATUS_BAR_BUTTON)
+                    .tooltip(telaio_ui::components::open_tooltip())
+                    .on_click(cx.listener(|view, _, window, cx| view.open_shortcuts(window, cx))),
+            )
             .into_any_element()
     }
 }

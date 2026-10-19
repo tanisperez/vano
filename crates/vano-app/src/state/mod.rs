@@ -8,6 +8,7 @@ pub mod motion;
 pub mod recents;
 pub mod results;
 pub mod settings;
+pub mod shortcuts;
 pub mod target;
 pub mod trash;
 pub mod treemap;

@@ -1,0 +1,82 @@
+# Vano's rows of telaio's keyboard shortcuts cheat sheet (F1). The sheet's title is telaio's.
+_version: 2
+"shortcuts.group.general":
+  en: "General"
+  es: "General"
+  gl: "Xeral"
+  it: "Generale"
+"shortcuts.group.explorer":
+  en: "Explorer"
+  es: "Explorador"
+  gl: "Explorador"
+  it: "Esplora"
+"shortcuts.group.mouse":
+  en: "Mouse"
+  es: "Ratón"
+  gl: "Rato"
+  it: "Mouse"
+"shortcuts.action.choose_folder":
+  en: "Choose a folder to scan"
+  es: "Elegir una carpeta para analizar"
+  gl: "Escoller un cartafol para analizar"
+  it: "Scegli una cartella da analizzare"
+"shortcuts.action.start_scan":
+  en: "Start the scan (home screen)"
+  es: "Empezar el análisis (pantalla de inicio)"
+  gl: "Comezar a análise (pantalla de inicio)"
+  it: "Avvia l'analisi (schermata iniziale)"
+"shortcuts.action.settings":
+  en: "Settings"
+  es: "Ajustes"
+  gl: "Axustes"
+  it: "Impostazioni"
+"shortcuts.action.up":
+  en: "Up to the parent folder"
+  es: "Subir a la carpeta superior"
+  gl: "Subir ao cartafol superior"
+  it: "Sali alla cartella superiore"
+"shortcuts.action.back":
+  en: "Back"
+  es: "Atrás"
+  gl: "Atrás"
+  it: "Indietro"
+"shortcuts.action.forward":
+  en: "Forward"
+  es: "Adelante"
+  gl: "Adiante"
+  it: "Avanti"
+"shortcuts.action.close_detail":
+  en: "Close the details panel"
+  es: "Cerrar el panel de detalles"
+  gl: "Pechar o panel de detalles"
+  it: "Chiudi il pannello dei dettagli"
+"shortcuts.action.open":
+  en: "Open a folder"
+  es: "Abrir una carpeta"
+  gl: "Abrir un cartafol"
+  it: "Apri una cartella"
+"shortcuts.action.details":
+  en: "See the details"
+  es: "Ver los detalles"
+  gl: "Ver os detalles"
+  it: "Vedi i dettagli"
+"shortcuts.key.click":
+  en: "Click"
+  es: "Clic"
+  gl: "Clic"
+  it: "Clic"
+"shortcuts.key.right_click":
+  en: "Right click"
+  es: "Clic derecho"
+  gl: "Clic dereito"
+  it: "Clic destro"
+"shortcuts.key.mouse_back":
+  en: "Back button"
+  es: "Botón atrás"
+  gl: "Botón atrás"
+  it: "Tasto indietro"
+"shortcuts.key.mouse_forward":
+  en: "Forward button"
+  es: "Botón adelante"
+  gl: "Botón adiante"
+  it: "Tasto avanti"
