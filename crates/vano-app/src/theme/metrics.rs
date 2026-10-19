@@ -17,6 +17,9 @@ pub const ENV_PILL_HEIGHT: f32 = 26.0;
 /// Width of the Move to Trash confirmation.
 pub const CONFIRM_WIDTH: f32 = 482.0;
 
+/// Tallest the confirmation's list of items grows before it scrolls, about five rows.
+pub const CONFIRM_LIST_MAX_HEIGHT: f32 = 270.0;
+
 /// Padding around the screen content, and the gap between its cards.
 pub const PAGE_PADDING: f32 = 16.0;
 /// Width of the right column (Recommendations, Found so far).
