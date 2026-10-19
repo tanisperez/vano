@@ -1,6 +1,8 @@
 //! The status bar: the disk's free space at the left, what Vano is doing at the right, and a
 //! "Restart to update" link when an update is ready.
 
+use std::sync::atomic::Ordering;
+
 use gpui_kit::component::*;
 use gpui_kit::prelude::*;
 use gpui_kit::*;
@@ -71,11 +73,21 @@ impl AppView {
                 })
                 .unwrap_or_default(),
         };
-        let right = if self.trashing {
-            t!("status.trashing").into_owned()
-        } else {
-            right
+        let right = match &self.trash_progress {
+            Some(progress) => t!(
+                "status.trashing_progress",
+                done = format::count(progress.done.load(Ordering::Relaxed) as u64),
+                total = format::count(progress.total as u64),
+                size = format::size(progress.bytes.load(Ordering::Relaxed))
+            )
+            .into_owned(),
+            None if self.trashing => t!("status.trashing").into_owned(),
+            None => right,
         };
+        let stoppable = self
+            .trash_progress
+            .as_ref()
+            .is_some_and(|progress| !progress.cancel.load(Ordering::Relaxed));
         let ready = self.state.update.ready().map(|ready| ready.version.clone());
 
         h_flex()
@@ -111,6 +123,18 @@ impl AppView {
                     )
             }))
             .child(div().flex_none().truncate().child(right))
+            .when(stoppable, |bar| {
+                bar.child(
+                    div()
+                        .id("status-trash-stop")
+                        .flex_none()
+                        .text_color(palette.accent_text)
+                        .cursor_pointer()
+                        .hover(|style| style.text_color(palette.fg))
+                        .child(t!("status.trashing_stop"))
+                        .on_click(cx.listener(|view, _, _, cx| view.cancel_trash(cx))),
+                )
+            })
             .into_any_element()
     }
 }
