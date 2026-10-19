@@ -250,7 +250,7 @@ impl AppView {
                         .shadow(palette.shadow.clone())
                         .text_size(px(13.0))
                         .child(icon.small())
-                        .child(div().child(toast.text.clone()))
+                        .child(div().min_w_0().child(toast.text.clone()))
                         .when(can_undo, |row| {
                             row.child(
                                 div()

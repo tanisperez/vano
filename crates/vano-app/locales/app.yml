@@ -565,6 +565,16 @@ _version: 2
   es: "Moviendo a la papelera…"
   gl: "Movendo ao lixo…"
   it: "Spostamento nel cestino…"
+"status.trashing_progress":
+  en: "Moving to the Trash · %{done} of %{total} · %{size}"
+  es: "Moviendo a la papelera · %{done} de %{total} · %{size}"
+  gl: "Movendo ao lixo · %{done} de %{total} · %{size}"
+  it: "Spostamento nel cestino · %{done} di %{total} · %{size}"
+"status.trashing_stop":
+  en: "Stop"
+  es: "Detener"
+  gl: "Deter"
+  it: "Interrompi"
 "status.update_ready":
   en: "Vano %{version} is ready · Restart"
   es: "Vano %{version} está listo · Reiniciar"
@@ -625,11 +635,31 @@ _version: 2
   es: "%{n} elementos recuperados"
   gl: "%{n} elementos recuperados"
   it: "%{n} elementi ripristinati"
-"toast.trash_failed":
-  en: "Could not move to the Trash: %{error}"
-  es: "No se pudo mover a la papelera: %{error}"
-  gl: "Non se puido mover ao lixo: %{error}"
-  it: "Impossibile spostare nel cestino: %{error}"
+"toast.trash_left":
+  en: "Could not move %{name}%{more}: %{reason}"
+  es: "No se pudo mover %{name}%{more}: %{reason}"
+  gl: "Non se puido mover %{name}%{more}: %{reason}"
+  it: "Impossibile spostare %{name}%{more}: %{reason}"
+"toast.trash_more.one":
+  en: " and %{n} more"
+  es: " y %{n} más"
+  gl: " e %{n} máis"
+  it: " e altri %{n}"
+"toast.trash_more.other":
+  en: " and %{n} more"
+  es: " y %{n} más"
+  gl: " e %{n} máis"
+  it: " e altri %{n}"
+"toast.trash_refused":
+  en: "too big for the Trash or a path inside is too long"
+  es: "demasiado grande para la papelera o con una ruta demasiado larga"
+  gl: "demasiado grande para o lixo ou cunha ruta demasiado longa"
+  it: "troppo grande per il cestino o con un percorso troppo lungo"
+"toast.trash_stopped":
+  en: "Stopped"
+  es: "Detenido"
+  gl: "Detido"
+  it: "Interrotto"
 "toast.undo":
   en: "Undo"
   es: "Deshacer"

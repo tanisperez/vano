@@ -10,6 +10,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::rc::Rc;
 use std::sync::Arc;
+use std::sync::atomic::Ordering;
 use std::time::{Duration, Instant};
 
 use gpui_kit::component::ActiveTheme as _;
@@ -197,6 +198,8 @@ pub struct AppView {
     pub(crate) ring: super::live_views::RingState,
     pub(crate) toast: Option<Toast>,
     pub(crate) trashing: bool,
+    /// The batch being moved to the Trash, while it runs.
+    pub(crate) trash_progress: Option<Arc<trash::TrashProgress>>,
     pub(crate) settings_category: SettingsCategory,
     pub(crate) settings_selects: Option<SettingsSelects>,
     pub(crate) about_info: AboutInfo,
@@ -257,6 +260,7 @@ impl AppView {
             ring: Default::default(),
             toast: None,
             trashing: false,
+            trash_progress: None,
             settings_category: SettingsCategory::default(),
             settings_selects: None,
             about_info: AboutInfo::detect(),
@@ -681,9 +685,15 @@ impl AppView {
             return;
         }
         let paths: Vec<PathBuf> = nodes.iter().map(|node| results.tree.path(*node)).collect();
-        let size: u64 = nodes.iter().map(|node| results.tree.node(*node).size).sum();
+        let sizes: Vec<u64> = nodes
+            .iter()
+            .map(|node| results.tree.node(*node).size)
+            .collect();
+        let size: u64 = sizes.iter().sum();
         let count = request.rules.len() + request.nodes.len();
+        let progress = Arc::new(trash::TrashProgress::new(paths.len()));
         self.trashing = true;
+        self.trash_progress = Some(progress.clone());
         cx.notify();
         let at = trash::now();
         let batch = TrashBatch {
@@ -694,63 +704,122 @@ impl AppView {
             at,
         };
         log::info!("moving {} items ({} bytes) to the Trash", paths.len(), size);
-        let job = cx
-            .background_executor()
-            .spawn(async move { trash::move_to_trash(&paths) });
+        let shared = progress.clone();
+        let job = cx.background_executor().spawn(async move {
+            let outcome = trash::move_each(&paths, &shared.cancel, |index| {
+                shared.done.fetch_add(1, Ordering::Relaxed);
+                shared.bytes.fetch_add(sizes[index], Ordering::Relaxed);
+            });
+            shared.finished.store(true, Ordering::Relaxed);
+            outcome
+        });
         cx.spawn(async move |view, cx| {
+            // Repaint the status bar's count while the job runs, a few times a second.
+            while !progress.finished.load(Ordering::Relaxed) {
+                cx.background_executor().timer(POLL_INTERVAL).await;
+                if view.update(cx, |_, cx| cx.notify()).is_err() {
+                    break;
+                }
+            }
             let outcome = job.await;
             let _ = view.update(cx, |view, cx| view.finish_trash(batch, outcome, cx));
         })
         .detach();
     }
 
-    fn finish_trash(
-        &mut self,
-        batch: TrashBatch,
-        outcome: Result<(), String>,
-        cx: &mut Context<Self>,
-    ) {
+    /// Stops the batch being moved before its next item.
+    pub(crate) fn cancel_trash(&mut self, cx: &mut Context<Self>) {
+        if let Some(progress) = &self.trash_progress {
+            progress.cancel.store(true, Ordering::Relaxed);
+            cx.notify();
+        }
+    }
+
+    fn finish_trash(&mut self, batch: TrashBatch, outcome: trash::Outcome, cx: &mut Context<Self>) {
         self.trashing = false;
+        self.trash_progress = None;
         let Some(results) = self.results.as_mut() else {
             return;
         };
-        match outcome {
-            Ok(()) => {
-                results.mark_trashed(&batch.nodes);
-                self.explorer.generation += 1;
-                if let Some(Detail::Node(node)) = self.detail
-                    && results.tree.is_removed(node)
-                {
-                    self.detail = None;
-                }
-                if let Some(Detail::Rec(rule)) = self.detail
-                    && results.removed.contains(rule)
-                {
-                    self.detail = None;
-                }
-                // Zoomed into something that is gone: back to the nearest folder still there.
-                while self.explorer.focus != ROOT && results.tree.is_removed(self.explorer.focus) {
-                    self.explorer.focus = results.tree.node(self.explorer.focus).parent;
-                }
-                // Read again rather than added: the Trash is on the same disk, so the space only
-                // comes back when the user empties it.
-                results.fs = vano_scan::root_filesystem_usage(&results.target.path);
-                self.disk = vano_scan::root_filesystem_usage(&crate::state::target::system_root());
-                let text = format!(
-                    "{} \u{b7} {}",
-                    format::counted("toast.moved", batch.count as u64),
-                    rust_i18n::t!("toast.freed", size = format::size(batch.size)),
-                );
-                let undo = trash::can_restore().then_some(batch);
-                self.show_toast(text, undo, false, cx);
-            }
-            Err(error) => {
-                log::warn!("could not move to the Trash: {error}");
-                // Part of the batch may have moved: the next scan shows the truth.
-                let text = rust_i18n::t!("toast.trash_failed", error = error).into_owned();
-                self.show_toast(text, None, true, cx);
-            }
+        for (index, error) in &outcome.failed {
+            log::warn!(
+                "could not move {} to the Trash: {error:?}",
+                batch.paths[*index].display()
+            );
         }
+        // The first item left in place names the failure; the log has the rest.
+        let failed = outcome.failed.first().map(|(index, error)| {
+            let reason = match error {
+                trash::TrashError::Refused => rust_i18n::t!("toast.trash_refused").into_owned(),
+                trash::TrashError::Os(text) => text.clone(),
+            };
+            rust_i18n::t!(
+                "toast.trash_left",
+                name = results.tree.display_name(batch.nodes[*index]),
+                more = match outcome.failed.len() - 1 {
+                    0 => String::new(),
+                    more => format::counted("toast.trash_more", more as u64),
+                },
+                reason = reason
+            )
+            .into_owned()
+        });
+        // Only what left its place: everything else stays in the tree.
+        let complete = outcome.moved.len() == batch.nodes.len();
+        let moved = if complete {
+            batch
+        } else {
+            let nodes: Vec<NodeId> = outcome
+                .moved
+                .iter()
+                .map(|index| batch.nodes[*index])
+                .collect();
+            TrashBatch {
+                size: nodes.iter().map(|node| results.tree.node(*node).size).sum(),
+                count: nodes.len(),
+                paths: outcome
+                    .moved
+                    .iter()
+                    .map(|index| batch.paths[*index].clone())
+                    .collect(),
+                nodes,
+                at: batch.at,
+            }
+        };
+        if !moved.nodes.is_empty() {
+            results.mark_trashed(&moved.nodes);
+            self.explorer.generation += 1;
+            if let Some(Detail::Node(node)) = self.detail
+                && results.tree.is_removed(node)
+            {
+                self.detail = None;
+            }
+            if let Some(Detail::Rec(rule)) = self.detail
+                && results.removed.contains(rule)
+            {
+                self.detail = None;
+            }
+            // Zoomed into something that is gone: back to the nearest folder still there.
+            while self.explorer.focus != ROOT && results.tree.is_removed(self.explorer.focus) {
+                self.explorer.focus = results.tree.node(self.explorer.focus).parent;
+            }
+            // Read again rather than added: the Trash is on the same disk, so the space only
+            // comes back when the user empties it.
+            results.fs = vano_scan::root_filesystem_usage(&results.target.path);
+            self.disk = vano_scan::root_filesystem_usage(&crate::state::target::system_root());
+        }
+        let mut parts = Vec::new();
+        if !moved.nodes.is_empty() {
+            parts.push(format::counted("toast.moved", moved.count as u64));
+            parts.push(rust_i18n::t!("toast.freed", size = format::size(moved.size)).into_owned());
+        }
+        parts.extend(failed);
+        if outcome.cancelled {
+            parts.push(rust_i18n::t!("toast.trash_stopped").into_owned());
+        }
+        let text = parts.join(" \u{b7} ");
+        let undo = (trash::can_restore() && !moved.nodes.is_empty()).then_some(moved);
+        self.show_toast(text, undo, !outcome.failed.is_empty(), cx);
         cx.notify();
     }
 

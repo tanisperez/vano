@@ -23,6 +23,8 @@ pub struct Results {
     pub selected: HashSet<&'static str>,
     /// Every recommended node and the index of its recommendation in `recs`.
     covered: HashMap<NodeId, usize>,
+    /// Size and file count of each of `recs` as scanned, while part of it is in the Trash.
+    scanned: Vec<(u64, u64)>,
     /// How long the scan took, in seconds.
     pub seconds: f64,
     /// Size and free space of the file system the scanned folder is on.
@@ -64,6 +66,7 @@ impl Results {
             .filter(|rec| rec.status == Status::Safe)
             .map(|rec| rec.rule)
             .collect();
+        let scanned = recs.iter().map(|rec| (rec.size, rec.files)).collect();
         let (dominant, category_sums) = dominant_categories(&tree, &categories);
         let mut results = Self {
             target,
@@ -73,6 +76,7 @@ impl Results {
             removed: HashSet::new(),
             selected,
             covered,
+            scanned,
             fs: vano_scan::root_filesystem_usage(&target_path),
             dominant,
             category_sums,
@@ -240,6 +244,16 @@ impl Results {
 
     fn refresh_removed(&mut self) {
         let tree = &self.tree;
+        // A recommendation partly moved (some items failed) counts only what is left.
+        for (rec, (size, files)) in self.recs.iter_mut().zip(&self.scanned) {
+            let left = rec.nodes.iter().filter(|node| !tree.is_removed(**node));
+            if left.clone().count() == rec.nodes.len() {
+                (rec.size, rec.files) = (*size, *files);
+            } else {
+                rec.size = left.clone().map(|node| tree.node(*node).size).sum();
+                rec.files = left.map(|node| u64::from(tree.node(*node).files)).sum();
+            }
+        }
         self.removed = self
             .recs
             .iter()
@@ -464,6 +478,31 @@ mod tests {
         assert_eq!(results.status_of(4), Some(Status::Review));
         assert_eq!(results.status_of(ROOT), None);
         assert_eq!(results.recs_inside(ROOT).len(), 2);
+    }
+
+    #[test]
+    fn a_rec_partly_trashed_counts_what_is_left() {
+        let mut tree = Tree::new("/h");
+        tree.set_children(
+            ROOT,
+            1,
+            &[entry("p1", Kind::Dir, 0), entry("p2", Kind::Dir, 0)],
+        );
+        tree.set_children(1, 3, &[entry("a", Kind::File, 100 * MB)]);
+        tree.set_children(2, 4, &[entry("b", Kind::File, 50 * MB)]);
+        let len = tree.len();
+        let mut results = Results::with(
+            Target::folder(PathBuf::from("/h")),
+            tree,
+            vec![Category::Other; len],
+            vec![rec("nm", Status::Review, vec![1, 2], 150 * MB)],
+            1.0,
+        );
+        results.mark_trashed(&[1]);
+        assert_eq!(results.active().count(), 1);
+        assert_eq!(results.rec("nm").map(|rec| rec.size), Some(50 * MB));
+        results.mark_restored(&[1]);
+        assert_eq!(results.rec("nm").map(|rec| rec.size), Some(150 * MB));
     }
 
     #[test]
