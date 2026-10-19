@@ -1,6 +1,7 @@
 //! The Move to Trash confirmation and the toast that follows it.
 
 use gpui_kit::assets::IconName as Lucide;
+use gpui_kit::component::scroll::ScrollableElement as _;
 use gpui_kit::component::*;
 use gpui_kit::prelude::*;
 use gpui_kit::*;
@@ -9,7 +10,7 @@ use vano_rules::Status;
 
 use crate::state::format;
 use crate::theme::PaletteExt;
-use crate::theme::metrics::{CONFIRM_WIDTH, RADIUS_LG, RADIUS_MD};
+use crate::theme::metrics::{CONFIRM_LIST_MAX_HEIGHT, CONFIRM_WIDTH, RADIUS_LG, RADIUS_MD};
 
 use super::components::{
     DangerButton, ModalPlacement, SecondaryButton, framed_dialog, modal_body, modal_footer,
@@ -152,7 +153,22 @@ impl AppView {
                                         .border_1()
                                         .border_color(palette.border)
                                         .overflow_hidden()
-                                        .children(rows)
+                                        // The scroll area needs a definite height: the
+                                        // capped column gives it one, the layout
+                                        // gpui-component's own max height test uses.
+                                        .child(
+                                            v_flex().max_h(px(CONFIRM_LIST_MAX_HEIGHT)).child(
+                                                v_flex().flex_1().overflow_hidden().child(
+                                                    div().flex_1().overflow_hidden().child(
+                                                        v_flex()
+                                                            .id("confirm-items")
+                                                            .size_full()
+                                                            .overflow_y_scrollbar()
+                                                            .children(rows),
+                                                    ),
+                                                ),
+                                            ),
+                                        )
                                         .child(
                                             h_flex()
                                                 .px(px(12.0))
