@@ -8,10 +8,6 @@ only adds what is specific to Vano, and wins where the two differ.
 
 @~/.claude/rust/RULES.md
 
-Vano does not use telaio yet: its migration is tracked in tanisperez/postino#139. Until then,
-where the shared rules say telaio, the app's own `theme/` and `views/components/` apply, and a fix
-to one of those components should be made in telaio too.
-
 ## Project
 
 Vano is a native desktop disk analyzer written in Rust with `gpui` (through `gpui-kit` 0.7.0,
@@ -31,9 +27,12 @@ A Cargo workspace, UI kept thin. Dependency direction (no cycles):
 ```
 vano-app ──> vano-scan ──> vano-core
     │──────> vano-rules ─> vano-core
-    │──────> vano-core
-    └──────> vano-update (standalone)
+    └──────> vano-core
 ```
+
+From telaio: `vano-app` uses `telaio-ui` (design system and standard components), `telaio-update`
+(the in-app updater) and `telaio-app` (logging, language, numbers, paths, window bootstrap and the
+About header), all at tag `v0.2.0`, the same pin as Postino.
 
 - `vano-core`: the scanned tree (one flat arena of 40 byte nodes, children of a folder have
   consecutive ids, names in one buffer), its binary encoding (`persist`), the squarified treemap
@@ -46,9 +45,14 @@ vano-app ──> vano-scan ──> vano-core
 - `vano-rules`: the recommendation rules (Safe / Review), the category of every node, and the
   live rules that report recommendations as folders finish. Its texts are
   `crates/vano-rules/locales/rules.yml`, linked into the app's `locales/`.
-- `vano-update`: the in-app updater, ported from `postino-update`.
 - `vano-app`: the `vano` binary. `state/` is plain Rust and unit tested (settings, results,
-  treemap layout, spring motion, recents, trash). `views/` only builds elements.
+  treemap layout, spring motion, recents, trash). `views/` only builds elements. `theme/` holds
+  only what telaio does not: the three accents as `Tokens` (Indigo is telaio's default), the
+  category and cleanup colors (`VanoColors`) and Vano's own metrics. `state/about.rs` defines
+  `IDENTITY`, the `telaio_app::AppIdentity` (name, `vano` slug, app id, `VANO` prefix, repository)
+  that the app passes to every `telaio-app` piece, so the log file, `VANO_LOG` and the window app
+  id are the same as before. The standard components are re-exported from
+  `views/components/mod.rs`; the accent and live view cards of Settings (`PreviewCard`) are Vano's.
 
 ### The explorer and its animation
 

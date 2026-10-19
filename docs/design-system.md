@@ -5,18 +5,18 @@ that used to live in `vano_design_system/`: the design is implemented, so the co
 of truth and this file is its readable summary. If this file and the code disagree, the code
 wins; fix this file.
 
-Vano reuses Postino's tokens, metrics and components (`~/dev/postino/docs/design-system.md`) and
-extends them for a disk analyzer: three accent palettes, six category colors for the treemap, two
+Vano uses telaio's tokens, metrics, fonts and standard components (`~/dev/telaio`, the same ones
+as Postino) and extends them for a disk analyzer: three accent palettes, six category colors for the treemap, two
 cleanup treatments and the motion of the scan.
 
 Where things live (all under `crates/vano-app/src/`):
 
 | What | File |
 | --- | --- |
-| Color tokens (three accents, light and dark), `Palette`, gpui-kit theme JSON | `theme/palette.rs` |
-| Sizes, heights, widths, radii | `theme/metrics.rs` |
-| Fonts, theme registration, live settings apply | `theme/mod.rs` |
-| Reusable widgets | `views/components/` |
+| Color tokens (three accents, light and dark) as telaio `Tokens`, category and cleanup colors | `theme/palette.rs` |
+| Sizes, heights, widths, radii (telaio's, plus Vano's own layout) | `theme/metrics.rs` |
+| Theme family from the settings, live settings apply | `theme/mod.rs` |
+| Standard widgets (telaio, re-exported), accent and live view cards | `views/components/` |
 | Panel card, card header, stats strip, section label, legend | `views/common.rs` |
 | Treemap layout (two levels, "N more" tile) | `state/treemap.rs` |
 | Spring motion of tiles and ranking rows | `state/motion.rs` |
@@ -26,7 +26,7 @@ Where things live (all under `crates/vano-app/src/`):
 
 - Colors only through `cx.palette()` (a `Palette`), never from `cx.theme()` and never as a literal.
 - Sizes only from `theme::metrics`, never scattered as literals.
-- Every hex literal is written once, in `theme/palette.rs`. The accent swaps only the neutrals
+- Every hex literal of Vano is written once, in `theme/palette.rs`. The accent swaps only the neutrals
   and the accent tokens; the states, the category colors and the cleanup fills are shared by the
   three accents.
 - Light or dark follows the system through `Theme::sync_system_appearance`, as in Postino, unless
@@ -156,7 +156,7 @@ The values are CSS. gpui's `blur_radius` is the gaussian's standard deviation, h
 
 ## Typography
 
-UI font **Geist**, mono font **Geist Mono**, both bundled in `assets/fonts/` (OFL). The user can
+UI font **Geist**, mono font **Geist Mono**, both bundled by telaio-ui (OFL). The user can
 change the UI font, its size (base 13) and the mono font in Settings.
 
 | Spec | Use |
@@ -230,7 +230,7 @@ Every screen has the title bar on top and the status bar at the bottom.
    progress, the results summary or "Moving to the Trash"; and "Vano X is ready · Restart" when
    an update is downloaded.
 
-Every dialog is a modal card drawn by `components::modal`: `overlay` fill, radius 14, a 1 px
+Every dialog is a modal card drawn by telaio's `framed_dialog`: `overlay` fill, radius 14, a 1 px
 `border` border and the shadow token, `scrim` behind, a 52 px header and footer. See
 `docs/gpui-notes.md`, "Dialogs".
 
@@ -257,8 +257,10 @@ springs replace it so that interrupted motion never jumps.
 
 ## Components (`views/components/`)
 
-`buttons` (primary, secondary, danger, ghost), `icon_button`, `modal` (the frame every dialog
-shares), `segmented_control`, `status_badge`, `theme_card`. Reuse one before writing a new widget.
+From telaio: buttons (primary, secondary, danger, ghost), `IconButton`, the modal frame every dialog
+shares (`framed_dialog`), `SegmentedControl`, `StatusBadge` and `ThemeCard`. Vano's own:
+`PreviewCard` (the accent and live view cards of Settings). Reuse one before writing a new
+widget; a fix to a standard one belongs in telaio.
 
 Icons are Lucide, through `gpui_kit::assets::IconName`. The app must keep
 `.with_assets(gpui_kit::assets::AllAssets)` or icons render empty.

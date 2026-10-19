@@ -32,7 +32,7 @@ silently keeps the built-in theme. This is what `theme::install` does.
 Vano's own views never read `cx.theme()`: colors come from `Palette`. The theme JSON only
 matters for the borrowed stock widgets (`TitleBar`, `Button`, `Dialog`, the scrollbar, `Input`
 caret, selection and border, tree chevrons, checkboxes, switches). The mapping is built in
-`theme/palette.rs` (`theme_colors_and_highlight`). The non-obvious points:
+telaio-ui (`palette::theme_colors_and_highlight`), from the `Tokens` in `theme/palette.rs`. The non-obvious points:
 
 - `surface` has to be set on **three** keys, `sidebar.background`, `title_bar.background` and
   `tab_bar.background`. The title bar and tab bar fall back to `background`, not to the sidebar.
@@ -132,7 +132,7 @@ layers itself, so views must not render them again (see `AGENTS.md`).
 black at 10%, set inside its open animation: a `.shadow(..)` on the dialog is overwritten on every
 frame, and the shadow does not show over Vano's scrim. Its content is clipped to the box (an
 `overflow_hidden` wrapper), so a shadow drawn by the content is cut at the box edge.
-`components::modal::framed_dialog` works around both: it makes the box transparent, borderless and
+telaio's `framed_dialog` (`components::modal`) works around both: it makes the box transparent, borderless and
 larger than the visible card by the room the card's shadow needs (less on a small window), and
 draws the card inside it. The card then slides and fades in with the dialog. The box also drops
 its close button (it would sit in the transparent room), so modals draw their own in the header.
