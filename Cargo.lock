@@ -6367,6 +6367,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "telaio-ui"
+version = "0.2.0"
+source = "git+https://github.com/tanisperez/telaio?tag=v0.2.0#2822122e2939bf32e78652ccbf9caaa83b232f33"
+dependencies = [
+ "gpui-kit",
+ "rust-i18n",
+ "serde_json",
+]
+
+[[package]]
 name = "tempfile"
 version = "3.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7038,6 +7048,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sys-locale",
+ "telaio-ui",
  "tempfile",
  "toml 0.8.23",
  "trash",

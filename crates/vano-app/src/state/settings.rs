@@ -34,6 +34,16 @@ pub enum ThemeChoice {
     Dark,
 }
 
+impl From<ThemeChoice> for telaio_ui::ThemeChoice {
+    fn from(choice: ThemeChoice) -> Self {
+        match choice {
+            ThemeChoice::System => telaio_ui::ThemeChoice::System,
+            ThemeChoice::Light => telaio_ui::ThemeChoice::Light,
+            ThemeChoice::Dark => telaio_ui::ThemeChoice::Dark,
+        }
+    }
+}
+
 impl ThemeChoice {
     /// Parses a theme name as read from the settings file, case-insensitive. Returns `None` for
     /// anything else, so the caller can fall back to the default.

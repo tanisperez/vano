@@ -60,21 +60,6 @@ _version: 2
   es: "Sistema sigue el modo claro/oscuro del sistema operativo y cambia al instante."
   gl: "Sistema segue o modo claro/escuro do sistema operativo e cambia ao instante."
   it: "Sistema segue l'impostazione chiaro/scuro del sistema operativo e cambia subito."
-"settings.theme.system":
-  en: "System"
-  es: "Sistema"
-  gl: "Sistema"
-  it: "Sistema"
-"settings.theme.light":
-  en: "Light"
-  es: "Claro"
-  gl: "Claro"
-  it: "Chiaro"
-"settings.theme.dark":
-  en: "Dark"
-  es: "Oscuro"
-  gl: "Escuro"
-  it: "Scuro"
 "settings.interface.title":
   en: "Interface"
   es: "Interfaz"

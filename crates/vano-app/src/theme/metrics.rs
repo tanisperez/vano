@@ -1,40 +1,21 @@
 //! Named layout constants (heights, widths, radii) from the design system. Views read sizes only
 //! from here, never as a literal scattered in a view, so every size traces back to one place.
+//!
+//! The sizes of the standard components and the radius scale come from telaio; the rest are
+//! Vano's own layout.
+#![allow(dead_code)]
+
+pub use telaio_ui::metrics::*;
 
 /// Height of the title bar.
 pub const TITLE_BAR_HEIGHT: f32 = 40.0;
 /// Height of the status bar.
 pub const STATUS_BAR_HEIGHT: f32 = 24.0;
-/// Height of ordinary controls (inputs, buttons).
-pub const CONTROL_HEIGHT: f32 = 30.0;
 /// Height of the small title bar controls (target switcher, gear, Rescan).
 pub const ENV_PILL_HEIGHT: f32 = 26.0;
-/// Height of a segmented control's inner items.
-pub const SEGMENTED_CONTROL_INNER_HEIGHT: f32 = 22.0;
 
-/// Radius for chips and checkboxes.
-pub const RADIUS_XS: f32 = 4.0;
-/// Radius for segmented items, rows and badges.
-pub const RADIUS_SM: f32 = 6.0;
-/// Radius for inputs, buttons and small cards.
-pub const RADIUS_MD: f32 = 8.0;
-/// Radius for cards, menus and popovers.
-pub const RADIUS_LG: f32 = 10.0;
-/// Radius for modals.
-pub const RADIUS_MODAL: f32 = 14.0;
-/// Height of a modal's header and footer strips.
-pub const MODAL_HEADER_HEIGHT: f32 = 52.0;
 /// Width of the Move to Trash confirmation.
 pub const CONFIRM_WIDTH: f32 = 482.0;
-
-/// Height of a theme card's preview in Settings.
-pub const THEME_PREVIEW_HEIGHT: f32 = 92.0;
-/// Padding between a theme card's frame and its preview.
-pub const THEME_PREVIEW_PADDING: f32 = 8.0;
-/// Height of a `StatusBadge`.
-pub const STATUS_BADGE_HEIGHT: f32 = 22.0;
-/// Side length of an `IconButton`'s large size.
-pub const ICON_BUTTON_LG: f32 = 28.0;
 
 /// Padding around the screen content, and the gap between its cards.
 pub const PAGE_PADDING: f32 = 16.0;

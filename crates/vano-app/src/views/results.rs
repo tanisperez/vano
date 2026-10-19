@@ -21,7 +21,7 @@ use crate::theme::metrics::{
     BREADCRUMB_HEIGHT, PAGE_PADDING, RADIUS_MD, RADIUS_SM, RADIUS_XS, REC_ROW_HEIGHT,
     SIDE_PANEL_WIDTH,
 };
-use crate::theme::{Palette, PaletteExt};
+use crate::theme::{Palette, PaletteExt, VanoColors};
 
 use super::common::{Stat, card_header, eyebrow, legend_item, panel, stats_row};
 use super::components::{
@@ -65,6 +65,8 @@ impl AppView {
         }
 
         let palette = cx.palette();
+
+        let palette = &*palette;
         let mono = cx.theme().mono_font_family.clone();
         let Some(results) = self.results.as_ref() else {
             return div().into_any_element();
@@ -306,7 +308,7 @@ impl AppView {
     fn render_explorer(
         &self,
         results: &Results,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> Div {
@@ -553,7 +555,7 @@ impl AppView {
     fn render_recommendations(
         &self,
         results: &Results,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> AnyElement {
@@ -592,7 +594,7 @@ impl AppView {
                     .justify_between()
                     .border_b_1()
                     .border_color(palette.border)
-                    .child(StatusBadge::new(label, fg, fg, bg))
+                    .child(StatusBadge::new(label).colors(fg, fg, bg))
                     .child(
                         div()
                             .font_family(mono.clone())
@@ -699,7 +701,7 @@ impl AppView {
         &self,
         rec: &Recommendation,
         on: bool,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> AnyElement {
@@ -764,7 +766,7 @@ impl AppView {
         &self,
         results: &Results,
         detail: Detail,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> AnyElement {
@@ -811,7 +813,7 @@ impl AppView {
         &self,
         results: &Results,
         rec: &Recommendation,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> Div {
@@ -854,7 +856,9 @@ impl AppView {
             crate::state::format::tr(&format!("rules.{rule}.name")),
             rec.display_path.clone(),
             size,
-            StatusBadge::new(badge, color, color, bg).into_any_element(),
+            StatusBadge::new(badge)
+                .colors(color, color, bg)
+                .into_any_element(),
             crate::state::format::tr(&format!("rules.{rule}.desc")),
             reason,
             inside,
@@ -907,19 +911,18 @@ impl AppView {
         &self,
         results: &Results,
         node: NodeId,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> Div {
         let tree = &results.tree;
         let category = results.category(node);
         let colors = palette.category(category);
-        let badge = StatusBadge::new(
-            crate::state::format::tr(&format!("category.{}", category.id())),
-            colors.dot,
-            palette.fg,
-            colors.fill,
-        );
+        let badge = StatusBadge::new(crate::state::format::tr(&format!(
+            "category.{}",
+            category.id()
+        )))
+        .colors(colors.dot, palette.fg, colors.fill);
         let links: Vec<(&'static str, Status, u64)> = results
             .recs_inside(node)
             .into_iter()
@@ -1134,7 +1137,7 @@ fn largest_inside_rec(results: &Results, rec: &Recommendation) -> Vec<(String, u
 /// The scrolled body of a detail view.
 #[allow(clippy::too_many_arguments)]
 fn detail_body(
-    palette: &'static Palette,
+    palette: &Palette,
     mono: &SharedString,
     name: String,
     path: String,
@@ -1331,9 +1334,9 @@ fn checkbox(
 fn render_legend(palette: &Palette, color_by: ColorBy) -> Div {
     let safe = legend_item(
         palette,
-        palette.safe_fill,
-        palette.safe_line,
-        Some(palette.safe_hatch),
+        palette.safe_fill(),
+        palette.safe_line(),
+        Some(palette.safe_hatch()),
         t!("results.legend.safe"),
     );
     let items: Vec<Div> = match color_by {
@@ -1355,8 +1358,8 @@ fn render_legend(palette: &Palette, color_by: ColorBy) -> Div {
             safe,
             legend_item(
                 palette,
-                palette.review_fill,
-                palette.review_line,
+                palette.review_fill(),
+                palette.review_line(),
                 None,
                 t!("results.legend.review"),
             ),

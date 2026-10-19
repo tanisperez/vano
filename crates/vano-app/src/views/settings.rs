@@ -25,7 +25,8 @@ use crate::theme::metrics::{CONTROL_HEIGHT, RADIUS_MD};
 use crate::theme::{self, Palette, PaletteExt};
 
 use super::components::{
-    GhostButton, IconButton, MODAL_INNER_RADIUS, ModalPlacement, ThemeCard, framed_dialog,
+    GhostButton, IconButton, MODAL_INNER_RADIUS, ModalPlacement, PreviewCard, ThemeCard,
+    framed_dialog,
 };
 use super::root::AppView;
 
@@ -237,6 +238,7 @@ fn render_settings_body(
     let about =
         (category == SettingsCategory::About).then(|| about::AboutPane::capture(view.read(cx)));
     let palette = cx.palette();
+    let palette = &*palette;
     let mono_font_family = cx.theme().mono_font_family.clone();
     let Some(selects) = view
         .read(cx)
@@ -605,11 +607,14 @@ pub(crate) fn theme_card(
         ThemeChoice::Light => "light",
         ThemeChoice::Dark => "dark",
     };
-    ThemeCard::new(SharedString::from(format!("{id_prefix}-{id}")), choice)
-        .selected(choice == current)
-        .on_click(move |_, window, cx| {
-            let _ = weak.update(cx, |view, cx| view.set_theme_choice(choice, window, cx));
-        })
+    ThemeCard::new(
+        SharedString::from(format!("{id_prefix}-{id}")),
+        choice.into(),
+    )
+    .selected(choice == current)
+    .on_click(move |_, window, cx| {
+        let _ = weak.update(cx, |view, cx| view.set_theme_choice(choice, window, cx));
+    })
 }
 
 fn render_theme_section(
@@ -740,7 +745,7 @@ fn render_accent_section(
                 .gap(px(12.0))
                 .children(Accent::ALL.into_iter().map(|accent| {
                     let weak = weak.clone();
-                    ThemeCard::accent(
+                    PreviewCard::accent(
                         SharedString::from(format!("settings-accent-{accent:?}")),
                         accent,
                     )
@@ -771,7 +776,7 @@ fn render_live_view_section(
                 .gap(px(12.0))
                 .children(LiveView::ALL.into_iter().map(|view_kind| {
                     let weak = weak.clone();
-                    ThemeCard::live_view(
+                    PreviewCard::live_view(
                         SharedString::from(format!("settings-live-{view_kind:?}")),
                         view_kind,
                     )

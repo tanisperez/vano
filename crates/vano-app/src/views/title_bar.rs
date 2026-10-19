@@ -24,6 +24,7 @@ impl AppView {
         cx: &mut Context<Self>,
     ) -> AnyElement {
         let palette = cx.palette();
+        let palette = &*palette;
         let rescan = (self.screen == Screen::Results).then(|| {
             let weak = weak.clone();
             no_drag(
