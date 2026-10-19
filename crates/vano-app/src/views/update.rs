@@ -8,7 +8,7 @@ use gpui_kit::component::*;
 use gpui_kit::prelude::*;
 use gpui_kit::*;
 use rust_i18n::t;
-use vano_update::Platform;
+use telaio_update::Platform;
 
 use crate::state::update::{
     self, CheckOutcome, InstallOutcome, ReadyUpdate, STARTUP_DELAY, updater_enabled,

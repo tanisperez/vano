@@ -26,7 +26,7 @@ icu_decimal = { workspace = true }
 icu_locale_core = { workspace = true }
 chrono = { workspace = true }
 vano-core = { path = "../vano-core" }
-vano-update = { path = "../vano-update" }
+telaio-update = { workspace = true }
 vano-scan = { path = "../vano-scan" }
 vano-rules = { path = "../vano-rules" }
 trash = { workspace = true }

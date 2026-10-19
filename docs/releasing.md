@@ -91,7 +91,7 @@ document types.
 
 ## In-app updater
 
-The `vano-update` crate (no UI, tested against a local `tiny_http` server). Package managers own
+The `telaio-update` crate (shared with the other apps, no UI). Package managers own
 updates on Linux, so the updater exists only on macOS and Windows.
 
 - **Compiled in only with `VANO_UPDATER=github`** at build time, set only on the macOS and Windows
@@ -115,7 +115,7 @@ updates on Linux, so the updater exists only on macOS and Windows.
   `/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /relaunch=1` and quit. `vano.iss` closes a running
   Vano through the Restart Manager and relaunches it only because of `/relaunch=1`.
 - **Portable Windows copy:** the installer always leaves `unins000.exe` next to `vano.exe`
-  (`vano_update::install::windows_is_installed`). A copy without it is portable and must only
+  (`telaio_update::install::windows_is_installed`). A copy without it is portable and must only
   point the user to the release page. Keep that file name and location if the installer script
   changes.
 - **macOS install:** unpack the `.app.tar.gz` next to the installed bundle, swap the bundles from
