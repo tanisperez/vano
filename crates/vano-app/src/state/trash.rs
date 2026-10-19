@@ -63,7 +63,14 @@ fn move_one(path: &Path) -> Result<(), TrashError> {
         #[cfg(windows)]
         trash::Error::Unknown { .. } => TrashError::Refused,
         // Just the OS message: the path is already named next to it.
+        #[cfg(all(
+            unix,
+            not(target_os = "macos"),
+            not(target_os = "ios"),
+            not(target_os = "android")
+        ))]
         trash::Error::FileSystem { source, .. } => TrashError::Os(source.to_string()),
+        trash::Error::Os { description, .. } => TrashError::Os(description),
         other => TrashError::Os(other.to_string()),
     })
 }
