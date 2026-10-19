@@ -62,6 +62,8 @@ fn move_one(path: &Path) -> Result<(), TrashError> {
         // The only error of the crate's Windows code that has no OS code: an aborted operation.
         #[cfg(windows)]
         trash::Error::Unknown { .. } => TrashError::Refused,
+        // Just the OS message: the path is already named next to it.
+        trash::Error::FileSystem { source, .. } => TrashError::Os(source.to_string()),
         other => TrashError::Os(other.to_string()),
     })
 }

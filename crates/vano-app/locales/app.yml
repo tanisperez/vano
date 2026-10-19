@@ -636,10 +636,10 @@ _version: 2
   gl: "%{n} elementos recuperados"
   it: "%{n} elementi ripristinati"
 "toast.trash_left":
-  en: "Left %{name}%{more} in place: %{reason}"
-  es: "%{name}%{more} se quedó en su sitio: %{reason}"
-  gl: "%{name}%{more} quedou no seu sitio: %{reason}"
-  it: "%{name}%{more} è rimasto al suo posto: %{reason}"
+  en: "Could not move %{name}%{more}: %{reason}"
+  es: "No se pudo mover %{name}%{more}: %{reason}"
+  gl: "Non se puido mover %{name}%{more}: %{reason}"
+  it: "Impossibile spostare %{name}%{more}: %{reason}"
 "toast.trash_more.one":
   en: " and %{n} more"
   es: " y %{n} más"
