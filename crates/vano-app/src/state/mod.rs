@@ -3,6 +3,7 @@
 pub mod about;
 pub mod debug_open;
 pub mod format;
+pub mod linux_trash;
 pub mod locale;
 pub mod motion;
 pub mod recents;

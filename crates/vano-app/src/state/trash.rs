@@ -58,6 +58,11 @@ pub fn move_each(paths: &[PathBuf], cancel: &AtomicBool, progress: impl FnMut(us
 }
 
 fn move_one(path: &Path) -> Result<(), TrashError> {
+    // The Recycle Bin refuses a WSL2 distribution's files; its own freedesktop Trash takes them.
+    #[cfg(windows)]
+    if let Some(root) = vano_scan::linux_root_of(path) {
+        return super::linux_trash::trash(&root, path).map_err(TrashError::Os);
+    }
     trash::delete(path).map_err(|error| match error {
         // The only error of the crate's Windows code that has no OS code: an aborted operation.
         #[cfg(windows)]
@@ -128,6 +133,47 @@ pub fn can_restore() -> bool {
     )
 ))]
 pub fn restore(paths: &[PathBuf], since: i64) -> Result<(), String> {
+    #[cfg(windows)]
+    {
+        // Items of a WSL2 distribution went to its own Trash, grouped here by distribution.
+        let mut linux: std::collections::HashMap<PathBuf, Vec<PathBuf>> =
+            std::collections::HashMap::new();
+        let mut system = Vec::new();
+        for path in paths {
+            match vano_scan::linux_root_of(path) {
+                Some(root) => linux.entry(root).or_default().push(path.clone()),
+                None => system.push(path.clone()),
+            }
+        }
+        if !linux.is_empty() {
+            let mut first_error = None;
+            for (root, items) in &linux {
+                if let Err(error) = super::linux_trash::restore(root, items, since) {
+                    first_error.get_or_insert(error);
+                }
+            }
+            if !system.is_empty()
+                && let Err(error) = restore_system(&system, since)
+            {
+                first_error.get_or_insert(error);
+            }
+            return first_error.map_or(Ok(()), Err);
+        }
+    }
+    restore_system(paths, since)
+}
+
+/// Puts items back from the system Trash.
+#[cfg(any(
+    windows,
+    all(
+        unix,
+        not(target_os = "macos"),
+        not(target_os = "ios"),
+        not(target_os = "android")
+    )
+))]
+fn restore_system(paths: &[PathBuf], since: i64) -> Result<(), String> {
     let wanted: HashSet<&PathBuf> = paths.iter().collect();
     let items = trash::os_limited::list().map_err(|error| error.to_string())?;
     let mut matching: Vec<trash::TrashItem> = items
