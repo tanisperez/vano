@@ -450,8 +450,10 @@ impl AppView {
                 Some(
                     h_flex()
                         .gap(px(8.0))
-                        .child(view_control)
+                        // The view selector stays at the right edge: the coloring one comes and
+                        // goes on its left.
                         .when(view == LiveView::Treemap, |row| row.child(segmented))
+                        .child(view_control)
                         .into_any_element(),
                 ),
             ))
@@ -1333,7 +1335,6 @@ fn detail_footer(palette: &Palette) -> Div {
         .border_color(palette.border)
 }
 
-/// A recommendation's checkbox.
 /// What a checkbox shows. `Mixed` is a group with only part of it ticked.
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Check {
