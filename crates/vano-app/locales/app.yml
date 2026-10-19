@@ -200,26 +200,11 @@ _version: 2
   es: "Desmarcar"
   gl: "Desmarcar"
   it: "Deseleziona"
-"results.explorer.sub_disk":
-  en: "The whole disk by space used · Click: open · Right click: details"
-  es: "Todo el disco por espacio ocupado · Clic: abrir · Clic derecho: detalles"
-  gl: "Todo o disco por espazo ocupado · Clic: abrir · Clic dereito: detalles"
-  it: "Tutto il disco per spazio usato · Clic: apri · Clic destro: dettagli"
-"results.explorer.sub_folder":
-  en: "This folder by space used · Click: open · Right click: details"
-  es: "Esta carpeta por espacio ocupado · Clic: abrir · Clic derecho: detalles"
-  gl: "Este cartafol por espazo ocupado · Clic: abrir · Clic dereito: detalles"
-  it: "Questa cartella per spazio usato · Clic: apri · Clic destro: dettagli"
-"results.explorer.sub_home":
-  en: "Your home folder by space used · Click: open · Right click: details"
-  es: "Tu carpeta personal por espacio ocupado · Clic: abrir · Clic derecho: detalles"
-  gl: "O teu cartafol persoal por espazo ocupado · Clic: abrir · Clic dereito: detalles"
-  it: "La tua cartella home per spazio usato · Clic: apri · Clic destro: dettagli"
-"results.explorer.sub_zoomed":
-  en: "Click a folder: open · Right click or a file: details · Backspace: back"
-  es: "Clic en carpeta: abrir · Clic derecho o en archivo: detalles · Retroceso: atrás"
-  gl: "Clic nun cartafol: abrir · Clic dereito ou nun ficheiro: detalles · Retroceso: atrás"
-  it: "Clic su cartella: apri · Clic destro o su file: dettagli · Backspace: indietro"
+"results.explorer.sub_treemap":
+  en: "Left click a folder to open it, right click to see its details."
+  es: "Clic izquierdo en una carpeta para abrirla, clic derecho para ver los detalles."
+  gl: "Clic esquerdo nun cartafol para abrilo, clic dereito para ver os detalles."
+  it: "Clic sinistro su una cartella per aprirla, clic destro per vedere i dettagli."
 "results.explorer.title":
   en: "Explorer"
   es: "Explorador"

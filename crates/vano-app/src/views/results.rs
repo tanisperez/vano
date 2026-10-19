@@ -376,14 +376,8 @@ impl AppView {
             t!("results.explorer.sub_ranking")
         } else if view == LiveView::Rings {
             t!("results.explorer.sub_rings")
-        } else if self.explorer.focus != ROOT {
-            t!("results.explorer.sub_zoomed")
         } else {
-            match results.target.kind {
-                TargetKind::Home => t!("results.explorer.sub_home"),
-                TargetKind::Disk => t!("results.explorer.sub_disk"),
-                TargetKind::Folder => t!("results.explorer.sub_folder"),
-            }
+            t!("results.explorer.sub_treemap")
         };
 
         let weak = cx.weak_entity();
