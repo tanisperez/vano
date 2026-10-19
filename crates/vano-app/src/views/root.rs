@@ -41,8 +41,6 @@ use super::treemap_view::TileView;
 
 /// How often a running scan is polled.
 const POLL_INTERVAL: Duration = Duration::from_millis(100);
-/// How long the finished scan stays on screen before the results open by themselves.
-const RESULTS_DELAY: Duration = Duration::from_millis(1400);
 /// How long the toast stays.
 const TOAST_DURATION: Duration = Duration::from_secs(8);
 
@@ -232,7 +230,7 @@ pub struct AppView {
     pub(crate) rules_ctx: RulesContext,
     pub(crate) home: Option<PathBuf>,
     focus_handle: FocusHandle,
-    _results_timer: Option<Task<()>>,
+    _evaluation: Option<Task<()>>,
 }
 
 impl AppView {
@@ -294,7 +292,7 @@ impl AppView {
             rules_ctx: RulesContext::current(),
             home: dirs::home_dir(),
             focus_handle,
-            _results_timer: None,
+            _evaluation: None,
         };
         view.live_treemap.motion.set_spring(LIVE_SPRING);
         view.schedule_startup_update_check(cx);
@@ -420,7 +418,7 @@ impl AppView {
         self.live_view = self.state.settings.live_view;
         self.detail = None;
         self.screen = Screen::Scanning;
-        self._results_timer = None;
+        self._evaluation = None;
         cx.notify();
     }
 
@@ -459,8 +457,8 @@ impl AppView {
         finished
     }
 
-    /// The scan is done: keep its tree, evaluate it in the background, save it, and show the
-    /// results a moment later.
+    /// The scan is done: keep its tree, evaluate it in the background, save it, and open the
+    /// results as soon as the rules are evaluated.
     fn finish_scan(&mut self, cx: &mut Context<Self>) {
         let Some(session) = self.scan.as_mut() else {
             return;
@@ -500,13 +498,11 @@ impl AppView {
         let task = cx.spawn(async move |view, cx| {
             let (categories, recs) = evaluate.await;
             log::debug!("rules evaluated in {:?}", started.elapsed());
-            let delay = RESULTS_DELAY.saturating_sub(started.elapsed());
-            cx.background_executor().timer(delay).await;
             let _ = view.update(cx, |view, cx| {
                 view.show_scan_results(target, categories, recs, progress, cx);
             });
         });
-        self._results_timer = Some(task);
+        self._evaluation = Some(task);
         let _ = tree;
     }
 
@@ -628,22 +624,9 @@ impl AppView {
         if let Some(session) = self.scan.take() {
             session.handle.cancel();
         }
-        self._results_timer = None;
+        self._evaluation = None;
         self.screen = Screen::Home;
         cx.notify();
-    }
-
-    /// The finished scan's "View results" button: no need to wait for the delay.
-    pub(crate) fn view_results_now(&mut self, cx: &mut Context<Self>) {
-        let ready = self.scan.as_ref().is_some_and(|session| session.finished);
-        if !ready {
-            return;
-        }
-        // The evaluation task shows the results when it is done; it only waits for the delay
-        // when it is faster than it, so nothing is lost by switching right away when it ended.
-        if let Some(task) = self._results_timer.take() {
-            cx.spawn(async move |_, _| task.await).detach();
-        }
     }
 
     pub(crate) fn go_home(&mut self, cx: &mut Context<Self>) {

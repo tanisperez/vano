@@ -390,11 +390,6 @@ _version: 2
   es: "Cancelar análisis"
   gl: "Cancelar análise"
   it: "Annulla analisi"
-"scan.complete":
-  en: "Scan complete. %{files} files in %{seconds}"
-  es: "Análisis completo. %{files} archivos en %{seconds}"
-  gl: "Análise completa. %{files} ficheiros en %{seconds}"
-  it: "Analisi completata. %{files} file in %{seconds}"
 "scan.counted":
   en: "Counted"
   es: "Contado"
@@ -445,6 +440,11 @@ _version: 2
   es: "de ~%{size}"
   gl: "de ~%{size}"
   it: "di ~%{size}"
+"scan.preparing":
+  en: "Preparing the results…"
+  es: "Preparando los resultados…"
+  gl: "Preparando os resultados…"
+  it: "Preparazione dei risultati…"
 "scan.starting":
   en: "Starting…"
   es: "Empezando…"
@@ -470,11 +470,6 @@ _version: 2
   es: "Treemap"
   gl: "Treemap"
   it: "Treemap"
-"scan.view_results":
-  en: "View results"
-  es: "Ver resultados"
-  gl: "Ver resultados"
-  it: "Vedi risultati"
 "settings.accent.description":
   en: "Changes the accent and the neutrals. Treemap and status colors stay the same."
   es: "Cambia el color de acento y los neutros. Los colores del treemap y de estado no cambian."
@@ -550,11 +545,6 @@ _version: 2
   es: "Buscar actualizaciones"
   gl: "Buscar actualizacións"
   it: "Cerca aggiornamenti"
-"status.complete":
-  en: "Scan complete"
-  es: "Análisis completo"
-  gl: "Análise completa"
-  it: "Analisi completata"
 "status.disk":
   en: "%{disk} · %{free} free of %{total}"
   es: "%{disk} · %{free} libres de %{total}"

@@ -20,7 +20,7 @@ use crate::theme::metrics::{BREADCRUMB_HEIGHT, PAGE_PADDING, SIDE_PANEL_WIDTH};
 use crate::theme::{Palette, PaletteExt};
 
 use super::common::{Stat, card_header, panel, stats_row};
-use super::components::{PrimaryButton, SecondaryButton, SegmentedControl, SegmentedItem};
+use super::components::{SecondaryButton, SegmentedControl, SegmentedItem};
 use super::live_views::{RANK_ROWS, RankRow, ring_sums, set_ranking};
 use super::root::{AppView, ColorBy, ScanSession};
 use super::treemap_view::{TileView, apply_layout, render_treemap};
@@ -95,13 +95,9 @@ impl AppView {
             },
         ];
 
+        // Done reading: the rules are being evaluated, a moment before the results open.
         let path_line = if session.finished {
-            t!(
-                "scan.complete",
-                files = format::count(progress.files),
-                seconds = format::seconds(elapsed)
-            )
-            .into_owned()
+            t!("scan.preparing").into_owned()
         } else {
             progress
                 .current
@@ -119,17 +115,7 @@ impl AppView {
             .items_center()
             .border_t_1()
             .border_color(palette.border)
-            .child(if session.finished {
-                Icon::new(IconName::CircleCheck)
-                    .small()
-                    .text_color(palette.success)
-                    .into_any_element()
-            } else {
-                Spinner::new()
-                    .small()
-                    .color(palette.accent)
-                    .into_any_element()
-            })
+            .child(Spinner::new().small().color(palette.accent))
             .child(
                 div()
                     .flex_1()
@@ -143,20 +129,10 @@ impl AppView {
             .children(
                 percent.map(|p| div().font_family(mono.clone()).text_size(px(12.0)).child(p)),
             );
-        let bar =
-            div()
-                .h(px(2.0))
-                .bg(palette.hover)
-                .child(
-                    div()
-                        .h_full()
-                        .w(relative(bar_fraction))
-                        .bg(if session.finished {
-                            palette.success
-                        } else {
-                            palette.accent
-                        }),
-                );
+        let bar = div()
+            .h(px(2.0))
+            .bg(palette.hover)
+            .child(div().h_full().w(relative(bar_fraction)).bg(palette.accent));
 
         let live = self.render_live_card(session, palette, &mono, cx);
         let found = self.render_found(session, palette, &mono, cx);
@@ -473,15 +449,8 @@ impl AppView {
                 .text_color(palette.fg_subtle)
                 .child(t!("scan.found.empty"))
         });
-        let button = if session.finished {
-            PrimaryButton::new("view-results", t!("scan.view_results"))
-                .on_click(cx.listener(|view, _, _, cx| view.view_results_now(cx)))
-                .into_any_element()
-        } else {
-            SecondaryButton::new("cancel-scan", t!("scan.cancel"))
-                .on_click(cx.listener(|view, _, _, cx| view.cancel_scan(cx)))
-                .into_any_element()
-        };
+        let button = SecondaryButton::new("cancel-scan", t!("scan.cancel"))
+            .on_click(cx.listener(|view, _, _, cx| view.cancel_scan(cx)));
         v_flex()
             .size_full()
             .child(card_header(

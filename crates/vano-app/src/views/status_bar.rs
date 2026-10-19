@@ -46,7 +46,6 @@ impl AppView {
         let right = match self.screen {
             Screen::Home => String::new(),
             Screen::Scanning => match self.scan.as_ref() {
-                Some(session) if session.finished => t!("status.complete").into_owned(),
                 Some(session) => match session.fraction() {
                     Some(fraction) => t!(
                         "status.scanning_pct",
