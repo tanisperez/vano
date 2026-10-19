@@ -51,6 +51,8 @@ impl AppView {
         }
 
         let palette = cx.palette();
+
+        let palette = &*palette;
         let mono = cx.theme().mono_font_family.clone();
         let Some(session) = self.scan.as_ref() else {
             return div().into_any_element();
@@ -319,7 +321,7 @@ impl AppView {
     fn render_live_card(
         &self,
         session: &ScanSession,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> Div {
@@ -408,7 +410,7 @@ impl AppView {
     fn render_found(
         &self,
         session: &ScanSession,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> AnyElement {

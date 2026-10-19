@@ -14,8 +14,8 @@ use vano_core::treemap::Rect;
 
 use crate::state::format;
 use crate::state::motion::Motion;
-use crate::theme::Palette;
 use crate::theme::metrics::{RANK_ROW_HEIGHT, RING_SIZE, RING_THICKNESS};
+use crate::theme::{Palette, VanoColors};
 
 /// The ring's segment order, like the design.
 const RING_ORDER: [Category; 6] = [
@@ -102,7 +102,7 @@ pub fn ring_sums(items: impl IntoIterator<Item = (Category, u64)>) -> [u64; 6] {
 /// The ring, its center text and the legend.
 pub fn render_rings(
     ring: &RingState,
-    palette: &'static Palette,
+    palette: &Palette,
     mono: &SharedString,
     center: SharedString,
     sub: SharedString,
@@ -303,7 +303,7 @@ pub fn set_ranking(motion: &mut Motion<u32, RankRow>, rows: Vec<(u32, u64, RankR
 /// The ranking rows at their animated places.
 pub fn render_ranking(
     motion: &Motion<u32, RankRow>,
-    palette: &'static Palette,
+    palette: &Palette,
     mono: &SharedString,
     on_click: Option<RankClick>,
 ) -> AnyElement {

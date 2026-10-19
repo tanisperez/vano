@@ -247,12 +247,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ascii"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d92bec98840b8f03a5ff5413de5293bfcd8bf96467cf5452609f939ec6f5de16"
-
-[[package]]
 name = "ash"
 version = "0.38.0+1.3.281"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -823,12 +817,6 @@ dependencies = [
  "wasm-bindgen",
  "windows-link 0.2.1",
 ]
-
-[[package]]
-name = "chunked_transfer"
-version = "1.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e4de3bc4ea267985becf712dc6d9eed8b04c953b3fcfb339ebc87acd9804901"
 
 [[package]]
 name = "cipher"
@@ -2904,12 +2892,6 @@ name = "httparse"
 version = "1.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6dbf3de79e51f3d586ab4cb9d5c3e2c14aa28ed23d180cf89b4df0454a69cc87"
-
-[[package]]
-name = "httpdate"
-version = "1.0.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df3b46402a9d5adb4c86a0cf463f42e19994e3ee891101b1841f30a545cb49a9"
 
 [[package]]
 name = "hybrid-array"
@@ -6367,6 +6349,49 @@ dependencies = [
 ]
 
 [[package]]
+name = "telaio-app"
+version = "0.2.0"
+source = "git+https://github.com/tanisperez/telaio?tag=v0.2.0#2822122e2939bf32e78652ccbf9caaa83b232f33"
+dependencies = [
+ "chrono",
+ "dirs 7.0.0",
+ "gpui-kit",
+ "icu_decimal",
+ "icu_locale_core",
+ "log",
+ "rust-i18n",
+ "serde",
+ "sys-locale",
+ "telaio-ui",
+ "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "telaio-ui"
+version = "0.2.0"
+source = "git+https://github.com/tanisperez/telaio?tag=v0.2.0#2822122e2939bf32e78652ccbf9caaa83b232f33"
+dependencies = [
+ "gpui-kit",
+ "rust-i18n",
+ "serde_json",
+]
+
+[[package]]
+name = "telaio-update"
+version = "0.2.0"
+source = "git+https://github.com/tanisperez/telaio?tag=v0.2.0#2822122e2939bf32e78652ccbf9caaa83b232f33"
+dependencies = [
+ "dirs 7.0.0",
+ "log",
+ "semver",
+ "serde",
+ "serde_json",
+ "sha2 0.11.1",
+ "thiserror 2.0.21",
+ "ureq",
+]
+
+[[package]]
 name = "tempfile"
 version = "3.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6505,18 +6530,6 @@ dependencies = [
  "arrayref",
  "bytemuck",
  "strict-num",
-]
-
-[[package]]
-name = "tiny_http"
-version = "0.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "389915df6413a2e74fb181895f933386023c71110878cd0825588928e64cdc82"
-dependencies = [
- "ascii",
- "chunked_transfer",
- "httpdate",
- "log",
 ]
 
 [[package]]
@@ -7030,21 +7043,20 @@ dependencies = [
  "dunce",
  "embed-resource",
  "gpui-kit",
- "icu_decimal",
- "icu_locale_core",
  "log",
  "pretty_assertions",
  "rust-i18n",
  "serde",
  "serde_json",
- "sys-locale",
+ "telaio-app",
+ "telaio-ui",
+ "telaio-update",
  "tempfile",
  "toml 0.8.23",
  "trash",
  "vano-core",
  "vano-rules",
  "vano-scan",
- "vano-update",
 ]
 
 [[package]]
@@ -7072,21 +7084,6 @@ dependencies = [
  "rustix",
  "tempfile",
  "vano-core",
-]
-
-[[package]]
-name = "vano-update"
-version = "0.1.0"
-dependencies = [
- "log",
- "semver",
- "serde",
- "serde_json",
- "sha2 0.11.1",
- "tempfile",
- "thiserror 2.0.21",
- "tiny_http",
- "ureq",
 ]
 
 [[package]]

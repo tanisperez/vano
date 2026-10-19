@@ -16,7 +16,7 @@ use vano_rules::Status;
 
 use crate::state::motion::Frame;
 use crate::state::treemap::{PARENT_HEADER, Tile, TileKey, TileRole};
-use crate::theme::Palette;
+use crate::theme::{Palette, VanoColors};
 
 use super::root::{AppView, ColorBy, Transition, TreemapState};
 
@@ -87,7 +87,7 @@ pub fn render_treemap(
     id: &'static str,
     owner: WeakEntity<AppView>,
     treemap: &TreemapState,
-    palette: &'static Palette,
+    palette: &Palette,
     color_by: ColorBy,
     mono_font: SharedString,
     on_click: Option<TileClick>,
@@ -139,9 +139,9 @@ fn tile_colors(view: &TileView, palette: &Palette, color_by: ColorBy) -> (Hsla, 
         }
     } else {
         match (view.status, color_by) {
-            (Some(Status::Safe), _) => (palette.safe_fill, palette.safe_line, true),
+            (Some(Status::Safe), _) => (palette.safe_fill(), palette.safe_line(), true),
             (Some(Status::Review), ColorBy::Cleanup) => {
-                (palette.review_fill, palette.review_line, false)
+                (palette.review_fill(), palette.review_line(), false)
             }
             (_, ColorBy::Cleanup) => (palette.surface, palette.border, false),
             (_, ColorBy::Category) => (cat.fill, cat.line, false),
@@ -153,7 +153,7 @@ fn tile_colors(view: &TileView, palette: &Palette, color_by: ColorBy) -> (Hsla, 
 
 fn render_tile(
     frame: Frame<'_, TileKey, TileView>,
-    palette: &'static Palette,
+    palette: &Palette,
     color_by: ColorBy,
     mono_font: &SharedString,
     on_click: Option<TileClick>,
@@ -223,7 +223,7 @@ fn render_tile(
                 div()
                     .absolute()
                     .inset_0()
-                    .bg(pattern_slash(palette.safe_hatch, 1.5, 7.0)),
+                    .bg(pattern_slash(palette.safe_hatch(), 1.5, 7.0)),
             )
         })
         .when(cleanup_band, |tile| {
@@ -239,9 +239,9 @@ fn render_tile(
                     .right_0()
                     .bottom(px(safe_h))
                     .h(px(review_h))
-                    .bg(palette.review_fill)
+                    .bg(palette.review_fill())
                     .when(review_h > 0.0, |band| {
-                        band.border_t_1().border_color(palette.review_line)
+                        band.border_t_1().border_color(palette.review_line())
                     }),
             )
             .child(
@@ -251,12 +251,12 @@ fn render_tile(
                     .right_0()
                     .bottom_0()
                     .h(px(safe_h))
-                    .bg(palette.safe_fill)
+                    .bg(palette.safe_fill())
                     .when(safe_h > 0.0, |band| {
-                        band.border_t_1().border_color(palette.safe_line)
+                        band.border_t_1().border_color(palette.safe_line())
                     })
                     .child(div().absolute().inset_0().bg(pattern_slash(
-                        palette.safe_hatch,
+                        palette.safe_hatch(),
                         1.5,
                         7.0,
                     ))),

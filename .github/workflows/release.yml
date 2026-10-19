@@ -174,7 +174,7 @@ jobs:
           path: dist
           merge-multiple: true
 
-      # The manifest the in-app updater reads (vano-update). The asset names are found by
+      # The manifest the in-app updater reads (telaio-update). The asset names are found by
       # glob, so the step fails if the macOS or Windows package is missing.
       - name: Write latest.json
         working-directory: dist

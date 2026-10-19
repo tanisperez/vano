@@ -1,18 +1,13 @@
-//! Reusable building blocks of Vano's design system. Each one reads colors only from
-//! [`crate::theme::PaletteExt`] and sizes only from [`crate::theme::metrics`].
+//! Reusable building blocks of Vano's design system. The standard ones come from telaio
+//! (re-exported here, so views keep importing them from `super::components`); the preview cards
+//! of Settings are Vano's own. Each one reads colors only from [`crate::theme::PaletteExt`] and
+//! sizes only from [`crate::theme::metrics`].
 
-pub mod buttons;
-pub mod icon_button;
-pub mod modal;
-pub mod segmented_control;
-pub mod status_badge;
-pub mod theme_card;
+pub mod preview_card;
 
-pub use buttons::{DangerButton, GhostButton, PrimaryButton, SecondaryButton};
-pub use icon_button::IconButton;
-pub use modal::{
-    MODAL_INNER_RADIUS, ModalPlacement, framed_dialog, modal_body, modal_footer, modal_header,
+pub use preview_card::PreviewCard;
+pub use telaio_ui::components::{
+    DangerButton, GhostButton, IconButton, MODAL_INNER_RADIUS, ModalPlacement, PrimaryButton,
+    SecondaryButton, SegmentedControl, SegmentedItem, StatusBadge, ThemeCard, framed_dialog,
+    modal_body, modal_footer, modal_header,
 };
-pub use segmented_control::{SegmentedControl, SegmentedItem};
-pub use status_badge::StatusBadge;
-pub use theme_card::ThemeCard;

@@ -27,6 +27,7 @@ impl AppView {
         cx: &mut Context<Self>,
     ) -> AnyElement {
         let palette = cx.palette();
+        let palette = &*palette;
         let mono = cx.theme().mono_font_family.clone();
         let home = self.home.clone();
         let selected = self.target.kind;
@@ -265,7 +266,7 @@ impl AppView {
         caption: String,
         fraction: Option<f32>,
         picker: bool,
-        palette: &'static Palette,
+        palette: &Palette,
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> AnyElement {

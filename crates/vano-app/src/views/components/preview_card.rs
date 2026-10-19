@@ -1,41 +1,37 @@
-//! A preview card with a radio and a name: the theme cards (System, Light, Dark), the accent
-//! cards (Indigo, Graphite, Electric blue) and the live view cards (Treemap, Rings, Ranking) of
-//! Settings.
+//! A preview card with a radio and a name: the accent cards (Indigo, Graphite, Electric blue) and
+//! the live view cards (Treemap, Rings, Ranking) of Settings. The theme cards (System, Light,
+//! Dark) are telaio's `ThemeCard`.
+
+use std::rc::Rc;
 
 use gpui_kit::component::{h_flex, v_flex};
 use gpui_kit::prelude::*;
 use gpui_kit::*;
-use rust_i18n::t;
 
-use crate::state::settings::{Accent, LiveView, ThemeChoice};
+use crate::state::settings::{Accent, LiveView};
 use crate::theme::metrics::{RADIUS_LG, RADIUS_SM, THEME_PREVIEW_HEIGHT, THEME_PREVIEW_PADDING};
-use crate::theme::{Palette, PaletteExt};
+use crate::theme::palette::accent_palette;
+use crate::theme::{Palette, PaletteExt, VanoColors};
 
 /// What a card previews.
 #[derive(Debug, Clone, Copy)]
 enum CardKind {
-    Theme(ThemeChoice),
     Accent(Accent),
     LiveView(LiveView),
 }
 
 type ClickHandler = Box<dyn Fn(&ClickEvent, &mut Window, &mut App)>;
 
-/// One theme card. It fills the width its parent gives it (`flex_1`).
+/// One preview card. It fills the width its parent gives it (`flex_1`).
 #[derive(IntoElement)]
-pub struct ThemeCard {
+pub struct PreviewCard {
     id: ElementId,
     kind: CardKind,
     selected: bool,
     on_click: Option<ClickHandler>,
 }
 
-impl ThemeCard {
-    /// The card for `choice`, labelled with the theme's translated name.
-    pub fn new(id: impl Into<ElementId>, choice: ThemeChoice) -> Self {
-        Self::of(id, CardKind::Theme(choice))
-    }
-
+impl PreviewCard {
     /// The card of an accent palette, previewed in the current mode.
     pub fn accent(id: impl Into<ElementId>, accent: Accent) -> Self {
         Self::of(id, CardKind::Accent(accent))
@@ -71,38 +67,22 @@ impl ThemeCard {
     }
 }
 
-impl RenderOnce for ThemeCard {
+impl RenderOnce for PreviewCard {
     fn render(self, _window: &mut Window, cx: &mut App) -> impl IntoElement {
         let palette = cx.palette();
         let selected = self.selected;
         let dark = palette.dark;
-        let accent_now = cx
-            .try_global::<crate::theme::ActiveAccent>()
-            .map(|a| a.0)
-            .unwrap_or_default();
         let (label, left, right, accent_line) = match self.kind {
-            CardKind::Theme(choice) => {
-                let label = match choice {
-                    ThemeChoice::System => t!("settings.theme.system"),
-                    ThemeChoice::Light => t!("settings.theme.light"),
-                    ThemeChoice::Dark => t!("settings.theme.dark"),
-                }
-                .into_owned();
-                let light = Palette::get(accent_now, false);
-                let dark_palette = Palette::get(accent_now, true);
-                // System's preview is half light, half dark.
-                let (left, right) = match choice {
-                    ThemeChoice::System => (light, dark_palette),
-                    ThemeChoice::Light => (light, light),
-                    ThemeChoice::Dark => (dark_palette, dark_palette),
-                };
-                (label, left, right, left.accent)
-            }
             CardKind::Accent(accent) => {
-                let p = Palette::get(accent, dark);
-                (accent.label(), p, p, p.accent)
+                let p = Rc::new(accent_palette(accent, dark));
+                (accent.label(), p.clone(), p.clone(), p.accent)
             }
-            CardKind::LiveView(view) => (view.label(), palette, palette, palette.accent),
+            CardKind::LiveView(view) => (
+                view.label(),
+                palette.clone(),
+                palette.clone(),
+                palette.accent,
+            ),
         };
 
         let ring_color = if selected {
@@ -181,8 +161,8 @@ impl RenderOnce for ThemeCard {
             );
 
         let mini_window = match self.kind {
-            CardKind::LiveView(view) => live_view_drawing(view, palette).into_any_element(),
-            _ => mini_window.into_any_element(),
+            CardKind::LiveView(view) => live_view_drawing(view, &palette).into_any_element(),
+            CardKind::Accent(_) => mini_window.into_any_element(),
         };
         let on_click = self.on_click;
         v_flex()

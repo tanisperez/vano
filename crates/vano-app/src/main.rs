@@ -4,7 +4,6 @@
 #![cfg_attr(windows, windows_subsystem = "windows")]
 
 mod actions;
-mod logging;
 mod state;
 mod theme;
 mod views;
@@ -13,31 +12,31 @@ rust_i18n::i18n!("locales", fallback = "en");
 
 use std::path::Path;
 
-use gpui_kit::component::theme::{Theme, ThemeMode};
-use gpui_kit::component::{Root, TitleBar};
+use gpui_kit::component::Root;
 use gpui_kit::*;
+use telaio_app::window::WindowSizes;
+use telaio_app::{logging, window};
 
 use actions::{ChooseFolder, CloseDetail, OpenSettings, StartScan, ZoomOut};
+use state::about::IDENTITY;
 use state::settings::ThemeChoice;
 use views::AppView;
 
-/// The application id: Wayland `app_id`, X11 `WM_CLASS`, Windows AppUserModelID. The Linux
-/// `codes.tanis.vano.desktop` file uses the same value.
-const APP_ID: &str = "codes.tanis.vano";
-
-/// The user-visible application name.
-const APP_NAME: &str = "Vano";
-
 fn main() {
     let settings = state::settings::load_settings();
-    let env_level = std::env::var(logging::ENV_VAR).ok();
+    let log_env_var = logging::env_var(&IDENTITY);
+    let env_level = std::env::var(&log_env_var).ok();
     let log_level = logging::startup_level(settings.log_level, env_level.as_deref());
-    let log_path = logging::init(log_level.to_filter());
+    let log_path = logging::init(&IDENTITY, log_level.to_filter());
     let from_env = env_level
         .as_deref()
         .and_then(state::settings::LogLevel::parse)
         .is_some();
-    log_startup(log_level, from_env, log_path.as_deref());
+    log_startup(
+        log_level,
+        from_env.then_some(log_env_var.as_str()),
+        log_path.as_deref(),
+    );
 
     let language = state::locale::resolve(settings.language);
     state::locale::apply(language);
@@ -48,56 +47,34 @@ fn main() {
         .and_then(|value| state::debug_open::parse(&value));
     let theme_choice = settings.theme;
 
-    let app = gpui_kit::application().with_assets(gpui_kit::assets::AllAssets);
+    let app = window::application();
     app.run(move |cx| {
-        cx.set_app_identity(APP_ID, APP_NAME);
-        gpui_kit::init(cx);
+        window::init(cx, &IDENTITY);
         bind_keys(cx);
         theme::install(cx, &settings);
 
-        // Centered at 1400x900, capped to 90% of the display. Some Wayland compositors report no
-        // display before the first configure event, hence the fallback.
-        let window_bounds = match cx.primary_display() {
-            Some(display) => {
-                let visible = display.visible_bounds();
-                let cap = size(visible.size.width * 0.9, visible.size.height * 0.9);
-                let target = size(px(1400.0), px(900.0)).min(&cap);
-                WindowBounds::Windowed(Bounds::centered_at(visible.center(), target))
-            }
-            None => WindowBounds::Windowed(Bounds {
-                origin: point(px(0.0), px(0.0)),
-                size: size(px(1280.0), px(780.0)),
-            }),
-        };
-        let window_options = WindowOptions {
-            window_bounds: Some(window_bounds),
-            window_min_size: Some(size(px(900.), px(560.))),
-            window_decorations: Some(WindowDecorations::Client),
-            app_id: Some(APP_ID.to_string()),
-            ..TitleBar::window_options()
-        };
+        // Centered at 1400x900, capped to 90% of the display (see `window::options`).
+        let window_options = window::options(
+            cx,
+            &IDENTITY,
+            WindowSizes {
+                default: (1400.0, 900.0),
+                min: (900.0, 560.0),
+            },
+        );
 
         cx.spawn(async move |cx| {
             let opened = cx.open_window(window_options, move |window, cx| {
-                match theme_choice {
-                    ThemeChoice::System => Theme::sync_system_appearance(Some(window), cx),
-                    ThemeChoice::Light => Theme::change(ThemeMode::Light, Some(window), cx),
-                    ThemeChoice::Dark => Theme::change(ThemeMode::Dark, Some(window), cx),
-                }
+                telaio_ui::ThemeChoice::from(theme_choice).apply(Some(window), cx);
                 let view = cx.new(|cx| AppView::new(settings, debug, window, cx));
-                // "System" follows the OS live; checked on every change so a later choice of
-                // Light or Dark simply stops it.
+                // Always listening, whatever the theme choice at startup: the Settings view can
+                // switch to "System" at any time (see `window::follow_system_appearance`).
                 let weak = view.downgrade();
-                window
-                    .observe_window_appearance(move |window, cx| {
-                        let follows_system = weak.upgrade().is_some_and(|view| {
-                            view.read(cx).state.settings.theme == ThemeChoice::System
-                        });
-                        if follows_system {
-                            Theme::sync_system_appearance(Some(window), cx);
-                        }
+                window::follow_system_appearance(window, move |cx| {
+                    weak.upgrade().is_some_and(|view| {
+                        view.read(cx).state.settings.theme == ThemeChoice::System
                     })
-                    .detach();
+                });
                 cx.new(|cx| Root::new(view, window, cx))
             });
             #[allow(clippy::expect_used)]
@@ -108,7 +85,7 @@ fn main() {
 }
 
 /// The first lines of every log.
-fn log_startup(level: state::settings::LogLevel, from_env: bool, log_path: Option<&Path>) {
+fn log_startup(level: state::settings::LogLevel, from_env: Option<&str>, log_path: Option<&Path>) {
     log::info!(
         "Vano {} starting ({} build) on {} {}",
         env!("CARGO_PKG_VERSION"),
@@ -122,11 +99,7 @@ fn log_startup(level: state::settings::LogLevel, from_env: bool, log_path: Optio
     );
     log::info!(
         "log level {level:?}{}, log file {}",
-        if from_env {
-            format!(" (from {})", logging::ENV_VAR)
-        } else {
-            String::new()
-        },
+        from_env.map_or_else(String::new, |variable| format!(" (from {variable})")),
         log_path.map_or_else(|| "none".to_string(), |path| path.display().to_string()),
     );
 }

@@ -10,6 +10,8 @@ use std::path::{Path, PathBuf};
 use rust_i18n::t;
 use serde::Serialize;
 
+pub use telaio_app::logging::LogLevel;
+
 use super::locale::LanguageChoice;
 
 /// The path, relative to the OS config directory, of the settings file.
@@ -32,6 +34,16 @@ pub enum ThemeChoice {
     Light,
     /// Always use the dark theme.
     Dark,
+}
+
+impl From<ThemeChoice> for telaio_ui::ThemeChoice {
+    fn from(choice: ThemeChoice) -> Self {
+        match choice {
+            ThemeChoice::System => telaio_ui::ThemeChoice::System,
+            ThemeChoice::Light => telaio_ui::ThemeChoice::Light,
+            ThemeChoice::Dark => telaio_ui::ThemeChoice::Dark,
+        }
+    }
 }
 
 impl ThemeChoice {
@@ -79,79 +91,6 @@ impl SettingsCategory {
             SettingsCategory::About => t!("settings.category.about"),
         }
         .into_owned()
-    }
-}
-
-/// How much Vano writes to its log file (`crate::logging`), chosen in Settings, "Advanced".
-/// Stored in `settings.toml` as `log_level = "off" | "error" | "warn" | "info" | "debug" |
-/// "trace"`.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize)]
-#[serde(rename_all = "lowercase")]
-pub enum LogLevel {
-    /// Nothing is logged.
-    Off,
-    /// Only errors.
-    Error,
-    /// Errors and warnings.
-    Warn,
-    /// Startup, workspace and request summaries, plus warnings and errors.
-    #[default]
-    Info,
-    /// Also timings and state changes useful to diagnose a problem.
-    Debug,
-    /// Everything Vano and gpui log, including every render, plus third party crates' Info
-    /// messages. Verbose.
-    Trace,
-}
-
-impl LogLevel {
-    /// Every level, in the order the Settings view lists them.
-    pub const ALL: [LogLevel; 6] = [
-        LogLevel::Off,
-        LogLevel::Error,
-        LogLevel::Warn,
-        LogLevel::Info,
-        LogLevel::Debug,
-        LogLevel::Trace,
-    ];
-
-    /// Parses a level as read from the settings file or the `VANO_LOG` environment variable,
-    /// case-insensitive. Returns `None` for anything else, so the caller can fall back.
-    pub fn parse(text: &str) -> Option<Self> {
-        match text.trim().to_ascii_lowercase().as_str() {
-            "off" => Some(LogLevel::Off),
-            "error" => Some(LogLevel::Error),
-            "warn" | "warning" => Some(LogLevel::Warn),
-            "info" => Some(LogLevel::Info),
-            "debug" => Some(LogLevel::Debug),
-            "trace" => Some(LogLevel::Trace),
-            _ => None,
-        }
-    }
-
-    /// The label shown in the Settings view.
-    pub fn label(self) -> String {
-        match self {
-            LogLevel::Off => t!("settings.log_level.off"),
-            LogLevel::Error => t!("settings.log_level.error"),
-            LogLevel::Warn => t!("settings.log_level.warn"),
-            LogLevel::Info => t!("settings.log_level.info"),
-            LogLevel::Debug => t!("settings.log_level.debug"),
-            LogLevel::Trace => t!("settings.log_level.trace"),
-        }
-        .into_owned()
-    }
-
-    /// The matching `log` crate filter.
-    pub fn to_filter(self) -> log::LevelFilter {
-        match self {
-            LogLevel::Off => log::LevelFilter::Off,
-            LogLevel::Error => log::LevelFilter::Error,
-            LogLevel::Warn => log::LevelFilter::Warn,
-            LogLevel::Info => log::LevelFilter::Info,
-            LogLevel::Debug => log::LevelFilter::Debug,
-            LogLevel::Trace => log::LevelFilter::Trace,
-        }
     }
 }
 

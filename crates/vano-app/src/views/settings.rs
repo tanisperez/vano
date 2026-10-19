@@ -16,16 +16,18 @@ use gpui_kit::prelude::*;
 use gpui_kit::*;
 use rust_i18n::t;
 
-use crate::logging;
 use crate::state;
+use crate::state::about::IDENTITY;
 use crate::state::locale::{self, LanguageChoice};
 use crate::state::number::format_decimal;
 use crate::state::settings::{Accent, LiveView, LogLevel, Settings, SettingsCategory, ThemeChoice};
 use crate::theme::metrics::{CONTROL_HEIGHT, RADIUS_MD};
 use crate::theme::{self, Palette, PaletteExt};
+use telaio_app::logging;
 
 use super::components::{
-    GhostButton, IconButton, MODAL_INNER_RADIUS, ModalPlacement, ThemeCard, framed_dialog,
+    GhostButton, IconButton, MODAL_INNER_RADIUS, ModalPlacement, PreviewCard, ThemeCard,
+    framed_dialog,
 };
 use super::root::AppView;
 
@@ -237,6 +239,7 @@ fn render_settings_body(
     let about =
         (category == SettingsCategory::About).then(|| about::AboutPane::capture(view.read(cx)));
     let palette = cx.palette();
+    let palette = &*palette;
     let mono_font_family = cx.theme().mono_font_family.clone();
     let Some(selects) = view
         .read(cx)
@@ -605,11 +608,14 @@ pub(crate) fn theme_card(
         ThemeChoice::Light => "light",
         ThemeChoice::Dark => "dark",
     };
-    ThemeCard::new(SharedString::from(format!("{id_prefix}-{id}")), choice)
-        .selected(choice == current)
-        .on_click(move |_, window, cx| {
-            let _ = weak.update(cx, |view, cx| view.set_theme_choice(choice, window, cx));
-        })
+    ThemeCard::new(
+        SharedString::from(format!("{id_prefix}-{id}")),
+        choice.into(),
+    )
+    .selected(choice == current)
+    .on_click(move |_, window, cx| {
+        let _ = weak.update(cx, |view, cx| view.set_theme_choice(choice, window, cx));
+    })
 }
 
 fn render_theme_section(
@@ -740,7 +746,7 @@ fn render_accent_section(
                 .gap(px(12.0))
                 .children(Accent::ALL.into_iter().map(|accent| {
                     let weak = weak.clone();
-                    ThemeCard::accent(
+                    PreviewCard::accent(
                         SharedString::from(format!("settings-accent-{accent:?}")),
                         accent,
                     )
@@ -771,7 +777,7 @@ fn render_live_view_section(
                 .gap(px(12.0))
                 .children(LiveView::ALL.into_iter().map(|view_kind| {
                     let weak = weak.clone();
-                    ThemeCard::live_view(
+                    PreviewCard::live_view(
                         SharedString::from(format!("settings-live-{view_kind:?}")),
                         view_kind,
                     )
@@ -799,8 +805,8 @@ fn render_logging_section(
 ) -> AnyElement {
     let control = render_select("settings-log-level", select, palette, None);
 
-    let log_dir = logging::log_dir();
-    let path_label = logging::log_path()
+    let log_dir = logging::log_dir(&IDENTITY);
+    let path_label = logging::log_path(&IDENTITY)
         .map(|path| state::format::short_path(&path, dirs::home_dir().as_deref()))
         .unwrap_or_else(|| t!("common.unknown").into_owned());
     let open_folder = GhostButton::new(
@@ -856,7 +862,7 @@ fn render_logging_section(
                     "settings.logging.rotation",
                     size = logging::MAX_FILE_SIZE / (1024 * 1024),
                     files = logging::MAX_FILES,
-                    variable = logging::ENV_VAR,
+                    variable = logging::env_var(&IDENTITY),
                 )),
         )
         .into_any_element()

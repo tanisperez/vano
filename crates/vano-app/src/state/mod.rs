@@ -5,7 +5,6 @@ pub mod debug_open;
 pub mod format;
 pub mod locale;
 pub mod motion;
-pub mod number;
 pub mod recents;
 pub mod results;
 pub mod settings;
@@ -13,6 +12,8 @@ pub mod target;
 pub mod trash;
 pub mod treemap;
 pub mod update;
+
+pub use telaio_app::number;
 
 use update::UpdateState;
 

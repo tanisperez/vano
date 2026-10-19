@@ -3,20 +3,25 @@
 
 use std::path::PathBuf;
 
-use vano_update::Platform;
+use telaio_app::AppIdentity;
+use telaio_update::Platform;
 
 use super::update::{CURRENT_VERSION, download_dir, is_portable};
 
-/// The repository page.
-pub const REPO_URL: &str = "https://github.com/tanisperez/vano";
+/// Who Vano is, for `telaio-app`: the log file and folder, the `VANO_*` environment variables,
+/// the window's app id (the Linux `codes.tanis.vano.desktop` file uses the same value) and the
+/// About header.
+pub const IDENTITY: AppIdentity = AppIdentity {
+    name: "Vano",
+    slug: "vano",
+    app_id: "codes.tanis.vano",
+    version: CURRENT_VERSION,
+    env_prefix: "VANO",
+    repository: "https://github.com/tanisperez/vano",
+};
 
 /// The install page of the website, with the apt, dnf and AUR instructions.
 pub const INSTALL_URL: &str = "https://vano.tanis.codes/install.html";
-
-/// The release page of `version`.
-pub fn release_notes_url(version: &str) -> String {
-    format!("{REPO_URL}/releases/tag/v{version}")
-}
 
 /// The OS and architecture as shown to the user, for example "Linux x86_64" or "macOS arm64".
 pub fn platform_label(os: &str, arch: &str) -> String {
@@ -76,14 +81,6 @@ mod tests {
         assert_eq!(platform_label("macos", "x86_64"), "macOS x86_64");
         assert_eq!(platform_label("windows", "x86_64"), "Windows x86_64");
         assert_eq!(platform_label("freebsd", "x86_64"), "freebsd x86_64");
-    }
-
-    #[test]
-    fn the_release_notes_point_at_the_version_tag() {
-        assert_eq!(
-            release_notes_url("0.1.0"),
-            "https://github.com/tanisperez/vano/releases/tag/v0.1.0"
-        );
     }
 
     #[test]
