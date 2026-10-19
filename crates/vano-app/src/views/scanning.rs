@@ -390,7 +390,12 @@ impl AppView {
         mono: &SharedString,
         cx: &mut Context<Self>,
     ) -> AnyElement {
-        let total: u64 = session.found.iter().map(|rec| rec.size).sum();
+        let total: u64 = session
+            .found
+            .iter()
+            .filter(|rec| !rec.info)
+            .map(|rec| rec.size)
+            .sum();
         let rows = session.found.iter().map(|rec| {
             let rule = rec.rule;
             h_flex()

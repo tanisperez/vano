@@ -520,3 +520,32 @@ fn rule_ids_are_unique() {
     assert_eq!(ids.len(), n);
     assert!(n > 30);
 }
+
+#[test]
+fn wsl_and_docker_virtual_disks_are_shown_for_information() {
+    let w = tree(
+        "C:\\Users\\u",
+        &[
+            (
+                "AppData/Local/Packages/CanonicalGroupLimited.Ubuntu24.04LTS_79rhkp1fndgsc/LocalState/ext4.vhdx",
+                900,
+                NEW,
+            ),
+            (
+                "AppData/Local/Packages/Other.App_x/LocalState/settings.dat",
+                5,
+                NEW,
+            ),
+            ("AppData/Local/wsl/{3a5b-77}/ext4.vhdx", 400, NEW),
+            ("AppData/Local/Docker/wsl/disk/docker_data.vhdx", 600, NEW),
+            ("AppData/Local/Docker/log/host/x.log", 3, NEW),
+        ],
+    );
+    let recs = evaluate(&w, &ctx(Os::Windows));
+    assert_eq!(rule_names(&recs), vec!["wsl_disk"]);
+    let r = &recs[0];
+    assert_eq!(r.status, Status::Review);
+    assert!(r.info);
+    assert_eq!((r.size, r.nodes.len()), (1900, 3));
+    assert!(evaluate(&w, &linux()).is_empty());
+}

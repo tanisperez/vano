@@ -107,7 +107,7 @@ impl Results {
 
     fn refresh_reclaim(&mut self) {
         let mut reclaim: HashMap<NodeId, (u64, u64)> = HashMap::new();
-        for rec in self.active() {
+        for rec in self.actionable() {
             for node in &rec.nodes {
                 if self.tree.is_removed(*node) {
                     continue;
@@ -132,14 +132,20 @@ impl Results {
             .filter(|rec| !self.removed.contains(rec.rule))
     }
 
+    /// The active recommendations that can be selected and moved to the Trash: not the ones
+    /// shown for information only.
+    pub fn actionable(&self) -> impl Iterator<Item = &Recommendation> {
+        self.active().filter(|rec| !rec.info)
+    }
+
     /// The recommendation with this rule id.
     pub fn rec(&self, rule: &str) -> Option<&Recommendation> {
         self.recs.iter().find(|rec| rec.rule == rule)
     }
 
-    /// Size and count of the active recommendations of `status`.
+    /// Size and count of the actionable recommendations of `status`.
     pub fn total(&self, status: Status) -> (u64, usize) {
-        self.active()
+        self.actionable()
             .filter(|rec| rec.status == status)
             .fold((0, 0), |(size, count), rec| (size + rec.size, count + 1))
     }
@@ -156,16 +162,19 @@ impl Results {
         self.selection().iter().map(|rec| rec.size).sum()
     }
 
-    /// Ticks or unticks one recommendation.
+    /// Ticks or unticks one recommendation. One shown for information only is never ticked.
     pub fn toggle(&mut self, rule: &'static str) {
+        if self.rec(rule).is_some_and(|rec| rec.info) {
+            return;
+        }
         if !self.selected.remove(rule) {
             self.selected.insert(rule);
         }
     }
 
-    /// How many of the active recommendations of `status` are ticked, and how many there are.
+    /// How many of the actionable recommendations of `status` are ticked, and how many there are.
     pub fn group_selection(&self, status: Status) -> (usize, usize) {
-        self.active()
+        self.actionable()
             .filter(|rec| rec.status == status)
             .fold((0, 0), |(on, all), rec| {
                 (on + usize::from(self.selected.contains(rec.rule)), all + 1)
@@ -176,7 +185,7 @@ impl Results {
     /// otherwise.
     pub fn toggle_group(&mut self, status: Status) {
         let rules: Vec<&'static str> = self
-            .active()
+            .actionable()
             .filter(|rec| rec.status == status)
             .map(|rec| rec.rule)
             .collect();
@@ -410,6 +419,7 @@ mod tests {
             newest_mtime: 0,
             approx: false,
             display_path: String::new(),
+            info: false,
         }
     }
 
@@ -501,6 +511,29 @@ mod tests {
         assert_eq!(results.group_selection(Status::Safe), (0, 1));
         results.toggle_group(Status::Safe);
         assert_eq!(results.selected_size(), 150 * MB);
+    }
+
+    #[test]
+    fn a_rec_for_information_is_never_ticked_nor_counted() {
+        let mut tree = Tree::new("/h");
+        tree.set_children(ROOT, 1, &[entry("disk.vhdx", Kind::File, 80 * MB)]);
+        let len = tree.len();
+        let mut wsl = rec("wsl_disk", Status::Review, vec![1], 80 * MB);
+        wsl.info = true;
+        let mut results = Results::with(
+            Target::folder(PathBuf::from("/h")),
+            tree,
+            vec![Category::Other; len],
+            vec![wsl],
+            1.0,
+        );
+        results.toggle("wsl_disk");
+        results.toggle_group(Status::Review);
+        assert_eq!(results.selected_size(), 0);
+        assert_eq!(results.total(Status::Review), (0, 0));
+        assert_eq!(results.group_selection(Status::Review), (0, 0));
+        assert_eq!(results.reclaimable(ROOT), (0, 0));
+        assert_eq!(results.active().count(), 1);
     }
 
     #[test]

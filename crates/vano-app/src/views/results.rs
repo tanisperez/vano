@@ -593,7 +593,11 @@ impl AppView {
 
         let mut list = v_flex().pb(px(8.0));
         for (status, recs) in [(Status::Safe, &safe), (Status::Review, &review)] {
-            let total: u64 = recs.iter().map(|rec| rec.size).sum();
+            let total: u64 = recs
+                .iter()
+                .filter(|rec| !rec.info)
+                .map(|rec| rec.size)
+                .sum();
             let (label, fg, bg) = match status {
                 Status::Safe => (
                     t!("results.safe_group"),
@@ -754,17 +758,33 @@ impl AppView {
                 view.detail = Some(Detail::Rec(rule));
                 cx.notify();
             }))
-            .child(checkbox(
-                SharedString::from(format!("check-{rule}")),
-                if on { Check::On } else { Check::Off },
-                palette,
-                cx.listener(move |view, _, _, cx| {
-                    if let Some(results) = view.results.as_mut() {
-                        results.toggle(rule);
-                    }
-                    cx.notify();
-                }),
-            ))
+            .map(|row| {
+                if rec.info {
+                    // Never selected: an info mark in the checkbox's place.
+                    row.child(
+                        div()
+                            .flex_none()
+                            .size(px(16.0))
+                            .flex()
+                            .items_center()
+                            .justify_center()
+                            .text_color(palette.fg_subtle)
+                            .child(Icon::new(gpui_kit::assets::IconName::Info).small()),
+                    )
+                } else {
+                    row.child(checkbox(
+                        SharedString::from(format!("check-{rule}")),
+                        if on { Check::On } else { Check::Off },
+                        palette,
+                        cx.listener(move |view, _, _, cx| {
+                            if let Some(results) = view.results.as_mut() {
+                                results.toggle(rule);
+                            }
+                            cx.notify();
+                        }),
+                    ))
+                }
+            })
             .child(
                 v_flex()
                     .flex_1()
@@ -912,36 +932,41 @@ impl AppView {
                         .on_click(move |_, _, cx| cx.reveal_path(&path)),
                 )
             })
-            .child(
-                SecondaryButton::new(
-                    "detail-select",
-                    if on {
-                        t!("results.deselect")
-                    } else {
-                        t!("results.select")
-                    },
-                )
-                .on_click(cx.listener(move |view, _, _, cx| {
-                    if let Some(results) = view.results.as_mut() {
-                        results.toggle(rule);
-                    }
-                    cx.notify();
-                })),
-            )
-            .child(div().flex_1())
-            .child(
-                PrimaryButton::new("detail-trash", t!("results.move_to_trash"))
-                    .icon(Icon::new(IconName::Delete))
-                    .disabled(self.trashing)
-                    .on_click(move |_, window, cx| {
-                        let request = TrashRequest {
-                            rules: vec![rule],
-                            nodes: Vec::new(),
-                        };
-                        let _ = weak
-                            .update(cx, |view, cx| view.open_trash_confirm(request, window, cx));
-                    }),
-            );
+            // Shown for information only: nothing to select or move to the Trash.
+            .when(!rec.info, |footer| {
+                footer
+                    .child(
+                        SecondaryButton::new(
+                            "detail-select",
+                            if on {
+                                t!("results.deselect")
+                            } else {
+                                t!("results.select")
+                            },
+                        )
+                        .on_click(cx.listener(move |view, _, _, cx| {
+                            if let Some(results) = view.results.as_mut() {
+                                results.toggle(rule);
+                            }
+                            cx.notify();
+                        })),
+                    )
+                    .child(div().flex_1())
+                    .child(
+                        PrimaryButton::new("detail-trash", t!("results.move_to_trash"))
+                            .icon(Icon::new(IconName::Delete))
+                            .disabled(self.trashing)
+                            .on_click(move |_, window, cx| {
+                                let request = TrashRequest {
+                                    rules: vec![rule],
+                                    nodes: Vec::new(),
+                                };
+                                let _ = weak.update(cx, |view, cx| {
+                                    view.open_trash_confirm(request, window, cx)
+                                });
+                            }),
+                    )
+            });
         v_flex().flex_1().min_h_0().child(body).child(footer)
     }
 
@@ -1069,6 +1094,7 @@ impl AppView {
         );
         let openable =
             data.is_dir() && node != self.explorer.focus && !tree.children(node).is_empty();
+        let in_info_rec = results.covering(node).is_some_and(|rec| rec.info);
         let weak = cx.weak_entity();
         let footer = detail_footer(palette)
             .child(
@@ -1085,7 +1111,8 @@ impl AppView {
                 )
             })
             .child(div().flex_1())
-            .when(node != ROOT, |footer| {
+            // Not for a WSL virtual disk: moving it would delete the whole distribution.
+            .when(node != ROOT && !in_info_rec, |footer| {
                 footer.child(
                     PrimaryButton::new("detail-trash", t!("results.move_to_trash"))
                         .icon(Icon::new(IconName::Delete))

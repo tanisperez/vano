@@ -299,6 +299,7 @@ impl Engine {
                 const EXTS: [&[u8]; 4] = [b"mov", b"mp4", b"mkv", b"webm"];
                 EXTS.contains(&ext.as_slice()) && node.size >= BIG_VIDEO
             }
+            R::WslDisk => ext == b"vhdx",
             _ => false,
         }
     }

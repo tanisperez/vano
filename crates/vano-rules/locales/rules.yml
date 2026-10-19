@@ -480,3 +480,18 @@ _version: 2
   es: "Eliminar un dispositivo también elimina los datos de sus apps."
   gl: "Eliminar un dispositivo tamén elimina os datos das súas apps."
   it: "Eliminare un dispositivo elimina anche i dati delle sue app."
+"rules.wsl_disk.name":
+  en: "WSL and Docker virtual disks"
+  es: "Discos virtuales de WSL y Docker"
+  gl: "Discos virtuais de WSL e Docker"
+  it: "Dischi virtuali di WSL e Docker"
+"rules.wsl_disk.desc":
+  en: "Each WSL2 distribution and Docker Desktop keeps its whole Linux system in one virtual disk. It grows as files are added and never shrinks by itself: files deleted inside Linux still take their space here."
+  es: "Cada distribución de WSL2 y Docker Desktop guarda todo su sistema Linux en un disco virtual. Crece al añadir archivos y nunca encoge solo: lo que borras dentro de Linux sigue ocupando aquí."
+  gl: "Cada distribución de WSL2 e Docker Desktop garda todo o seu sistema Linux nun disco virtual. Medra ao engadir ficheiros e nunca encolle só: o que borras dentro de Linux segue ocupando aquí."
+  it: "Ogni distribuzione WSL2 e Docker Desktop tiene tutto il suo sistema Linux in un disco virtuale. Cresce quando si aggiungono file e non si riduce mai da solo: i file eliminati in Linux occupano ancora spazio qui."
+"rules.wsl_disk.reason":
+  en: "Never move it to the Trash: that deletes the whole distribution. To get the space back, run wsl --manage <distro> --set-sparse true once, so it shrinks by itself, or run wsl --shutdown and compact it with Optimize-VHD. For Docker, docker system prune first."
+  es: "Nunca lo muevas a la papelera: eso borra la distribución entera. Para recuperar el espacio, ejecuta una vez wsl --manage <distro> --set-sparse true para que encoja solo, o ejecuta wsl --shutdown y compáctalo con Optimize-VHD. En Docker, antes docker system prune."
+  gl: "Nunca o movas ao lixo: iso borra a distribución enteira. Para recuperar o espazo, executa unha vez wsl --manage <distro> --set-sparse true para que encolla só, ou executa wsl --shutdown e compáctao con Optimize-VHD. En Docker, antes docker system prune."
+  it: "Non spostarlo mai nel cestino: elimina l'intera distribuzione. Per recuperare lo spazio, esegui una volta wsl --manage <distro> --set-sparse true perché si riduca da solo, oppure esegui wsl --shutdown e compattalo con Optimize-VHD. Per Docker, prima docker system prune."

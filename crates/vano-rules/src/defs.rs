@@ -86,11 +86,18 @@ rules! {
     PythonVenv: "python_venv", Review, Caches, SelfDone, false;
     Cocoapods: "cocoapods", Review, Caches, SelfDone, false;
     IosSimulators: "ios_simulators", Review, Sdk, SelfDone, false;
+    WslDisk: "wsl_disk", Review, Other, ParentDone, false;
 }
 
 /// Whether the rule matches plain files (its display path is a glob of extensions).
 pub(crate) fn is_file_rule(rule: R) -> bool {
-    matches!(rule, R::Installers | R::Recordings)
+    matches!(rule, R::Installers | R::Recordings | R::WslDisk)
+}
+
+/// Whether the rule only informs: moving its matches to the Trash would do harm, and its reason
+/// says how to get the space back instead (a WSL2 virtual disk holds a whole distribution).
+pub(crate) fn is_info_rule(rule: R) -> bool {
+    matches!(rule, R::WslDisk)
 }
 
 pub(crate) const L: u8 = 1;
@@ -282,7 +289,15 @@ pub(crate) static TABLE: &[(u8, Base, &str, Entry)] = &[
     // Containers.
     (L, H, ".local/share/docker", Hit(R::Docker)),
     (M, H, "Library/Containers/com.docker.docker", Hit(R::Docker)),
-    (W, H, "AppData/Local/Docker", Hit(R::Docker)),
+    // WSL2 and Docker Desktop keep each Linux system in one virtual disk that never shrinks.
+    (
+        W,
+        H,
+        "AppData/Local/Packages/*/LocalState",
+        Files(R::WslDisk),
+    ),
+    (W, H, "AppData/Local/wsl/*", Files(R::WslDisk)),
+    (W, H, "AppData/Local/Docker/wsl/*", Files(R::WslDisk)),
     (L, A, "var/lib/docker", Hit(R::Docker)),
     // Trash and system caches.
     (L, H, ".local/share/Trash", Hit(R::Trash)),

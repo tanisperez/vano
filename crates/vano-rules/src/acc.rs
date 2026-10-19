@@ -6,7 +6,7 @@ use std::path::Path;
 use vano_core::{NodeId, Tree};
 
 use crate::Recommendation;
-use crate::defs::{R, RULES, is_file_rule};
+use crate::defs::{R, RULES, is_file_rule, is_info_rule};
 
 /// How many of the biggest matches are kept with their path, to write the display path.
 const SAMPLE: usize = 64;
@@ -64,6 +64,7 @@ impl Acc {
             files: self.files,
             newest_mtime: self.newest,
             approx: def.approx,
+            info: is_info_rule(self.rule),
             display_path: if is_file_rule(self.rule) {
                 file_summary(&paths)
             } else {

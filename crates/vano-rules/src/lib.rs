@@ -103,6 +103,9 @@ pub struct Recommendation {
     pub approx: bool,
     /// A short path pattern for the UI, like `~/.npm` or `~/projects/{orbit,sandbox}`.
     pub display_path: String,
+    /// Shown for information only: never selected nor moved to the Trash, its reason says how
+    /// to get the space back.
+    pub info: bool,
 }
 
 /// The recommendations of a finished tree: Safe first, then Review, each biggest first.
