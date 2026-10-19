@@ -1285,7 +1285,7 @@ fn detail_body(
                                 .pt(px(1.0))
                                 .child(Icon::new(IconName::TriangleAlert).small()),
                         )
-                        .child(div().flex_1().child(reason))
+                        .child(div().flex_1().min_w_0().child(reason))
                 }))
                 .when(!inside.is_empty(), |body| {
                     body.child(
