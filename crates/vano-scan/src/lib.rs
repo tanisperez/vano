@@ -19,6 +19,7 @@ use std::time::Duration;
 
 use vano_core::tree::{NodeId, Tree};
 
+pub use linux_root::linux_root_of;
 pub use usage::{DiskUsage, root_filesystem_usage};
 
 use scan::Shared;

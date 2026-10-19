@@ -18,7 +18,7 @@ const FALLBACK: [&str; 6] = ["proc", "sys", "dev", "run", "mnt", "usr/lib/wsl"];
 /// The directories under `root` not to enter, when `root` is the root of a Linux system: every
 /// mount point but `/` itself. `None` when `root` does not look like one.
 pub(crate) fn foreign_mounts(root: &Path) -> Option<HashSet<PathBuf>> {
-    if !root.join("proc").is_dir() || !root.join("etc").is_dir() {
+    if !looks_like_root(root) {
         return None;
     }
     let points = MOUNT_TABLES
@@ -33,6 +33,19 @@ pub(crate) fn foreign_mounts(root: &Path) -> Option<HashSet<PathBuf>> {
         points.len()
     );
     Some(points.iter().map(|point| under(root, point)).collect())
+}
+
+/// Whether `path` has the `proc` and `etc` folders of a Linux root.
+fn looks_like_root(path: &Path) -> bool {
+    path.join("proc").is_dir() && path.join("etc").is_dir()
+}
+
+/// The closest ancestor of `path` (or `path` itself) that is the root of a Linux system, such as
+/// the WSL2 distribution holding it.
+pub fn linux_root_of(path: &Path) -> Option<PathBuf> {
+    path.ancestors()
+        .find(|ancestor| looks_like_root(ancestor))
+        .map(Path::to_path_buf)
 }
 
 /// The mount points of a `/proc/mounts` table, except `/`.
@@ -122,6 +135,20 @@ C:\134 /mnt/c 9p rw,noatime,dirsync,aname=drvfs;path=C:\;uid=1000 0 0
 
         let other = tempfile::tempdir().unwrap();
         assert!(foreign_mounts(other.path()).is_none());
+    }
+
+    #[test]
+    fn the_root_of_a_path_is_its_closest_linux_ancestor() {
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path();
+        std::fs::create_dir(root.join("proc")).unwrap();
+        std::fs::create_dir_all(root.join("etc")).unwrap();
+        std::fs::create_dir_all(root.join("home/user/app")).unwrap();
+        assert_eq!(
+            linux_root_of(&root.join("home/user/app")),
+            Some(root.to_path_buf())
+        );
+        assert_eq!(linux_root_of(root), Some(root.to_path_buf()));
     }
 
     #[test]
