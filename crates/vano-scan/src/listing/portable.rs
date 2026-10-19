@@ -7,7 +7,7 @@ use std::time::UNIX_EPOCH;
 
 use vano_core::tree::{EntryData, Kind};
 
-use super::{Ctx, DirInfo, Listing};
+use super::{Ctx, DirInfo, Listing, SKIPPED};
 
 pub(super) fn stat_root(path: &Path) -> Option<(u64, u32)> {
     let meta = std::fs::metadata(path).ok()?;
@@ -21,7 +21,7 @@ fn mtime_of(meta: &std::fs::Metadata) -> u32 {
         .map_or(0, |d| d.as_secs().min(u64::from(u32::MAX)) as u32)
 }
 
-pub(super) fn read_directory(path: &Path, _info: DirInfo, _ctx: &Ctx) -> Listing {
+pub(super) fn read_directory(path: &Path, _info: DirInfo, ctx: &Ctx) -> Listing {
     let mut listing = Listing::default();
     let read = match std::fs::read_dir(path) {
         Ok(read) => read,
@@ -55,15 +55,20 @@ pub(super) fn read_directory(path: &Path, _info: DirInfo, _ctx: &Ctx) -> Listing
         } else {
             Kind::Other
         };
+        let mut flags = 0;
         if kind == Kind::Dir {
-            listing.descend.push((listing.entries.len() as u32, 0));
+            if ctx.skip.contains(&item.path()) {
+                flags = SKIPPED;
+            } else {
+                listing.descend.push((listing.entries.len() as u32, 0));
+            }
         }
         listing.entries.push(EntryData {
             name,
             kind,
             size: if kind == Kind::Dir { 0 } else { meta.len() },
             mtime: mtime_of(&meta),
-            flags: 0,
+            flags,
         });
     }
     listing

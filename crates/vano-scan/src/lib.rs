@@ -6,6 +6,7 @@
 
 pub mod cache;
 mod hardlinks;
+mod linux_root;
 mod listing;
 mod scan;
 mod usage;

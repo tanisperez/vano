@@ -93,6 +93,7 @@ pub(crate) fn run(shared: &Shared, root: PathBuf, one_file_system: bool, threads
         ctx: Ctx {
             one_file_system,
             hardlinks: crate::hardlinks::Hardlinks::new(),
+            skip: foreign_mounts(&root, one_file_system),
         },
         injector: Injector::new(),
         next_id: AtomicU32::new(1),
@@ -331,4 +332,25 @@ fn apply(tree: &mut Tree, pending: &mut Vec<u32>, done: &mut Vec<NodeId>, msg: M
         done.push(cur);
         cur = tree.node(cur).parent;
     }
+}
+
+/// The mount points of a Linux root scanned from Windows, not to enter (see `linux_root`).
+#[cfg(not(unix))]
+fn foreign_mounts(
+    root: &std::path::Path,
+    one_file_system: bool,
+) -> std::collections::HashSet<PathBuf> {
+    if !one_file_system {
+        return Default::default();
+    }
+    crate::linux_root::foreign_mounts(root).unwrap_or_default()
+}
+
+/// Unix tells file systems apart by device, in `listing::unix`.
+#[cfg(unix)]
+fn foreign_mounts(
+    _root: &std::path::Path,
+    _one_file_system: bool,
+) -> std::collections::HashSet<PathBuf> {
+    Default::default()
 }

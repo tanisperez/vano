@@ -1,6 +1,7 @@
 //! What a worker produces for one directory, and the shared settings it reads with.
 
-use std::path::Path;
+use std::collections::HashSet;
+use std::path::{Path, PathBuf};
 
 use vano_core::tree::EntryData;
 
@@ -22,6 +23,10 @@ pub(crate) struct Ctx {
     pub(crate) one_file_system: bool,
     /// Multiply linked files already counted.
     pub(crate) hardlinks: Hardlinks,
+    /// Directories not to enter: the other file systems of a Linux root reached from Windows
+    /// (`linux_root`). Empty on Unix, where devices tell file systems apart.
+    #[cfg_attr(unix, allow(dead_code))]
+    pub(crate) skip: HashSet<PathBuf>,
 }
 
 /// The result of reading one directory.
