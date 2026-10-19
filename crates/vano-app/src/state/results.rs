@@ -163,13 +163,30 @@ impl Results {
         }
     }
 
-    /// Selects exactly the Safe recommendations.
-    pub fn select_safe(&mut self) {
-        self.selected = self
+    /// How many of the active recommendations of `status` are ticked, and how many there are.
+    pub fn group_selection(&self, status: Status) -> (usize, usize) {
+        self.active()
+            .filter(|rec| rec.status == status)
+            .fold((0, 0), |(on, all), rec| {
+                (on + usize::from(self.selected.contains(rec.rule)), all + 1)
+            })
+    }
+
+    /// The group checkbox: clears the group when anything in it is ticked, ticks all of it
+    /// otherwise.
+    pub fn toggle_group(&mut self, status: Status) {
+        let rules: Vec<&'static str> = self
             .active()
-            .filter(|rec| rec.status == Status::Safe)
+            .filter(|rec| rec.status == status)
             .map(|rec| rec.rule)
             .collect();
+        if self.group_selection(status).0 > 0 {
+            for rule in rules {
+                self.selected.remove(rule);
+            }
+        } else {
+            self.selected.extend(rules);
+        }
     }
 
     /// The status of the active recommendation covering `id` (the node itself or an ancestor).
@@ -469,6 +486,21 @@ mod tests {
         let results = sample();
         assert_eq!(results.selected_size(), 100 * MB);
         assert_eq!(results.total(Status::Review), (50 * MB, 1));
+    }
+
+    #[test]
+    fn the_group_checkbox_clears_a_ticked_group_and_ticks_an_empty_one() {
+        let mut results = sample();
+        assert_eq!(results.group_selection(Status::Safe), (1, 1));
+        assert_eq!(results.group_selection(Status::Review), (0, 1));
+        results.toggle_group(Status::Safe);
+        assert_eq!(results.group_selection(Status::Safe), (0, 1));
+        results.toggle_group(Status::Review);
+        assert_eq!(results.group_selection(Status::Review), (1, 1));
+        // The other group is left alone.
+        assert_eq!(results.group_selection(Status::Safe), (0, 1));
+        results.toggle_group(Status::Safe);
+        assert_eq!(results.selected_size(), 150 * MB);
     }
 
     #[test]

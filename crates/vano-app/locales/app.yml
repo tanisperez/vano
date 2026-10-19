@@ -390,11 +390,6 @@ _version: 2
   es: "Marcar"
   gl: "Marcar"
   it: "Seleziona"
-"results.select_safe":
-  en: "Select safe"
-  es: "Marcar seguros"
-  gl: "Marcar seguros"
-  it: "Seleziona sicuri"
 "results.selected":
   en: "selected"
   es: "seleccionado"

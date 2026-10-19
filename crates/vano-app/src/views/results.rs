@@ -610,15 +610,35 @@ impl AppView {
                     palette.warning_subtle,
                 ),
             };
+            let (ticked, count) = results.group_selection(status);
+            let check = match ticked {
+                0 => Check::Off,
+                ticked if ticked == count => Check::On,
+                _ => Check::Mixed,
+            };
             list = list.child(
                 h_flex()
                     .h(px(44.0))
                     .px(px(16.0))
+                    .gap(px(12.0))
                     .items_center()
-                    .justify_between()
                     .border_b_1()
                     .border_color(palette.border)
+                    .when(count > 0, |header| {
+                        header.child(checkbox(
+                            SharedString::from(format!("check-group-{status:?}")),
+                            check,
+                            palette,
+                            cx.listener(move |view, _, _, cx| {
+                                if let Some(results) = view.results.as_mut() {
+                                    results.toggle_group(status);
+                                }
+                                cx.notify();
+                            }),
+                        ))
+                    })
                     .child(StatusBadge::new(label).colors(fg, fg, bg))
+                    .child(div().flex_1())
                     .child(
                         div()
                             .font_family(mono.clone())
@@ -690,32 +710,20 @@ impl AppView {
                             )),
                     )
                     .child(
-                        h_flex()
-                            .gap(px(8.0))
-                            .child(
-                                SecondaryButton::new("select-safe", t!("results.select_safe"))
-                                    .on_click(cx.listener(|view, _, _, cx| {
-                                        if let Some(results) = view.results.as_mut() {
-                                            results.select_safe();
-                                        }
-                                        cx.notify();
-                                    })),
-                            )
-                            .child(div().flex_1())
-                            .child(
-                                PrimaryButton::new("trash-selected", t!("results.move_to_trash"))
-                                    .icon(Icon::new(IconName::Delete))
-                                    .disabled(!can_trash)
-                                    .on_click(move |_, window, cx| {
-                                        let request = TrashRequest {
-                                            rules: selection_rules.clone(),
-                                            nodes: Vec::new(),
-                                        };
-                                        let _ = weak.update(cx, |view, cx| {
-                                            view.open_trash_confirm(request, window, cx)
-                                        });
-                                    }),
-                            ),
+                        h_flex().justify_end().child(
+                            PrimaryButton::new("trash-selected", t!("results.move_to_trash"))
+                                .icon(Icon::new(IconName::Delete))
+                                .disabled(!can_trash)
+                                .on_click(move |_, window, cx| {
+                                    let request = TrashRequest {
+                                        rules: selection_rules.clone(),
+                                        nodes: Vec::new(),
+                                    };
+                                    let _ = weak.update(cx, |view, cx| {
+                                        view.open_trash_confirm(request, window, cx)
+                                    });
+                                }),
+                        ),
                     ),
             )
             .into_any_element()
@@ -750,7 +758,17 @@ impl AppView {
                 view.detail = Some(Detail::Rec(rule));
                 cx.notify();
             }))
-            .child(checkbox(rule, on, palette, cx))
+            .child(checkbox(
+                SharedString::from(format!("check-{rule}")),
+                if on { Check::On } else { Check::Off },
+                palette,
+                cx.listener(move |view, _, _, cx| {
+                    if let Some(results) = view.results.as_mut() {
+                        results.toggle(rule);
+                    }
+                    cx.notify();
+                }),
+            ))
             .child(
                 v_flex()
                     .flex_1()
@@ -1322,14 +1340,23 @@ fn detail_footer(palette: &Palette) -> Div {
 }
 
 /// A recommendation's checkbox.
+/// What a checkbox shows. `Mixed` is a group with only part of it ticked.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Check {
+    Off,
+    On,
+    Mixed,
+}
+
 fn checkbox(
-    rule: &'static str,
-    on: bool,
+    id: SharedString,
+    check: Check,
     palette: &Palette,
-    cx: &mut Context<AppView>,
+    on_click: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static,
 ) -> impl IntoElement {
+    let on = check != Check::Off;
     div()
-        .id(SharedString::from(format!("check-{rule}")))
+        .id(id)
         .flex_none()
         .size(px(16.0))
         .flex()
@@ -1344,14 +1371,23 @@ fn checkbox(
         })
         .bg(if on { palette.accent } else { palette.raised })
         .text_color(palette.accent_fg)
-        .when(on, |check| check.child(Icon::new(IconName::Check).xsmall()))
-        .on_click(cx.listener(move |view, _, _, cx| {
+        .when(check == Check::On, |check| {
+            check.child(Icon::new(IconName::Check).xsmall())
+        })
+        // No minus icon in the set: a short bar, like the platforms' mixed checkbox.
+        .when(check == Check::Mixed, |check| {
+            check.child(
+                div()
+                    .w(px(8.0))
+                    .h(px(2.0))
+                    .rounded(px(1.0))
+                    .bg(palette.accent_fg),
+            )
+        })
+        .on_click(move |event, window, cx| {
             cx.stop_propagation();
-            if let Some(results) = view.results.as_mut() {
-                results.toggle(rule);
-            }
-            cx.notify();
-        }))
+            on_click(event, window, cx);
+        })
 }
 
 /// The legend under the explorer.
