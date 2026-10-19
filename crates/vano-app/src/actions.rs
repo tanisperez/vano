@@ -4,5 +4,12 @@ use gpui_kit::actions;
 
 actions!(
     vano,
-    [OpenSettings, StartScan, ZoomOut, CloseDetail, ChooseFolder,]
+    [
+        OpenSettings,
+        StartScan,
+        ZoomOut,
+        ZoomForward,
+        CloseDetail,
+        ChooseFolder,
+    ]
 );

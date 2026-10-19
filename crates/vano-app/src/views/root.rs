@@ -21,7 +21,7 @@ use vano_core::{NodeId, ROOT, Tree};
 use vano_rules::{Context as RulesContext, LiveRules, Recommendation, Status};
 use vano_scan::{DiskUsage, Progress, ScanHandle, ScanOptions};
 
-use crate::actions::{ChooseFolder, CloseDetail, OpenSettings, StartScan, ZoomOut};
+use crate::actions::{ChooseFolder, CloseDetail, OpenSettings, StartScan, ZoomForward, ZoomOut};
 use crate::state::about::AboutInfo;
 use crate::state::debug_open::DebugOpenTarget;
 use crate::state::motion::{LIVE_SPRING, Motion, SPRING};
@@ -153,6 +153,9 @@ pub struct Explorer {
     pub treemap: TreemapState,
     /// Bumped when the tree changes (items moved to the Trash or put back).
     pub generation: u64,
+    /// The folders zoomed out of, the next one to go back into last (the mouse forward
+    /// button). Opening any other folder clears it.
+    pub forward: Vec<NodeId>,
 }
 
 /// A batch of items moved to the Trash, kept for Undo.
@@ -273,6 +276,7 @@ impl AppView {
                 color_by: ColorBy::Category,
                 treemap: TreemapState::new(),
                 generation: 0,
+                forward: Vec::new(),
             },
             detail: None,
             live_view,
@@ -552,6 +556,7 @@ impl AppView {
 
     fn open_results_screen(&mut self, cx: &mut Context<Self>) {
         self.explorer.focus = ROOT;
+        self.explorer.forward.clear();
         // The results keep the view the scan was showing.
         self.explorer.view = self.live_view;
         self.explorer.views_key = None;
@@ -936,6 +941,12 @@ impl AppView {
         }
     }
 
+    fn on_zoom_forward(&mut self, _: &ZoomForward, _window: &mut Window, cx: &mut Context<Self>) {
+        if self.screen == Screen::Results {
+            self.zoom_forward(cx);
+        }
+    }
+
     fn on_close_detail(&mut self, _: &CloseDetail, _window: &mut Window, cx: &mut Context<Self>) {
         if self.detail.take().is_some() {
             cx.notify();
@@ -1001,6 +1012,8 @@ impl Render for AppView {
             .on_action(cx.listener(Self::on_start_scan))
             .on_action(cx.listener(Self::on_choose_folder))
             .on_action(cx.listener(Self::on_zoom_out))
+            .on_action(cx.listener(Self::on_zoom_forward))
+            .child(navigation_buttons(cx.weak_entity()))
             .on_action(cx.listener(Self::on_close_detail))
             .child(title_bar)
             .child(
@@ -1017,4 +1030,35 @@ impl Render for AppView {
                     .child(div().absolute().inset_0().bg(palette.scrim))
             })
     }
+}
+
+/// Listens to the mouse back and forward buttons over the whole window. An element's own
+/// `on_mouse_down` only fires while its hitbox is hovered, and the treemap tiles occlude the
+/// explorer under them.
+fn navigation_buttons(view: WeakEntity<AppView>) -> impl IntoElement {
+    canvas(
+        |_, _, _| {},
+        move |_, _, window, _| {
+            let view = view.clone();
+            window.on_mouse_event(move |event: &MouseDownEvent, phase, window, cx| {
+                let MouseButton::Navigate(direction) = event.button else {
+                    return;
+                };
+                if phase != DispatchPhase::Bubble || window.has_active_dialog(cx) {
+                    return;
+                }
+                let _ = view.update(cx, |view, cx| {
+                    if view.screen != Screen::Results {
+                        return;
+                    }
+                    match direction {
+                        NavigationDirection::Back => view.zoom_out(cx),
+                        NavigationDirection::Forward => view.zoom_forward(cx),
+                    }
+                });
+            });
+        },
+    )
+    .absolute()
+    .size_0()
 }

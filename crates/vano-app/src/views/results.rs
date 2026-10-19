@@ -245,9 +245,35 @@ impl AppView {
     pub(crate) fn zoom_into(&mut self, node: NodeId, key: TileKey, cx: &mut Context<Self>) {
         let from = self.explorer.treemap.motion.rect_of(&key);
         self.explorer.treemap.pending = from.map(Transition::In);
-        self.explorer.focus = node;
+        self.enter(node);
         log::debug!("explorer zoomed into node {node}");
         cx.notify();
+    }
+
+    /// Makes `node` the focus, keeping the forward history only when it is the next step of it.
+    fn enter(&mut self, node: NodeId) {
+        if self.explorer.forward.last() == Some(&node) {
+            self.explorer.forward.pop();
+        } else {
+            self.explorer.forward.clear();
+        }
+        self.explorer.focus = node;
+    }
+
+    /// Goes back into the folder last zoomed out of (the mouse forward button).
+    pub(crate) fn zoom_forward(&mut self, cx: &mut Context<Self>) {
+        let Some(results) = self.results.as_ref() else {
+            return;
+        };
+        let Some(&node) = self.explorer.forward.last() else {
+            return;
+        };
+        // Moved to the Trash since, or no longer under the focus: the history is stale.
+        if results.tree.is_removed(node) || results.tree.node(node).parent != self.explorer.focus {
+            self.explorer.forward.clear();
+            return;
+        }
+        self.zoom_into(node, TileKey::Node(node), cx);
     }
 
     /// Zooms out one level.
@@ -260,6 +286,7 @@ impl AppView {
             return;
         }
         self.explorer.focus = results.tree.node(focus).parent;
+        self.explorer.forward.push(focus);
         self.explorer.treemap.pending = Some(Transition::Out(focus));
         cx.notify();
     }
@@ -276,6 +303,10 @@ impl AppView {
         let Some(child) = chain.get(index + 1).copied() else {
             return;
         };
+        // Forward goes back down the same way, one level at a time.
+        self.explorer
+            .forward
+            .extend(chain[index + 1..].iter().rev().copied());
         self.explorer.focus = ancestor;
         self.explorer.treemap.pending = Some(Transition::Out(child));
         cx.notify();
@@ -359,7 +390,6 @@ impl AppView {
         let on_click: TileClick = Rc::new(move |key, view, secondary, _window, cx| {
             let _ = weak.update(cx, |this, cx| this.on_tile(key, view, secondary, cx));
         });
-        let weak = cx.weak_entity();
         let content = match view {
             LiveView::Treemap => render_treemap(
                 "explorer",
@@ -394,7 +424,7 @@ impl AppView {
                     let _ = weak.update(cx, |this, cx| {
                         if openable {
                             this.explorer.treemap.pending = None;
-                            this.explorer.focus = node;
+                            this.enter(node);
                             cx.notify();
                         } else {
                             this.detail = Some(Detail::Node(node));
@@ -414,12 +444,6 @@ impl AppView {
             .min_h_0()
             .px(px(14.0))
             .pb(px(10.0))
-            .on_mouse_down(
-                MouseButton::Navigate(NavigationDirection::Back),
-                move |_, _, cx| {
-                    let _ = weak.update(cx, |view, cx| view.zoom_out(cx));
-                },
-            )
             .child(content);
 
         panel(palette)
