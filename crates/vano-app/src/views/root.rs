@@ -165,6 +165,27 @@ pub struct TrashBatch {
     pub at: i64,
 }
 
+/// An item of a batch that could not be moved, for the report.
+#[derive(Debug, Clone)]
+pub struct LeftItem {
+    pub name: String,
+    pub path: String,
+    pub size: u64,
+    pub reason: String,
+}
+
+/// How a batch that failed in part, or was stopped, ended.
+#[derive(Debug, Clone)]
+pub struct TrashReport {
+    /// Items moved, and their bytes.
+    pub moved: usize,
+    pub freed: u64,
+    /// Items in the batch.
+    pub total: usize,
+    pub left: Vec<LeftItem>,
+    pub undo: Option<TrashBatch>,
+}
+
 /// The toast at the bottom of the window.
 pub struct Toast {
     pub text: SharedString,
@@ -658,7 +679,12 @@ impl AppView {
     }
 
     /// Moves what `request` names to the Trash, in the background.
-    pub(crate) fn trash(&mut self, request: TrashRequest, cx: &mut Context<Self>) {
+    pub(crate) fn trash(
+        &mut self,
+        request: TrashRequest,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
         let Some(results) = self.results.as_ref() else {
             return;
         };
@@ -713,7 +739,7 @@ impl AppView {
             shared.finished.store(true, Ordering::Relaxed);
             outcome
         });
-        cx.spawn(async move |view, cx| {
+        cx.spawn_in(window, async move |view, cx| {
             // Repaint the status bar's count while the job runs, a few times a second.
             while !progress.finished.load(Ordering::Relaxed) {
                 cx.background_executor().timer(POLL_INTERVAL).await;
@@ -722,7 +748,9 @@ impl AppView {
                 }
             }
             let outcome = job.await;
-            let _ = view.update(cx, |view, cx| view.finish_trash(batch, outcome, cx));
+            let _ = view.update_in(cx, |view, window, cx| {
+                view.finish_trash(batch, outcome, window, cx);
+            });
         })
         .detach();
     }
@@ -735,9 +763,16 @@ impl AppView {
         }
     }
 
-    fn finish_trash(&mut self, batch: TrashBatch, outcome: trash::Outcome, cx: &mut Context<Self>) {
+    fn finish_trash(
+        &mut self,
+        batch: TrashBatch,
+        outcome: trash::Outcome,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
         self.trashing = false;
         self.trash_progress = None;
+        let home = self.home.clone();
         let Some(results) = self.results.as_mut() else {
             return;
         };
@@ -747,23 +782,20 @@ impl AppView {
                 batch.paths[*index].display()
             );
         }
-        // The first item left in place names the failure; the log has the rest.
-        let failed = outcome.failed.first().map(|(index, error)| {
-            let reason = match error {
-                trash::TrashError::Refused => rust_i18n::t!("toast.trash_refused").into_owned(),
-                trash::TrashError::Os(text) => text.clone(),
-            };
-            rust_i18n::t!(
-                "toast.trash_left",
-                name = results.tree.display_name(batch.nodes[*index]),
-                more = match outcome.failed.len() - 1 {
-                    0 => String::new(),
-                    more => format::counted("toast.trash_more", more as u64),
+        let left: Vec<LeftItem> = outcome
+            .failed
+            .iter()
+            .map(|(index, error)| LeftItem {
+                name: results.tree.display_name(batch.nodes[*index]),
+                path: format::short_path(&batch.paths[*index], home.as_deref()),
+                size: results.tree.node(batch.nodes[*index]).size,
+                reason: match error {
+                    trash::TrashError::Refused => rust_i18n::t!("report.refused").into_owned(),
+                    trash::TrashError::Os(text) => text.clone(),
                 },
-                reason = reason
-            )
-            .into_owned()
-        });
+            })
+            .collect();
+        let total = batch.nodes.len();
         // Only what left its place: everything else stays in the tree.
         let complete = outcome.moved.len() == batch.nodes.len();
         let moved = if complete {
@@ -808,18 +840,26 @@ impl AppView {
             results.fs = vano_scan::root_filesystem_usage(&results.target.path);
             self.disk = vano_scan::root_filesystem_usage(&crate::state::target::system_root());
         }
-        let mut parts = Vec::new();
-        if !moved.nodes.is_empty() {
-            parts.push(format::counted("toast.moved", moved.count as u64));
-            parts.push(rust_i18n::t!("toast.freed", size = format::size(moved.size)).into_owned());
+        let (count, items, freed) = (moved.count, moved.nodes.len(), moved.size);
+        let undo = (trash::can_restore() && items > 0).then_some(moved);
+        if left.is_empty() && !outcome.cancelled {
+            let text = format!(
+                "{} \u{b7} {}",
+                format::counted("toast.moved", count as u64),
+                rust_i18n::t!("toast.freed", size = format::size(freed)),
+            );
+            self.show_toast(text, undo, false, cx);
+        } else {
+            // Something needs explaining: what moved, what stayed and why.
+            let report = TrashReport {
+                moved: items,
+                freed,
+                total,
+                left,
+                undo,
+            };
+            self.open_trash_report(report, window, cx);
         }
-        parts.extend(failed);
-        if outcome.cancelled {
-            parts.push(rust_i18n::t!("toast.trash_stopped").into_owned());
-        }
-        let text = parts.join(" \u{b7} ");
-        let undo = (trash::can_restore() && !moved.nodes.is_empty()).then_some(moved);
-        self.show_toast(text, undo, !outcome.failed.is_empty(), cx);
         cx.notify();
     }
 
@@ -828,6 +868,11 @@ impl AppView {
         let Some(batch) = self.toast.take().and_then(|toast| toast.undo) else {
             return;
         };
+        self.restore(batch, cx);
+    }
+
+    /// Puts `batch` back from the Trash, in the background.
+    pub(crate) fn restore(&mut self, batch: TrashBatch, cx: &mut Context<Self>) {
         if self.trashing {
             return;
         }
