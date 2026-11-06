@@ -30,7 +30,6 @@ const GRAPHITE_LIGHT: Tokens = Tokens {
     accent: "#171717",
     accent_text: "#171717",
     accent_subtle: "#ececec",
-    syn_key: "#171717",
     ..Tokens::DEFAULT_LIGHT
 };
 
@@ -49,7 +48,6 @@ const GRAPHITE_DARK: Tokens = Tokens {
     accent_fg: "#141414",
     accent_text: "#ffffff",
     accent_subtle: "#2e2e2e",
-    syn_key: "#ffffff",
     ..Tokens::DEFAULT_DARK
 };
 
@@ -65,7 +63,6 @@ const ELECTRIC_LIGHT: Tokens = Tokens {
     accent: "#0b63f6",
     accent_text: "#0052d6",
     accent_subtle: "#e3edff",
-    syn_key: "#0052d6",
     ..Tokens::DEFAULT_LIGHT
 };
 
@@ -83,7 +80,6 @@ const ELECTRIC_DARK: Tokens = Tokens {
     accent: "#2f7bff",
     accent_text: "#8db8ff",
     accent_subtle: "#15284a",
-    syn_key: "#8db8ff",
     ..Tokens::DEFAULT_DARK
 };
 

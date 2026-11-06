@@ -10,7 +10,7 @@ only adds what is specific to Vano, and wins where the two differ.
 
 ## Project
 
-Vano is a native desktop disk analyzer written in Rust with `gpui` (through `gpui-kit` 0.7.0,
+Vano is a native desktop disk analyzer written in Rust with `gpui` (through `gpui-kit` 0.8.0,
 the same stack as Postino in `~/dev/postino`). It scans the home folder, the whole disk or any
 folder, shows what fills it in an animated treemap, and recommends what can be moved to the
 Trash safely. Targets: Linux first, then macOS and Windows. Nothing is ever deleted directly:
@@ -32,7 +32,7 @@ vano-app ──> vano-scan ──> vano-core
 
 From telaio: `vano-app` uses `telaio-ui` (design system and standard components), `telaio-update`
 (the in-app updater) and `telaio-app` (logging, language, numbers, paths, window bootstrap and the
-About header), all at tag `v0.3.0`.
+About header), all at tag `v0.15.0`.
 
 - `vano-core`: the scanned tree (one flat arena of 40 byte nodes, children of a folder have
   consecutive ids, names in one buffer), its binary encoding (`persist`), the squarified treemap
