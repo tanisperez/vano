@@ -7028,7 +7028,7 @@ dependencies = [
 
 [[package]]
 name = "vano-app"
-version = "0.3.0"
+version = "0.4.0-dev"
 dependencies = [
  "anyhow",
  "chrono",
@@ -7055,14 +7055,14 @@ dependencies = [
 
 [[package]]
 name = "vano-core"
-version = "0.3.0"
+version = "0.4.0-dev"
 dependencies = [
  "pretty_assertions",
 ]
 
 [[package]]
 name = "vano-rules"
-version = "0.3.0"
+version = "0.4.0-dev"
 dependencies = [
  "dirs 7.0.0",
  "vano-core",
@@ -7070,7 +7070,7 @@ dependencies = [
 
 [[package]]
 name = "vano-scan"
-version = "0.3.0"
+version = "0.4.0-dev"
 dependencies = [
  "crossbeam-deque",
  "crossbeam-utils",
