@@ -281,15 +281,15 @@ _version: 2
   gl: "Modificado"
   it: "Modificato"
 "report.moved":
-  en: "Moved %{moved} of %{total} items to the Trash, %{size} freed."
-  es: "Se movieron %{moved} de %{total} elementos a la papelera, %{size} liberados."
-  gl: "Movéronse %{moved} de %{total} elementos ao lixo, %{size} liberados."
-  it: "Spostati %{moved} di %{total} elementi nel cestino, %{size} liberati."
+  en: "Moved %{moved} of %{total} items to the Trash (%{size})."
+  es: "Se movieron %{moved} de %{total} elementos a la papelera (%{size})."
+  gl: "Movéronse %{moved} de %{total} elementos ao lixo (%{size})."
+  it: "Spostati %{moved} di %{total} elementi nel cestino (%{size})."
 "report.moved.windows":
-  en: "Moved %{moved} of %{total} items to the Recycle Bin, %{size} freed."
-  es: "Se movieron %{moved} de %{total} elementos a la papelera de reciclaje, %{size} liberados."
-  gl: "Movéronse %{moved} de %{total} elementos á papeleira de reciclaxe, %{size} liberados."
-  it: "Spostati %{moved} di %{total} elementi nel cestino, %{size} liberati."
+  en: "Moved %{moved} of %{total} items to the Recycle Bin (%{size})."
+  es: "Se movieron %{moved} de %{total} elementos a la papelera de reciclaje (%{size})."
+  gl: "Movéronse %{moved} de %{total} elementos á papeleira de reciclaxe (%{size})."
+  it: "Spostati %{moved} di %{total} elementi nel cestino (%{size})."
 "report.nothing_deleted":
   en: "Nothing was deleted: the items that were not moved are still where they were."
   es: "No se borró nada: los elementos que no se movieron siguen donde estaban."

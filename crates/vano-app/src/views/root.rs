@@ -918,18 +918,20 @@ impl AppView {
         }
         window.close_dialog(cx);
         if left.is_empty() && !outcome.cancelled {
-            let text = format!(
-                "{} \u{b7} {}",
-                format::counted(
-                    if permanent {
-                        "toast.deleted"
-                    } else {
-                        trash::trash_key!("toast.moved")
-                    },
-                    count as u64
-                ),
-                rust_i18n::t!("toast.freed", size = format::size(freed)),
-            );
+            // Only a deletion frees the space: the Trash holds it until it is emptied.
+            let text = if permanent {
+                format!(
+                    "{} \u{b7} {}",
+                    format::counted("toast.deleted", count as u64),
+                    rust_i18n::t!("toast.freed", size = format::size(freed)),
+                )
+            } else {
+                format!(
+                    "{} \u{b7} {}",
+                    format::counted(trash::trash_key!("toast.moved"), count as u64),
+                    format::size(freed),
+                )
+            };
             self.show_toast(text, undo, false, cx);
         } else {
             // Something needs explaining: what moved, what stayed and why.
