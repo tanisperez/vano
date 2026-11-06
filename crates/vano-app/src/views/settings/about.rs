@@ -13,13 +13,8 @@ use crate::state::about::{AboutInfo, IDENTITY};
 use crate::state::update::{CheckStatus, ReadyUpdate, updater_enabled};
 use crate::theme::Palette;
 use crate::theme::metrics::{CONTROL_HEIGHT, RADIUS_LG};
-use crate::views::components::{PrimaryButton, SecondaryButton};
+use crate::views::components::{LabeledRow, PrimaryButton, SecondaryButton};
 use crate::views::root::AppView;
-
-use super::{divider, labeled_row};
-
-/// Height of the About footer strip.
-const FOOTER_HEIGHT: f32 = 48.0;
 
 /// What the pane needs from [`AppView`], cloned out so nothing borrows the view while rendering.
 pub(super) struct AboutPane {
@@ -43,7 +38,7 @@ impl AboutPane {
     }
 }
 
-/// The pane's body sections: the header row, a divider and the updates section.
+/// The pane's body sections: the header row and the updates section.
 pub(super) fn render_about(
     weak: WeakEntity<AppView>,
     palette: &Palette,
@@ -52,29 +47,18 @@ pub(super) fn render_about(
 ) -> Vec<AnyElement> {
     vec![
         telaio_app::about::header(&IDENTITY, &pane.info.platform, palette, mono_font_family),
-        divider(palette),
         render_updates(weak, palette, mono_font_family, pane),
     ]
 }
 
-/// The pane's footer: what Vano sends over the network, which depends on the updater.
-pub(super) fn render_about_footer(palette: &Palette) -> AnyElement {
-    let text = if updater_enabled() {
+/// The pane's footer text: what Vano sends over the network, which depends on the updater.
+pub(super) fn footer_text() -> SharedString {
+    if updater_enabled() {
         t!("settings.about.footer.updater")
     } else {
         t!("settings.about.footer.offline")
-    };
-    h_flex()
-        .h(px(FOOTER_HEIGHT))
-        .flex_none()
-        .items_center()
-        .px(px(20.0))
-        .border_t_1()
-        .border_color(palette.border)
-        .text_color(palette.fg_subtle)
-        .text_size(px(12.0))
-        .child(text)
-        .into_any_element()
+    }
+    .into()
 }
 
 /// The "Updates" section: variant 3a with an updater, 3b without.
@@ -119,14 +103,12 @@ fn render_managed_updates(
         .on_click(move |checked, window, cx| {
             let checked = *checked;
             let _ = auto_weak.update(cx, |view, cx| view.set_check_updates(checked, window, cx));
-        })
-        .into_any_element();
-    rows.push(labeled_row(
-        palette,
-        t!("update.setting.check"),
-        Some(t!("update.setting.check_description")),
-        switch,
-    ));
+        });
+    rows.push(
+        LabeledRow::new(t!("update.setting.check"), switch)
+            .description(t!("update.setting.check_description"))
+            .into_any_element(),
+    );
 
     let busy = pane.status == CheckStatus::Checking || pane.ready.is_some();
     let check = SecondaryButton::new("about-check-now", t!("shell.palette.check_for_updates"))

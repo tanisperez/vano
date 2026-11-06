@@ -205,13 +205,3 @@ _version: 2
   es: "Solo local. Vano nunca se conecta a internet por su cuenta."
   gl: "Só local. Vano nunca se conecta a internet por si mesmo."
   it: "Solo locale. Vano non si connette mai a internet da solo."
-"settings.select.search":
-  en: "Search"
-  es: "Buscar"
-  gl: "Buscar"
-  it: "Cerca"
-"settings.select.no_results":
-  en: "No results"
-  es: "Sin resultados"
-  gl: "Sen resultados"
-  it: "Nessun risultato"

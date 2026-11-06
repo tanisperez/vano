@@ -250,13 +250,6 @@ pub fn settings_path() -> Option<PathBuf> {
     dirs::config_dir().map(|base| base.join(SETTINGS_FILE))
 }
 
-/// Steps `current` by `step` (positive or negative), clamped to `range`. Used by the Settings
-/// view's font size stepper: the `-`/`+` buttons pass `-step`/`step` of [`UI_FONT_SIZE_STEP`],
-/// with [`UI_FONT_SIZE_RANGE`].
-pub fn step_size(current: f32, step: f32, range: RangeInclusive<f32>) -> f32 {
-    (current + step).clamp(*range.start(), *range.end())
-}
-
 /// Builds the options for a font picker: `bundled` first, always, then every other entry of
 /// `installed` (as returned by `cx.text_system().all_font_names()`, already sorted), skipping the
 /// bundled family's own name if it repeats there and de-duplicating.
