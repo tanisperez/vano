@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 use super::target::Target;
 
 /// How many scans are remembered.
-const MAX_RECENTS: usize = 6;
+const MAX_RECENTS: usize = 4;
 
 /// One remembered scan.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -70,6 +70,21 @@ pub fn record(recent: Recent) -> Vec<Recent> {
     list
 }
 
+/// Takes `target` out of the list and saves it. Its saved tree is the caller's to remove.
+pub fn forget(target: &Target) -> Vec<Recent> {
+    let Some(base) = dirs::config_dir() else {
+        return Vec::new();
+    };
+    let list = without(read(&base), target);
+    write(&base, &list);
+    list
+}
+
+fn without(mut list: Vec<Recent>, target: &Target) -> Vec<Recent> {
+    list.retain(|old| old.target.path != target.path);
+    list
+}
+
 fn push(mut list: Vec<Recent>, recent: Recent) -> Vec<Recent> {
     list.retain(|old| old.target.path != recent.target.path);
     list.insert(0, recent);
@@ -82,10 +97,13 @@ fn file(base: &Path) -> PathBuf {
 }
 
 fn read(base: &Path) -> Vec<Recent> {
-    fs::read_to_string(file(base))
+    let mut list: Vec<Recent> = fs::read_to_string(file(base))
         .ok()
         .and_then(|text| serde_json::from_str(&text).ok())
-        .unwrap_or_default()
+        .unwrap_or_default();
+    // A list saved by a version that remembered more.
+    list.truncate(MAX_RECENTS);
+    list
 }
 
 fn write(base: &Path, list: &[Recent]) {
@@ -132,6 +150,25 @@ mod tests {
         assert_eq!(list.len(), 2);
         assert_eq!(list[0].size, 3);
         assert_eq!(list[1].target.path, PathBuf::from("/a"));
+    }
+
+    #[test]
+    fn forgetting_leaves_the_other_targets() {
+        let list = without(
+            vec![recent("/a", 1), recent("/b", 2)],
+            &Target::folder(PathBuf::from("/a")),
+        );
+        assert_eq!(list, vec![recent("/b", 2)]);
+    }
+
+    #[test]
+    fn a_longer_saved_list_is_cut() {
+        let dir = tempfile::tempdir().expect("tempdir");
+        let long: Vec<Recent> = (0..MAX_RECENTS + 2)
+            .map(|index| recent(&format!("/{index}"), 1))
+            .collect();
+        write(dir.path(), &long);
+        assert_eq!(read(dir.path()), long[..MAX_RECENTS]);
     }
 
     #[test]

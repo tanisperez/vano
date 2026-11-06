@@ -630,6 +630,24 @@ impl AppView {
         .detach();
     }
 
+    /// Removes a scan from the recent list and deletes its saved tree. The scanned folder is
+    /// not touched.
+    pub(crate) fn forget_recent(&mut self, recent: &Recent, cx: &mut Context<Self>) {
+        self.recents = recents::forget(&recent.target);
+        if let Some(path) = recent.cache_path() {
+            cx.background_executor()
+                .spawn(async move {
+                    if let Err(error) = std::fs::remove_file(&path)
+                        && error.kind() != std::io::ErrorKind::NotFound
+                    {
+                        log::warn!("could not remove {}: {error}", path.display());
+                    }
+                })
+                .detach();
+        }
+        cx.notify();
+    }
+
     /// Stops the running scan and goes back home.
     pub(crate) fn cancel_scan(&mut self, cx: &mut Context<Self>) {
         if let Some(session) = self.scan.take() {

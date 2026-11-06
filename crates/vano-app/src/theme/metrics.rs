@@ -62,6 +62,8 @@ pub const RING_THICKNESS: f32 = 20.0;
 pub const HOME_COLUMN_WIDTH: f32 = 680.0;
 /// Side length of the home screen's logo square.
 pub const HOME_LOGO_SIZE: f32 = 48.0;
+/// Least width of the Scan button of the home screen.
+pub const HOME_SCAN_WIDTH: f32 = 240.0;
 /// Height of a location card on the home screen.
 pub const LOCATION_CARD_HEIGHT: f32 = 110.0;
 /// Height of a recent scan row.

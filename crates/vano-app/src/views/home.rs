@@ -12,13 +12,13 @@ use crate::state::format;
 use crate::state::target::{Target, TargetKind};
 use crate::state::usage::Severity;
 use crate::theme::metrics::{
-    HOME_COLUMN_WIDTH, HOME_LOGO_SIZE, HOME_USAGE_BAR_HEIGHT, LOCATION_CARD_HEIGHT, RADIUS_LG,
-    RECENT_ROW_HEIGHT,
+    HOME_COLUMN_WIDTH, HOME_LOGO_SIZE, HOME_SCAN_WIDTH, HOME_USAGE_BAR_HEIGHT,
+    LOCATION_CARD_HEIGHT, RADIUS_LG, RECENT_ROW_HEIGHT,
 };
 use crate::theme::{Palette, PaletteExt, VanoColors};
 
 use super::common::eyebrow;
-use super::components::{PrimaryButton, UsageBar};
+use super::components::{IconButton, PrimaryButton, UsageBar};
 use super::root::AppView;
 use super::title_bar::target_icon;
 
@@ -118,7 +118,7 @@ impl AppView {
         let column = v_flex()
             .w_full()
             .max_w(px(HOME_COLUMN_WIDTH))
-            .pt(px(56.0))
+            .pt(px(40.0))
             .pb(px(24.0))
             .gap(px(28.0))
             .child(
@@ -170,9 +170,9 @@ impl AppView {
                     ),
             )
             .child(
-                h_flex().child(
+                h_flex().justify_center().child(
                     PrimaryButton::new("scan", scan_label)
-                        .key_hint("\u{21b5}")
+                        .min_width(HOME_SCAN_WIDTH)
                         .on_click(cx.listener(|view, _, _, cx| view.start_scan(cx))),
                 ),
             )
@@ -193,10 +193,12 @@ impl AppView {
                                 format::age(recent.scanned_at, now)
                             );
                             let name = recent.target.label();
+                            let forgotten = recent.clone();
                             h_flex()
                                 .id(("recent", index))
                                 .h(px(RECENT_ROW_HEIGHT))
-                                .px(px(10.0))
+                                .pl(px(10.0))
+                                .pr(px(4.0))
                                 .gap(px(16.0))
                                 .items_center()
                                 .rounded(px(8.0))
@@ -227,6 +229,13 @@ impl AppView {
                                         .child(t!("home.open_results"))
                                         .on_click(cx.listener(move |view, _, _, cx| {
                                             view.open_recent(recent.clone(), cx);
+                                        })),
+                                )
+                                .child(
+                                    IconButton::new(("recent-forget", index), IconName::Close)
+                                        .tooltip(t!("home.forget_recent"))
+                                        .on_click(cx.listener(move |view, _, _, cx| {
+                                            view.forget_recent(&forgotten, cx);
                                         })),
                                 )
                         })),

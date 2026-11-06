@@ -210,7 +210,8 @@ Every screen has the title bar on top and the status bar at the bottom.
    (radius 12, "V" 24/600) beside "Vano" and the tagline in 14 `fg_muted`. Then "What to scan"
    with two location cards side by side (the disk, with a usage bar, and "Any folder"); the
    selected one is `accent_subtle` with a 2 px `accent` border. Then the primary "Scan ..."
-   button, the recent scans (icon, name, size and date, "Open results" link), and a footer with a
+   button, centered, the last four scans (icon, name, size and date, "Open results" link, an X that
+   removes the row from the history), and a footer with a
    top border that says Vano only reads sizes and removes nothing without confirmation. The disk card's usage bar goes
    from green to red along the whole track, with the percentage in the color of its severity
    (from 60% and from 85%).

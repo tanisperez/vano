@@ -150,6 +150,11 @@ _version: 2
   es: "Vano solo lee el tamaño de los archivos. No se elimina nada hasta que lo confirmas, y lo eliminado va a la papelera salvo que elijas borrarlo definitivamente."
   gl: "Vano só le o tamaño dos ficheiros. Non se elimina nada ata que o confirmas, e o eliminado vai ao lixo salvo que escollas borralo definitivamente."
   it: "Vano legge solo le dimensioni dei file. Nulla viene rimosso finché non confermi, e ciò che rimuovi va nel cestino a meno che tu non scelga di eliminarlo definitivamente."
+"home.forget_recent":
+  en: "Remove from history"
+  es: "Quitar del historial"
+  gl: "Quitar do historial"
+  it: "Rimuovi dalla cronologia"
 "home.home_caption":
   en: "Your files, projects and caches."
   es: "Tus archivos, proyectos y cachés."
