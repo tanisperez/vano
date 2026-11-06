@@ -16,10 +16,11 @@ Run it from anywhere, or with `make screenshots`.
   on screen read `/home/alex` and your real settings and scans are never touched. The UI is
   English, the accent Indigo. The work folder is `target/screenshots/`, on the real disk: the free
   and used space the app shows come from the file system of the scanned folder.
-- Sizes the window to 1680x1000, so every click lands on the same spot, opens the results with
-  `VANO_OPEN=results` (or Settings with `VANO_OPEN=settings`), and drives the rest with `xdotool`
-  clicks (zoom into `dev`, Cleanup coloring, a recommendation, the Trash confirmation, Rings).
-  It never confirms the Trash.
+- Sizes the window to 2100x1260, tall enough for the home screen with no scrolling, so every
+  click lands on the same spot, opens the results with
+  `VANO_OPEN=results` (or Settings with `VANO_OPEN=settings`), and drives the rest with clicks
+  through a virtual pointer (`pointer.py`) (zoom into `dev`, Cleanup coloring, a recommendation, the delete confirmation, Rings).
+  It never confirms the deletion.
 - Captures the window with `spectacle` and converts it with ImageMagick.
 - Stops the app on exit, also on Ctrl+C or failure.
 
@@ -28,11 +29,13 @@ machine's own root file system.
 
 ## Requirements
 
-- Linux, KDE Plasma on Wayland with XWayland. X11 pointer requests are scaled by the display
-  scale, read from `kscreen-doctor -o`; the window geometry and the screenshots are in physical
-  pixels. The click coordinates are screenshot pixels of the 1680x1000 window.
-- `bwrap` (bubblewrap), `spectacle`, `xdotool`, `python3`, `cargo` and ImageMagick (`magick`)
-  built with WebP support.
+- Linux, KDE Plasma on Wayland with XWayland. `xdotool mousemove` does nothing there with several
+  monitors, so the pointer is a virtual device on `/dev/uinput`, in logical pixels of the desktop:
+  the display scale and the outputs are read from `kscreen-doctor -o`. The window geometry and the
+  screenshots are in physical pixels, and the click coordinates are screenshot pixels of the
+  2100x1260 window.
+- `bwrap` (bubblewrap), `spectacle`, `xdotool`, `kscreen-doctor`, `cargo`, `python3` with
+  python-evdev, write access to `/dev/uinput` and ImageMagick (`magick`) built with WebP support.
 - An unlocked screen. Do not use the keyboard or mouse while it runs (about 2 minutes): the
   script aborts if Vano loses the focus, so clicks never reach another application.
 

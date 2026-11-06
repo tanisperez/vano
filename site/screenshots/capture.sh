@@ -10,8 +10,8 @@ OUT="$ROOT/site/img"
 SCALE=1.5
 # The window is resized to this, so every click lands on the same pixel. The screenshot is the
 # same size, with the transparent margin around the window's shadow.
-WIDTH=1680
-HEIGHT=1000
+WIDTH=2100
+HEIGHT=1260
 # Under target/, on the real disk: the app reads the free and used space of the scanned folder's
 # file system, and a tmpfs would show nonsense next to the made-up home.
 WORK="$ROOT/target/screenshots"
@@ -28,7 +28,7 @@ trap cleanup EXIT INT TERM
 
 die() { echo "capture.sh: $*" >&2; exit 1; }
 
-for tool in spectacle xdotool magick python3 cargo bwrap; do
+for tool in spectacle xdotool magick python3 cargo bwrap kscreen-doctor; do
     command -v "$tool" >/dev/null || die "missing required tool: $tool"
 done
 if [ "$(busctl --user call org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver GetActive 2>/dev/null)" = "b true" ]; then
@@ -36,8 +36,8 @@ if [ "$(busctl --user call org.freedesktop.ScreenSaver /ScreenSaver org.freedesk
 fi
 pgrep -x vano >/dev/null && die "a vano process is already running, close it first"
 
-# X11 pointer requests are scaled by the display scale here (KDE Plasma on Wayland), while the
-# window geometry and the screenshot are in physical pixels.
+# The desktop is in logical pixels for the pointer (KDE Plasma on Wayland), while the window
+# geometry and the screenshot are in physical pixels.
 POINTER_SCALE=$(kscreen-doctor -o 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | awk '/Scale:/ {print $2; exit}')
 POINTER_SCALE=${POINTER_SCALE:-1}
 
@@ -93,15 +93,14 @@ pointer() {
     rx=$(python3 -c "print(round(($X+$1)/$POINTER_SCALE))")
     ry=$(python3 -c "print(round(($Y+$2)/$POINTER_SCALE))")
     ensure_active
-    xdotool mousemove $((rx-2)) $((ry-2)); sleep 0.2
-    xdotool mousemove "$rx" "$ry"; sleep 0.3
+    python3 -I "$HERE/pointer.py" "$rx" "$ry" ${3:-} || die "could not move the pointer"
     ensure_active
 }
 
-click() { pointer "$1" "$2"; xdotool mousedown 1; sleep 0.15; xdotool mouseup 1; sleep 1.2; }
+click() { pointer "$1" "$2" click; sleep 1.2; }
 
 # Parks the pointer on the status bar so no hover state is captured.
-park() { pointer 900 951; }
+park() { pointer 900 1211; }
 
 # shot NAME THEME: captures the active window into site/img/NAME-THEME.webp
 shot() {
@@ -119,21 +118,21 @@ for theme in light dark; do
     # The results of the made-up home, colored by category.
     launch "$theme" VANO_OPEN=results
     shot hero "$theme"
-    click 110 458      # the "dev" tile: zooms into it
+    click 105 550      # the "dev" tile: zooms into it
     shot explore "$theme"
     quit_app
 
-    # Cleanup coloring, a recommendation's detail and the confirmation of the Trash.
+    # Cleanup coloring, a recommendation's detail and the confirmation of the deletion.
     launch "$theme" VANO_OPEN=results
-    click 1008 328     # Cleanup
-    click 1300 486     # the "Rust build output" recommendation
+    click 1125 420     # Cleanup
+    click 1732 578     # the "Rust build output" recommendation
     shot cleanup "$theme"
-    click 1517 868     # Move to Trash: only opens the confirmation, nothing is confirmed
+    click 1980 1128    # Delete: only opens the confirmation, nothing is confirmed
     shot trash "$theme"
     quit_app
 
     launch "$theme" VANO_OPEN=results
-    click 691 328      # Rings
+    click 1338 420     # Rings
     shot rings "$theme"
     quit_app
 
