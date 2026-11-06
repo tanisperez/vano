@@ -222,7 +222,7 @@ Every screen has the title bar on top and the status bar at the bottom.
    the focused folder, Category or Cleanup coloring, and the legend) and the "Recommendations"
    panel on the right, grouped in Safe to remove and Review first, with checkboxes and "Select
    safe". A click on a recommendation or a tile opens its detail (badge, description, reason,
-   "Largest inside" bars, Files, Last used, "Covered by" links, "Show in folder", "Delete…"). Under
+   "Largest inside" bars, Files, Last used, "Covered by" links, "Show in folder", "Delete"). Under
    the explorer's minimum height (360) the page scrolls.
 5. **Delete** (`views/feedback.rs`): a modal (482 wide) that asks "Move to Trash" or "Delete
    permanently" with two radio cards, starting at the last choice of the session, then the list

@@ -12,7 +12,7 @@ use crate::state::results::Results;
 use crate::state::target::disk_name;
 use crate::state::usage::{Severity, UsagePreview};
 use crate::theme::metrics::{
-    USAGE_BAR_HEIGHT, USAGE_LABEL_WIDTH, USAGE_PERCENT_WIDTH, USAGE_STATS_MIN_WIDTH,
+    USAGE_BAR_HEIGHT, USAGE_LABEL_WIDTH, USAGE_PERCENT_WIDTH, USAGE_STATS_MIN_SHARE,
 };
 use crate::theme::{Palette, VanoColors};
 
@@ -130,13 +130,12 @@ impl AppView {
         let count = stats.len();
         let cells = h_flex()
             .flex_none()
-            .w(relative(0.38))
-            .min_w(px(USAGE_STATS_MIN_WIDTH))
+            .min_w(relative(USAGE_STATS_MIN_SHARE))
             .items_stretch()
             .children(stats.into_iter().enumerate().map(|(index, stat)| {
+                // Each column as wide as its content, sharing out what is left.
                 v_flex()
-                    .flex_1()
-                    .min_w_0()
+                    .flex_auto()
                     .px(px(14.0))
                     .py(px(12.0))
                     .justify_center()
@@ -154,7 +153,7 @@ impl AppView {
                             .children(stat.dot.map(|dot| {
                                 div().flex_none().size(px(6.0)).rounded(px(3.0)).bg(dot)
                             }))
-                            .child(div().min_w_0().child(stat.label)),
+                            .child(div().whitespace_nowrap().child(stat.label)),
                     )
                     .child(
                         div()
@@ -166,7 +165,7 @@ impl AppView {
                     )
                     .child(
                         div()
-                            .truncate()
+                            .whitespace_nowrap()
                             .text_size(px(11.5))
                             .text_color(stat.sub_color)
                             .child(stat.sub),

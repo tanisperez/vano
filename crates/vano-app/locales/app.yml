@@ -681,10 +681,10 @@ _version: 2
   gl: "%{used} usados · %{free} libres"
   it: "%{used} usati · %{free} liberi"
 "results.delete":
-  en: "Delete…"
-  es: "Borrar…"
-  gl: "Borrar…"
-  it: "Elimina…"
+  en: "Delete"
+  es: "Borrar"
+  gl: "Borrar"
+  it: "Elimina"
 "confirm.trash_title":
   en: "Move to Trash"
   es: "Mover a la papelera"
