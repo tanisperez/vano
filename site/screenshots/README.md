@@ -54,20 +54,22 @@ a little longer.
   manifest of its tree, and `materialize.py` creates every folder and file of it under
   `target/video/home`, each file allocated with `fallocate` at a quarter of its size (about
   340,000 files and 50 GB of real disk space, removed when the script ends).
-- Launches the `vano` of the `PATH` (not a fresh build) the same way as `capture.sh`: under
-  XWayland, inside bubblewrap, with that home mounted as `/home/alex`, in English, light theme and
-  Indigo accent. The window is 2240x1334 at 2x scale, so the video is sharp at 1600 pixels wide.
+- Launches `target/release/vano` (built first) the same way as `capture.sh`: under XWayland, inside
+  bubblewrap, with that home mounted as `/home/alex`, in English, light theme and Indigo accent. The
+  window is 2240x1344 at 1.6x scale, so the video is sharp at 1600 pixels wide.
 - Records the window with `gpu-screen-recorder` (a screen region, KMS capture, no portal dialog)
-  while `xdotool` drives it with smooth pointer moves: Settings (Dark, Electric), a live scan of
+  while the virtual pointer (`pointer.py`) drives it with smooth moves: Settings (Dark, Electric), a live scan of
   the home, a zoom into a project and back, Rings, Ranking, Cleanup coloring, a recommendation, and
-  Move to Trash, confirmed. The files moved are the made-up home's own, into its own Trash.
+  Delete with Move to Trash, confirmed. The files moved are the made-up home's own, into its own Trash.
 - Encodes the recording with `ffmpeg` (SVT-AV1 and x264, no audio) and takes the poster from the
   results right after the scan.
 
 ## Requirements
 
-The same as `capture.sh`, plus `vano` in the `PATH`, `gpu-screen-recorder`, `ffmpeg` built with
-`libsvtav1` and `libx264`, and about 50 GB free on the disk of the repository. XWayland runs at
+The same as `capture.sh`, plus `gpu-screen-recorder`, `ffmpeg` built with `libsvtav1` and
+`libx264`, and about 50 GB free on the disk of the repository. On a fuller disk, set a larger
+`DIVISOR` in the environment: with 24 it takes about 10 GB, and the sizes on screen are that much
+smaller. XWayland runs at
 the largest display scale, read from `kscreen-doctor -o`. The window is placed on the display at
 the top left corner of the desktop.
 
