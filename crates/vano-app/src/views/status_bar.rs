@@ -11,7 +11,7 @@ use vano_core::ROOT;
 
 use crate::state::format;
 use crate::state::target::disk_name;
-use crate::state::trash::DeleteMode;
+use crate::state::trash::{DeleteMode, trash_key};
 use crate::theme::PaletteExt;
 use crate::theme::metrics::{STATUS_BAR_BUTTON, STATUS_BAR_HEIGHT};
 
@@ -77,7 +77,7 @@ impl AppView {
         let right = match &self.trash_progress {
             Some(progress) => t!(
                 match progress.mode {
-                    DeleteMode::Trash => "status.trashing_progress",
+                    DeleteMode::Trash => trash_key!("status.trashing_progress"),
                     DeleteMode::Permanent => "status.deleting_progress",
                 },
                 done = format::count(progress.done.load(Ordering::Relaxed) as u64),
@@ -85,7 +85,7 @@ impl AppView {
                 size = format::size(progress.bytes.load(Ordering::Relaxed))
             )
             .into_owned(),
-            None if self.trashing => t!("status.trashing").into_owned(),
+            None if self.trashing => t!(trash_key!("status.trashing")).into_owned(),
             None => right,
         };
         let ready = self.state.update.ready().map(|ready| ready.version.clone());

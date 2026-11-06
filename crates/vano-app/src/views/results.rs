@@ -16,6 +16,7 @@ use crate::state::format;
 use crate::state::results::Results;
 use crate::state::settings::LiveView;
 use crate::state::target::TargetKind;
+use crate::state::trash::trash_key;
 use crate::state::treemap::{self, TileKey};
 use crate::theme::metrics::{
     BREADCRUMB_HEIGHT, EXPLORER_MIN_HEIGHT, PAGE_PADDING, RADIUS_MD, RADIUS_SM, RADIUS_XS,
@@ -669,7 +670,7 @@ impl AppView {
             .child(card_header(
                 palette,
                 t!("results.recs.title"),
-                t!("results.recs.sub"),
+                t!(trash_key!("results.recs.sub")),
                 None,
             ))
             .child(

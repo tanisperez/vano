@@ -25,6 +25,11 @@ _version: 2
   es: "Mover %{size} a la papelera"
   gl: "Mover %{size} ao lixo"
   it: "Sposta %{size} nel cestino"
+"confirm.button.windows":
+  en: "Move %{size} to Recycle Bin"
+  es: "Mover %{size} a la papelera de reciclaje"
+  gl: "Mover %{size} á papeleira de reciclaxe"
+  it: "Sposta %{size} nel cestino"
 "confirm.review.one":
   en: "%{n} of these needs review. Make sure you no longer use it."
   es: "%{n} de estos elementos necesita revisión. Asegúrate de que ya no lo usas."
@@ -40,10 +45,20 @@ _version: 2
   es: "¿Mover %{count} elementos a la papelera?"
   gl: "Mover %{count} elementos ao lixo?"
   it: "Spostare %{count} elementi nel cestino?"
+"confirm.title_many.windows":
+  en: "Move %{count} items to the Recycle Bin?"
+  es: "¿Mover %{count} elementos a la papelera de reciclaje?"
+  gl: "Mover %{count} elementos á papeleira de reciclaxe?"
+  it: "Spostare %{count} elementi nel cestino?"
 "confirm.title_one":
   en: "Move %{name} to the Trash?"
   es: "¿Mover %{name} a la papelera?"
   gl: "Mover %{name} ao lixo?"
+  it: "Spostare %{name} nel cestino?"
+"confirm.title_one.windows":
+  en: "Move %{name} to the Recycle Bin?"
+  es: "¿Mover %{name} a la papelera de reciclaje?"
+  gl: "Mover %{name} á papeleira de reciclaxe?"
   it: "Spostare %{name} nel cestino?"
 "confirm.total":
   en: "Total"
@@ -149,6 +164,11 @@ _version: 2
   en: "Vano only reads file sizes. Nothing is removed until you confirm, and removed items go to the Trash unless you choose to delete them permanently."
   es: "Vano solo lee el tamaño de los archivos. No se elimina nada hasta que lo confirmas, y lo eliminado va a la papelera salvo que elijas borrarlo definitivamente."
   gl: "Vano só le o tamaño dos ficheiros. Non se elimina nada ata que o confirmas, e o eliminado vai ao lixo salvo que escollas borralo definitivamente."
+  it: "Vano legge solo le dimensioni dei file. Nulla viene rimosso finché non confermi, e ciò che rimuovi va nel cestino a meno che tu non scelga di eliminarlo definitivamente."
+"home.footer.windows":
+  en: "Vano only reads file sizes. Nothing is removed until you confirm, and removed items go to the Recycle Bin unless you choose to delete them permanently."
+  es: "Vano solo lee el tamaño de los archivos. No se elimina nada hasta que lo confirmas, y lo eliminado va a la papelera de reciclaje salvo que elijas borrarlo definitivamente."
+  gl: "Vano só le o tamaño dos ficheiros. Non se elimina nada ata que o confirmas, e o eliminado vai á papeleira de reciclaxe salvo que escollas borralo definitivamente."
   it: "Vano legge solo le dimensioni dei file. Nulla viene rimosso finché non confermi, e ciò che rimuovi va nel cestino a meno che tu non scelga di eliminarlo definitivamente."
 "home.forget_recent":
   en: "Remove from history"
@@ -265,15 +285,20 @@ _version: 2
   es: "Se movieron %{moved} de %{total} elementos a la papelera, %{size} liberados."
   gl: "Movéronse %{moved} de %{total} elementos ao lixo, %{size} liberados."
   it: "Spostati %{moved} di %{total} elementi nel cestino, %{size} liberati."
+"report.moved.windows":
+  en: "Moved %{moved} of %{total} items to the Recycle Bin, %{size} freed."
+  es: "Se movieron %{moved} de %{total} elementos a la papelera de reciclaje, %{size} liberados."
+  gl: "Movéronse %{moved} de %{total} elementos á papeleira de reciclaxe, %{size} liberados."
+  it: "Spostati %{moved} di %{total} elementi nel cestino, %{size} liberati."
 "report.nothing_deleted":
   en: "Nothing was deleted: the items that were not moved are still where they were."
   es: "No se borró nada: los elementos que no se movieron siguen donde estaban."
   gl: "Non se borrou nada: os elementos que non se moveron seguen onde estaban."
   it: "Non è stato eliminato nulla: gli elementi non spostati sono ancora al loro posto."
 "report.refused":
-  en: "Too big for the Trash, or a path inside is too long."
-  es: "Demasiado grande para la papelera, o con una ruta demasiado larga."
-  gl: "Demasiado grande para o lixo, ou cunha ruta demasiado longa."
+  en: "Too big for the Recycle Bin, or a path inside is too long."
+  es: "Demasiado grande para la papelera de reciclaje, o con una ruta demasiado larga."
+  gl: "Demasiado grande para a papeleira de reciclaxe, ou cunha ruta demasiado longa."
   it: "Troppo grande per il cestino, o con un percorso troppo lungo."
 "report.title_left":
   en: "Some items could not be moved"
@@ -284,6 +309,11 @@ _version: 2
   en: "Moving to the Trash was stopped"
   es: "Se detuvo el movimiento a la papelera"
   gl: "Detívose o movemento ao lixo"
+  it: "Lo spostamento nel cestino è stato interrotto"
+"report.title_stopped.windows":
+  en: "Moving to the Recycle Bin was stopped"
+  es: "Se detuvo el movimiento a la papelera de reciclaje"
+  gl: "Detívose o movemento á papeleira de reciclaxe"
   it: "Lo spostamento nel cestino è stato interrotto"
 "report.untouched.one":
   en: "%{n} item was not touched."
@@ -334,6 +364,11 @@ _version: 2
   en: "Select items to move to the Trash or delete."
   es: "Selecciona lo que quieres mover a la papelera o borrar."
   gl: "Selecciona o que queres mover ao lixo ou borrar."
+  it: "Seleziona cosa spostare nel cestino o eliminare."
+"results.recs.sub.windows":
+  en: "Select items to move to the Recycle Bin or delete."
+  es: "Elige qué mover a la papelera de reciclaje o borrar."
+  gl: "Elixe que mover á papeleira de reciclaxe ou borrar."
   it: "Seleziona cosa spostare nel cestino o eliminare."
 "results.recs.title":
   en: "Recommendations"
@@ -560,10 +595,20 @@ _version: 2
   es: "Moviendo a la papelera…"
   gl: "Movendo ao lixo…"
   it: "Spostamento nel cestino…"
+"status.trashing.windows":
+  en: "Moving to the Recycle Bin…"
+  es: "Moviendo a la papelera de reciclaje…"
+  gl: "Movendo á papeleira de reciclaxe…"
+  it: "Spostamento nel cestino…"
 "status.trashing_progress":
   en: "Moving to the Trash · %{done} of %{total} · %{size}"
   es: "Moviendo a la papelera · %{done} de %{total} · %{size}"
   gl: "Movendo ao lixo · %{done} de %{total} · %{size}"
+  it: "Spostamento nel cestino · %{done} di %{total} · %{size}"
+"status.trashing_progress.windows":
+  en: "Moving to the Recycle Bin · %{done} of %{total} · %{size}"
+  es: "Moviendo a la papelera de reciclaje · %{done} de %{total} · %{size}"
+  gl: "Movendo á papeleira de reciclaxe · %{done} de %{total} · %{size}"
   it: "Spostamento nel cestino · %{done} di %{total} · %{size}"
 "status.update_ready":
   en: "Vano %{version} is ready · Restart"
@@ -609,6 +654,16 @@ _version: 2
   en: "Moved %{n} items to the Trash"
   es: "%{n} elementos movidos a la papelera"
   gl: "%{n} elementos movidos ao lixo"
+  it: "%{n} elementi spostati nel cestino"
+"toast.moved.windows.one":
+  en: "Moved %{n} item to the Recycle Bin"
+  es: "%{n} elemento movido a la papelera de reciclaje"
+  gl: "%{n} elemento movido á papeleira de reciclaxe"
+  it: "%{n} elemento spostato nel cestino"
+"toast.moved.windows.other":
+  en: "Moved %{n} items to the Recycle Bin"
+  es: "%{n} elementos movidos a la papelera de reciclaje"
+  gl: "%{n} elementos movidos á papeleira de reciclaxe"
   it: "%{n} elementi spostati nel cestino"
 "toast.restore_failed":
   en: "Could not put the items back: %{error}"
@@ -695,10 +750,20 @@ _version: 2
   es: "Mover a la papelera"
   gl: "Mover ao lixo"
   it: "Sposta nel cestino"
+"confirm.trash_title.windows":
+  en: "Move to Recycle Bin"
+  es: "Mover a la papelera de reciclaje"
+  gl: "Mover á papeleira de reciclaxe"
+  it: "Sposta nel cestino"
 "confirm.trash_desc":
   en: "You can restore them until you empty it. Disk space is only released when you do."
   es: "Puedes recuperarlos hasta que la vacíes. El espacio en disco solo se libera cuando lo haces."
   gl: "Podes recuperalos ata que o baleires. O espazo no disco só se libera cando o fas."
+  it: "Puoi ripristinarli finché non lo svuoti. Lo spazio su disco viene liberato solo quando lo fai."
+"confirm.trash_desc.windows":
+  en: "You can restore them until you empty it. Disk space is only released when you do."
+  es: "Puedes recuperarlos hasta que la vacíes. El espacio en disco solo se libera cuando lo haces."
+  gl: "Podes recuperalos ata que a baleires. O espazo no disco só se libera cando o fas."
   it: "Puoi ripristinarli finché non lo svuoti. Lo spazio su disco viene liberato solo quando lo fai."
 "confirm.perm_title":
   en: "Delete permanently"
@@ -710,6 +775,11 @@ _version: 2
   es: "Se salta la papelera. El espacio se libera al momento y las carpetas grandes se borran mucho más rápido."
   gl: "Sáltase o lixo. O espazo libérase ao momento e os cartafoles grandes bórranse moito máis rápido."
   it: "Salta il cestino. Lo spazio viene liberato subito e le cartelle grandi si eliminano molto più in fretta."
+"confirm.perm_desc.windows":
+  en: "Skips the Recycle Bin. Space is freed right away and large folders delete much faster."
+  es: "Se salta la papelera de reciclaje. El espacio se libera al momento y las carpetas grandes se borran mucho más rápido."
+  gl: "Sáltase a papeleira de reciclaxe. O espazo libérase ao momento e os cartafoles grandes bórranse moito máis rápido."
+  it: "Salta il cestino. Lo spazio viene liberato subito e le cartelle grandi si eliminano molto più in fretta."
 "confirm.faster":
   en: "Faster"
   es: "Más rápido"
@@ -719,6 +789,11 @@ _version: 2
   en: "Moving this many files to the Trash can take a long time. Delete permanently is much faster."
   es: "Mover tantos archivos a la papelera puede tardar mucho. Borrar definitivamente es mucho más rápido."
   gl: "Mover tantos ficheiros ao lixo pode tardar moito. Borrar definitivamente é moito máis rápido."
+  it: "Spostare così tanti file nel cestino può richiedere molto tempo. Eliminare definitivamente è molto più veloce."
+"confirm.slow_trash.windows":
+  en: "Moving this many files to the Recycle Bin can take a long time. Delete permanently is much faster."
+  es: "Mover tantos archivos a la papelera de reciclaje puede tardar mucho. Borrar definitivamente es mucho más rápido."
+  gl: "Mover tantos ficheiros á papeleira de reciclaxe pode tardar moito. Borrar definitivamente é moito máis rápido."
   it: "Spostare così tanti file nel cestino può richiedere molto tempo. Eliminare definitivamente è molto più veloce."
 "confirm.perm_warning":
   en: "This cannot be undone. Vano will not be able to restore these items."

@@ -20,6 +20,20 @@ pub enum DeleteMode {
 /// From this many files, the Trash can take a long time and the confirmation says so.
 pub const SLOW_TRASH_FILES: u64 = 20_000;
 
+/// The translation key of a text that names the Trash. Windows calls it the Recycle Bin, and the
+/// word cannot just be swapped in (in Galician even the gender changes), so those texts have a
+/// `.windows` variant. `state/locale.rs` tests that no such text skips this.
+macro_rules! trash_key {
+    ($key:literal) => {
+        if cfg!(windows) {
+            concat!($key, ".windows")
+        } else {
+            $key
+        }
+    };
+}
+pub(crate) use trash_key;
+
 /// Why one item could not be moved.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TrashError {

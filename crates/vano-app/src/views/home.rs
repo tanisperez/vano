@@ -10,6 +10,7 @@ use rust_i18n::t;
 
 use crate::state::format;
 use crate::state::target::{Target, TargetKind};
+use crate::state::trash::trash_key;
 use crate::state::usage::Severity;
 use crate::theme::metrics::{
     HOME_COLUMN_WIDTH, HOME_LOGO_SIZE, HOME_SCAN_WIDTH, HOME_USAGE_BAR_HEIGHT,
@@ -251,7 +252,7 @@ impl AppView {
                     .border_color(palette.border)
                     .text_size(px(12.5))
                     .text_color(palette.fg_muted)
-                    .child(t!("home.footer")),
+                    .child(t!(trash_key!("home.footer"))),
             );
 
         div()

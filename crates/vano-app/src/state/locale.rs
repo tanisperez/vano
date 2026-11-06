@@ -112,6 +112,52 @@ mod tests {
         }
     }
 
+    /// The Trash rule only matches on Linux and macOS, so its texts have no Windows variant.
+    #[test]
+    fn texts_that_name_the_trash_have_a_windows_variant() {
+        let english = messages("en");
+        for (key, text) in &english {
+            let is_windows = key.ends_with(".windows") || key.contains(".windows.");
+            if is_windows {
+                assert!(!text.contains("Trash"), "{key}");
+            } else if text.contains("Trash") && !key.starts_with("rules.") {
+                let variant = match key.rsplit_once('.') {
+                    Some((base, form @ ("one" | "other"))) => format!("{base}.windows.{form}"),
+                    _ => format!("{key}.windows"),
+                };
+                assert!(english.contains_key(&variant), "{key} has no {variant}");
+            }
+        }
+    }
+
+    #[test]
+    fn texts_with_a_windows_variant_go_through_trash_key() {
+        let bases: BTreeSet<String> = messages("en")
+            .keys()
+            .filter_map(|key| key.split_once(".windows"))
+            .map(|(base, _)| base.to_string())
+            .collect();
+        assert!(!bases.is_empty());
+        let mut files = Vec::new();
+        rust_files(
+            &Path::new(env!("CARGO_MANIFEST_DIR")).join("src"),
+            &mut files,
+        );
+        for file in files {
+            let source = fs::read_to_string(&file).expect("read source");
+            for base in &bases {
+                let quoted = format!("\"{base}\"");
+                for (at, _) in source.match_indices(&quoted) {
+                    assert!(
+                        source[..at].trim_end().ends_with("trash_key!("),
+                        "{base} in {} skips trash_key",
+                        file.display()
+                    );
+                }
+            }
+        }
+    }
+
     /// Every `.rs` file under `dir`, recursively.
     fn rust_files(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
         for entry in fs::read_dir(dir).expect("read dir").flatten() {

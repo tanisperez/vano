@@ -85,7 +85,8 @@ bands rising from the bottom, sized by the Safe and Review bytes inside it
   generation) changes.
 - Colors only from `theme::Palette` (`cx.palette()`), sizes only from `theme::metrics`.
 - Translations: English, Spanish, Galician, Italian, every key in all four
-  (`state/locale.rs` tests check it). Never the em dash anywhere.
+  (`state/locale.rs` tests check it). Never the em dash anywhere. A text that names the Trash
+  has a `.windows` variant that says Recycle Bin, read through `trash::trash_key!`.
 - `unsafe` is forbidden in the whole workspace. Clippy runs with `-D warnings`
   (`make lint`), `make format` and `make test` before considering a task done.
 - Read `docs/gpui-notes.md` before touching theming, dialogs or inputs.

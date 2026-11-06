@@ -920,7 +920,7 @@ impl AppView {
                     if permanent {
                         "toast.deleted"
                     } else {
-                        "toast.moved"
+                        trash::trash_key!("toast.moved")
                     },
                     count as u64
                 ),

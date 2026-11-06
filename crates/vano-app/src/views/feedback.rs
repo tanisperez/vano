@@ -13,7 +13,7 @@ use telaio_ui::Tone;
 use vano_rules::Status;
 
 use crate::state::format;
-use crate::state::trash::{DeleteMode, SLOW_TRASH_FILES, TrashProgress};
+use crate::state::trash::{DeleteMode, SLOW_TRASH_FILES, TrashProgress, trash_key};
 use crate::theme::metrics::{
     CONFIRM_LIST_MAX_HEIGHT, CONFIRM_WIDTH, MODAL_HEADER_HEIGHT, RADIUS_LG, RADIUS_MD,
 };
@@ -163,8 +163,11 @@ impl AppView {
         let size = format::size(contents.size);
 
         let title = match (permanent, contents.items.as_slice()) {
-            (false, [item]) => t!("confirm.title_one", name = item.name.clone()),
-            (false, items) => t!("confirm.title_many", count = items.len().to_string()),
+            (false, [item]) => t!(trash_key!("confirm.title_one"), name = item.name.clone()),
+            (false, items) => t!(
+                trash_key!("confirm.title_many"),
+                count = items.len().to_string()
+            ),
             (true, [item]) => t!("confirm.perm_title_one", name = item.name.clone()),
             (true, items) => t!("confirm.perm_title_many", count = items.len().to_string()),
         }
@@ -180,8 +183,8 @@ impl AppView {
                         DeleteMode::Trash,
                         mode,
                         running,
-                        t!("confirm.trash_title").into(),
-                        t!("confirm.trash_desc").into(),
+                        t!(trash_key!("confirm.trash_title")).into(),
+                        t!(trash_key!("confirm.trash_desc")).into(),
                         None,
                         weak.clone(),
                         palette,
@@ -192,7 +195,7 @@ impl AppView {
                         mode,
                         running,
                         t!("confirm.perm_title").into(),
-                        t!("confirm.perm_desc").into(),
+                        t!(trash_key!("confirm.perm_desc")).into(),
                         Some(t!("confirm.faster").into()),
                         weak.clone(),
                         palette,
@@ -201,7 +204,7 @@ impl AppView {
             .when(!permanent && contents.files > SLOW_TRASH_FILES, |body| {
                 body.child(InlineMessage::new(
                     InlineMessageKind::Info,
-                    t!("confirm.slow_trash"),
+                    t!(trash_key!("confirm.slow_trash")),
                 ))
             })
             .when(permanent && !running, |body| {
@@ -263,7 +266,7 @@ impl AppView {
                 .on_click(|_, window, cx| window.close_dialog(cx))
         };
         let label = match (permanent, running) {
-            (false, false) => t!("confirm.button", size = size),
+            (false, false) => t!(trash_key!("confirm.button"), size = size),
             (false, true) => t!("confirm.moving"),
             (true, false) => t!("confirm.perm_button", size = size),
             (true, true) => t!("confirm.deleting"),
@@ -308,7 +311,7 @@ impl AppView {
     ) {
         let permanent = report.mode == DeleteMode::Permanent;
         let title = match (permanent, report.left.is_empty()) {
-            (_, true) => t!("report.title_stopped").into_owned(),
+            (_, true) => t!(trash_key!("report.title_stopped")).into_owned(),
             (false, false) => t!("report.title_left").into_owned(),
             (true, false) => t!("report.perm_title_left").into_owned(),
         };
@@ -317,7 +320,7 @@ impl AppView {
                 if permanent {
                     "report.perm_moved"
                 } else {
-                    "report.moved"
+                    trash_key!("report.moved")
                 },
                 moved = format::count(report.moved as u64),
                 total = format::count(report.total as u64),
