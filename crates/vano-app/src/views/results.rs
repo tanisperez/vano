@@ -709,7 +709,6 @@ impl AppView {
                         h_flex().justify_center().child(
                             PrimaryButton::new("trash-selected", t!("results.delete"))
                                 .min_width(RECS_DELETE_WIDTH)
-                                .icon(Icon::new(IconName::Delete))
                                 .disabled(!can_trash)
                                 .on_click(move |_, window, cx| {
                                     let request = TrashRequest {
@@ -951,7 +950,6 @@ impl AppView {
                     .child(div().flex_1())
                     .child(
                         PrimaryButton::new("detail-trash", t!("results.delete"))
-                            .icon(Icon::new(IconName::Delete))
                             .disabled(self.trashing)
                             .on_click(move |_, window, cx| {
                                 let request = TrashRequest {
@@ -1112,7 +1110,6 @@ impl AppView {
             .when(node != ROOT && !in_info_rec, |footer| {
                 footer.child(
                     PrimaryButton::new("detail-trash", t!("results.delete"))
-                        .icon(Icon::new(IconName::Delete))
                         .disabled(self.trashing)
                         .on_click(move |_, window, cx| {
                             let request = TrashRequest {
