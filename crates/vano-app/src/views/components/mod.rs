@@ -9,9 +9,9 @@ pub mod usage_bar;
 pub use preview_card::PreviewCard;
 pub use telaio_ui::components::SettingsCategory as NavCategory;
 pub use telaio_ui::components::{
-    DangerButton, GhostButton, IconButton, InlineMessage, InlineMessageKind, LabeledRow,
-    ModalPlacement, NumberStepper, PrimaryButton, ProgressBar, SecondaryButton, SectionHeading,
-    SegmentedControl, SegmentedItem, SettingsLayout, StatusBadge, ThemeCard, framed_dialog,
-    modal_body, modal_footer, modal_header, settings_dialog,
+    CheckState, DangerButton, GhostButton, IconButton, InlineMessage, InlineMessageKind,
+    LabeledRow, ModalPlacement, NumberStepper, PrimaryButton, ProgressBar, SecondaryButton,
+    SectionHeading, SegmentedControl, SegmentedItem, SettingsLayout, StatusBadge, ThemeCard,
+    TriCheckbox, framed_dialog, modal_body, modal_footer, modal_header, settings_dialog,
 };
 pub use usage_bar::{UsageBar, UsageMark};

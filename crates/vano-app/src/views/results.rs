@@ -26,7 +26,8 @@ use crate::theme::{Palette, PaletteExt, VanoColors};
 
 use super::common::{Stat, card_header, eyebrow, legend_item, panel, stats_row};
 use super::components::{
-    PrimaryButton, SecondaryButton, SegmentedControl, SegmentedItem, StatusBadge,
+    CheckState, PrimaryButton, SecondaryButton, SegmentedControl, SegmentedItem, StatusBadge,
+    TriCheckbox,
 };
 use super::live_views::{
     RANK_ROWS, RankClick, RankRow, render_ranking, render_rings, ring_sums, set_ranking,
@@ -609,9 +610,9 @@ impl AppView {
             };
             let (ticked, count) = results.group_selection(status);
             let check = match ticked {
-                0 => Check::Off,
-                ticked if ticked == count => Check::On,
-                _ => Check::Mixed,
+                0 => CheckState::Unchecked,
+                ticked if ticked == count => CheckState::Checked,
+                _ => CheckState::Mixed,
             };
             list = list.child(
                 h_flex()
@@ -622,17 +623,20 @@ impl AppView {
                     .border_b_1()
                     .border_color(palette.border)
                     .when(count > 0, |header| {
-                        header.child(checkbox(
-                            SharedString::from(format!("check-group-{status:?}")),
-                            check,
-                            palette,
-                            cx.listener(move |view, _, _, cx| {
-                                if let Some(results) = view.results.as_mut() {
-                                    results.toggle_group(status);
-                                }
-                                cx.notify();
-                            }),
-                        ))
+                        header.child(
+                            TriCheckbox::new(
+                                SharedString::from(format!("check-group-{status:?}")),
+                                check,
+                            )
+                            .on_click(cx.listener(
+                                move |view, _, _, cx| {
+                                    if let Some(results) = view.results.as_mut() {
+                                        results.toggle_group(status);
+                                    }
+                                    cx.notify();
+                                },
+                            )),
+                        )
                     })
                     .child(StatusBadge::new(label).colors(fg, fg, bg))
                     .child(div().flex_1())
@@ -769,17 +773,22 @@ impl AppView {
                             .child(Icon::new(gpui_kit::assets::IconName::Info).small()),
                     )
                 } else {
-                    row.child(checkbox(
-                        SharedString::from(format!("check-{rule}")),
-                        if on { Check::On } else { Check::Off },
-                        palette,
-                        cx.listener(move |view, _, _, cx| {
+                    row.child(
+                        TriCheckbox::new(
+                            SharedString::from(format!("check-{rule}")),
+                            if on {
+                                CheckState::Checked
+                            } else {
+                                CheckState::Unchecked
+                            },
+                        )
+                        .on_click(cx.listener(move |view, _, _, cx| {
                             if let Some(results) = view.results.as_mut() {
                                 results.toggle(rule);
                             }
                             cx.notify();
-                        }),
-                    ))
+                        })),
+                    )
                 }
             })
             .child(
@@ -1355,56 +1364,6 @@ fn detail_footer(palette: &Palette) -> Div {
         .flex_wrap()
         .border_t_1()
         .border_color(palette.border)
-}
-
-/// What a checkbox shows. `Mixed` is a group with only part of it ticked.
-#[derive(Clone, Copy, PartialEq, Eq)]
-enum Check {
-    Off,
-    On,
-    Mixed,
-}
-
-fn checkbox(
-    id: SharedString,
-    check: Check,
-    palette: &Palette,
-    on_click: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static,
-) -> impl IntoElement {
-    let on = check != Check::Off;
-    div()
-        .id(id)
-        .flex_none()
-        .size(px(16.0))
-        .flex()
-        .items_center()
-        .justify_center()
-        .rounded(px(RADIUS_XS))
-        .border_1()
-        .border_color(if on {
-            palette.accent
-        } else {
-            palette.border_strong
-        })
-        .bg(if on { palette.accent } else { palette.raised })
-        .text_color(palette.accent_fg)
-        .when(check == Check::On, |check| {
-            check.child(Icon::new(IconName::Check).xsmall())
-        })
-        // No minus icon in the set: a short bar, like the platforms' mixed checkbox.
-        .when(check == Check::Mixed, |check| {
-            check.child(
-                div()
-                    .w(px(8.0))
-                    .h(px(2.0))
-                    .rounded(px(1.0))
-                    .bg(palette.accent_fg),
-            )
-        })
-        .on_click(move |event, window, cx| {
-            cx.stop_propagation();
-            on_click(event, window, cx);
-        })
 }
 
 /// The legend under the explorer.
