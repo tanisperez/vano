@@ -18,7 +18,7 @@
     <meta property="og:site_name" content="Vano">
     <meta property="og:locale" content="en_US">
     <meta property="og:title" content="Vano, see what fills your disk and clear it safely">
-    <meta property="og:description" content="A light, native disk analyzer. It scans in a blink, explains what can go, and moves it to the Trash, never deletes it.">
+    <meta property="og:description" content="A light, native disk analyzer. It scans in a blink, explains what can go, and asks whether to move it to the Trash or delete it for good.">
     <meta property="og:url" content="https://vano.tanis.codes/">
     <meta property="og:image" content="https://vano.tanis.codes/img/og.png">
     <meta property="og:image:type" content="image/png">
@@ -27,7 +27,7 @@
     <meta property="og:image:alt" content="Vano, see what fills your disk and clear it safely: the app's treemap of a home folder.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Vano, see what fills your disk and clear it safely">
-    <meta name="twitter:description" content="A light, native disk analyzer. It scans in a blink, explains what can go, and moves it to the Trash, never deletes it.">
+    <meta name="twitter:description" content="A light, native disk analyzer. It scans in a blink, explains what can go, and asks whether to move it to the Trash or delete it for good.">
     <meta name="twitter:image" content="https://vano.tanis.codes/img/og.png">
     <meta name="twitter:image:alt" content="Vano, see what fills your disk and clear it safely: the app's treemap of a home folder.">
     <script type="application/ld+json">
@@ -45,7 +45,7 @@
                 "@type": "SoftwareApplication",
                 "@id": "https://vano.tanis.codes/#app",
                 "name": "Vano",
-                "description": "A light, native, open source disk analyzer. It shows where the space goes in a treemap and recommends what can go to the Trash, where everything can be put back.",
+                "description": "A light, native, open source disk analyzer. It shows where the space goes in a treemap and recommends what can go. Nothing is removed until you confirm, to the Trash or for good, as you choose.",
                 "url": "https://vano.tanis.codes/",
                 "downloadUrl": "https://vano.tanis.codes/install.html",
                 "applicationCategory": "UtilitiesApplication",
@@ -96,7 +96,7 @@
             <div class="wrap">
                 <span class="eyebrow"><span class="pill">Open source</span> Free for everyone, Apache-2.0</span>
                 <h1>See what fills your disk and <span class="accent">clear it safely</span></h1>
-                <p class="lead">Vano is a light, native disk analyzer. It scans your home folder in a blink, shows where the space goes in a treemap you can zoom into, and tells you what can go and why. Nothing is deleted: it all goes to the Trash.</p>
+                <p class="lead">Vano is a light, native disk analyzer. It scans your home folder in a blink, shows where the space goes in a treemap you can zoom into, and tells you what can go and why. Nothing is removed until you confirm, and you choose: the Trash, or gone for good.</p>
                 <div class="actions">
                     <a class="btn btn-primary" href="install.html">Download Vano</a>
                     <a class="btn btn-secondary" href="https://github.com/tanisperez/vano">
@@ -122,7 +122,7 @@
                 <ul>
                     <li><strong>Native, not a browser</strong><span>Written in Rust on gpui, the GPU accelerated UI framework behind the Zed editor.</span></li>
                     <li><strong>Instant</strong><span>Every folder is read in parallel, so a home folder with hundreds of thousands of files takes a fraction of a second.</span></li>
-                    <li><strong>Nothing is deleted</strong><span>What you clean goes to the system Trash, and you can put it back.</span></li>
+                    <li><strong>You decide</strong><span>Nothing goes until you confirm. Send it to the system Trash and put it back, or delete it for good when you need the space now.</span></li>
                     <li><strong>Local first</strong><span>No sign in, no telemetry. Vano only reads file sizes on your machine.</span></li>
                 </ul>
             </div>
@@ -133,7 +133,7 @@
                 <div class="section-head">
                     <span class="kicker">See it in action</span>
                     <h2>From a full disk to a clean one</h2>
-                    <p>Scan the home folder, zoom into what is big, and send what is safe to the Trash. One click puts it back.</p>
+                    <p>Scan the home folder, zoom into what is big, and send what is safe to the Trash. One click puts it back. Or delete it for good.</p>
                 </div>
                 <div class="demo-video">
                     <video autoplay muted loop playsinline preload="metadata" width="1600" height="928"
@@ -225,11 +225,12 @@
 
                     <article class="feature">
                         <div class="copy">
-                            <h3>To the Trash, never deleted</h3>
+                            <h3>To the Trash, or gone for good</h3>
                             <div class="text">
-                                <p>Select the recommendations you want, or any folder of the treemap, and confirm. Vano lists every item and the total before it moves anything, and moves it to the system Trash, where it stays until you empty it.</p>
+                                <p>Select the recommendations you want, or any folder of the treemap, and confirm. Vano lists every item and the total before it touches anything, and asks: the system Trash, where it stays until you empty it, or a permanent deletion that frees the space right away.</p>
                                 <ul class="checks">
-                                    <li>Undo right away from the notice that follows</li>
+                                    <li>Undo a move to the Trash right away from the notice that follows</li>
+                                    <li>Progress and a Stop button, whichever you choose</li>
                                     <li>A warning when a folder is not covered by any recommendation</li>
                                     <li>The treemap and the totals update as soon as the items are gone</li>
                                 </ul>

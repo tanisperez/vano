@@ -7039,6 +7039,7 @@ dependencies = [
  "log",
  "pretty_assertions",
  "rust-i18n",
+ "rustix",
  "serde",
  "serde_json",
  "telaio-app",

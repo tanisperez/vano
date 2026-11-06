@@ -35,11 +35,6 @@ _version: 2
   es: "%{n} de estos elementos necesitan revisión. Asegúrate de que ya no los usas."
   gl: "%{n} destes elementos precisan revisión. Asegúrate de que xa non os usas."
   it: "%{n} di questi elementi vanno controllati. Assicurati di non usarli più."
-"confirm.text":
-  en: "These items go to the Trash. You can put them back from there until you empty it."
-  es: "Estos elementos van a la papelera. Puedes recuperarlos desde allí hasta que la vacíes."
-  gl: "Estes elementos van ao lixo. Podes recuperalos desde alí ata que o baleires."
-  it: "Questi elementi vanno nel cestino. Puoi ripristinarli da lì finché non lo svuoti."
 "confirm.title_many":
   en: "Move %{count} items to the Trash?"
   es: "¿Mover %{count} elementos a la papelera?"
@@ -151,10 +146,10 @@ _version: 2
   gl: "%{pct}% cheo"
   it: "%{pct}% pieno"
 "home.footer":
-  en: "Vano only reads file sizes. Nothing is removed until you confirm, and removed items go to the Trash."
-  es: "Vano solo lee el tamaño de los archivos. No se elimina nada hasta que lo confirmas, y lo eliminado va a la papelera."
-  gl: "Vano só le o tamaño dos ficheiros. Non se elimina nada ata que o confirmas, e o eliminado vai ao lixo."
-  it: "Vano legge solo le dimensioni dei file. Nulla viene rimosso finché non confermi, e ciò che rimuovi va nel cestino."
+  en: "Vano only reads file sizes. Nothing is removed until you confirm, and removed items go to the Trash unless you choose to delete them permanently."
+  es: "Vano solo lee el tamaño de los archivos. No se elimina nada hasta que lo confirmas, y lo eliminado va a la papelera salvo que elijas borrarlo definitivamente."
+  gl: "Vano só le o tamaño dos ficheiros. Non se elimina nada ata que o confirmas, e o eliminado vai ao lixo salvo que escollas borralo definitivamente."
+  it: "Vano legge solo le dimensioni dei file. Nulla viene rimosso finché non confermi, e ciò che rimuovi va nel cestino a meno che tu non scelga di eliminarlo definitivamente."
 "home.home_caption":
   en: "Your files, projects and caches."
   es: "Tus archivos, proyectos y cachés."
@@ -295,11 +290,6 @@ _version: 2
   es: "%{n} elementos no se tocaron."
   gl: "%{n} elementos non se tocaron."
   it: "%{n} elementi non sono stati toccati."
-"results.move_to_trash":
-  en: "Move to Trash"
-  es: "Mover a la papelera"
-  gl: "Mover ao lixo"
-  it: "Sposta nel cestino"
 "results.node.covered":
   en: "Part of this folder is covered by a recommendation. Review it there to remove only what is safe."
   es: "Parte de esta carpeta la cubre una recomendación. Revísala allí para eliminar solo lo que es seguro."
@@ -336,10 +326,10 @@ _version: 2
   gl: "Abrir"
   it: "Apri"
 "results.recs.sub":
-  en: "Select items to move to the Trash."
-  es: "Selecciona lo que quieres mover a la papelera."
-  gl: "Selecciona o que queres mover ao lixo."
-  it: "Seleziona cosa spostare nel cestino."
+  en: "Select items to move to the Trash or delete."
+  es: "Selecciona lo que quieres mover a la papelera o borrar."
+  gl: "Selecciona o que queres mover ao lixo ou borrar."
+  it: "Seleziona cosa spostare nel cestino o eliminare."
 "results.recs.title":
   en: "Recommendations"
   es: "Recomendaciones"
@@ -570,11 +560,6 @@ _version: 2
   es: "Moviendo a la papelera · %{done} de %{total} · %{size}"
   gl: "Movendo ao lixo · %{done} de %{total} · %{size}"
   it: "Spostamento nel cestino · %{done} di %{total} · %{size}"
-"status.trashing_stop":
-  en: "Stop"
-  es: "Detener"
-  gl: "Deter"
-  it: "Interrompi"
 "status.update_ready":
   en: "Vano %{version} is ready · Restart"
   es: "Vano %{version} está listo · Reiniciar"
@@ -695,3 +680,123 @@ _version: 2
   es: "%{used} usados · %{free} libres"
   gl: "%{used} usados · %{free} libres"
   it: "%{used} usati · %{free} liberi"
+"results.delete":
+  en: "Delete…"
+  es: "Borrar…"
+  gl: "Borrar…"
+  it: "Elimina…"
+"confirm.trash_title":
+  en: "Move to Trash"
+  es: "Mover a la papelera"
+  gl: "Mover ao lixo"
+  it: "Sposta nel cestino"
+"confirm.trash_desc":
+  en: "You can restore them until you empty it. Disk space is only released when you do."
+  es: "Puedes recuperarlos hasta que la vacíes. El espacio en disco solo se libera cuando lo haces."
+  gl: "Podes recuperalos ata que o baleires. O espazo no disco só se libera cando o fas."
+  it: "Puoi ripristinarli finché non lo svuoti. Lo spazio su disco viene liberato solo quando lo fai."
+"confirm.perm_title":
+  en: "Delete permanently"
+  es: "Borrar definitivamente"
+  gl: "Borrar definitivamente"
+  it: "Elimina definitivamente"
+"confirm.perm_desc":
+  en: "Skips the Trash. Space is freed right away and large folders delete much faster."
+  es: "Se salta la papelera. El espacio se libera al momento y las carpetas grandes se borran mucho más rápido."
+  gl: "Sáltase o lixo. O espazo libérase ao momento e os cartafoles grandes bórranse moito máis rápido."
+  it: "Salta il cestino. Lo spazio viene liberato subito e le cartelle grandi si eliminano molto più in fretta."
+"confirm.faster":
+  en: "Faster"
+  es: "Más rápido"
+  gl: "Máis rápido"
+  it: "Più veloce"
+"confirm.slow_trash":
+  en: "Moving this many files to the Trash can take a long time. Delete permanently is much faster."
+  es: "Mover tantos archivos a la papelera puede tardar mucho. Borrar definitivamente es mucho más rápido."
+  gl: "Mover tantos ficheiros ao lixo pode tardar moito. Borrar definitivamente é moito máis rápido."
+  it: "Spostare così tanti file nel cestino può richiedere molto tempo. Eliminare definitivamente è molto più veloce."
+"confirm.perm_warning":
+  en: "This cannot be undone. Vano will not be able to restore these items."
+  es: "No se puede deshacer. Vano no podrá recuperar estos elementos."
+  gl: "Non se pode desfacer. Vano non poderá recuperar estes elementos."
+  it: "Non si può annullare. Vano non potrà ripristinare questi elementi."
+"confirm.perm_title_one":
+  en: "Delete %{name} permanently?"
+  es: "¿Borrar %{name} definitivamente?"
+  gl: "Borrar %{name} definitivamente?"
+  it: "Eliminare %{name} definitivamente?"
+"confirm.perm_title_many":
+  en: "Delete %{count} items permanently?"
+  es: "¿Borrar %{count} elementos definitivamente?"
+  gl: "Borrar %{count} elementos definitivamente?"
+  it: "Eliminare %{count} elementi definitivamente?"
+"confirm.perm_button":
+  en: "Delete %{size} permanently"
+  es: "Borrar %{size} definitivamente"
+  gl: "Borrar %{size} definitivamente"
+  it: "Elimina %{size} definitivamente"
+"confirm.moving":
+  en: "Moving…"
+  es: "Moviendo…"
+  gl: "Movendo…"
+  it: "Spostamento…"
+"confirm.deleting":
+  en: "Deleting…"
+  es: "Borrando…"
+  gl: "Borrando…"
+  it: "Eliminazione…"
+"confirm.stop":
+  en: "Stop"
+  es: "Detener"
+  gl: "Deter"
+  it: "Interrompi"
+"confirm.progress_files":
+  en: "%{done} of %{total} files · %{size} of %{total_size}"
+  es: "%{done} de %{total} archivos · %{size} de %{total_size}"
+  gl: "%{done} de %{total} ficheiros · %{size} de %{total_size}"
+  it: "%{done} di %{total} file · %{size} di %{total_size}"
+"confirm.progress_items":
+  en: "%{done} of %{total} items · %{size} of %{total_size}"
+  es: "%{done} de %{total} elementos · %{size} de %{total_size}"
+  gl: "%{done} de %{total} elementos · %{size} de %{total_size}"
+  it: "%{done} di %{total} elementi · %{size} di %{total_size}"
+"confirm.stopped":
+  en: "Stopped at %{pct}%. Files already deleted cannot be restored, and the rest were left untouched."
+  es: "Detenido al %{pct}%. Los archivos ya borrados no se pueden recuperar, y el resto no se ha tocado."
+  gl: "Detido ao %{pct}%. Os ficheiros xa borrados non se poden recuperar, e o resto non se tocou."
+  it: "Interrotto al %{pct}%. I file già eliminati non si possono ripristinare, e il resto non è stato toccato."
+"report.perm_moved":
+  en: "Deleted %{moved} of %{total} items permanently, %{size} freed."
+  es: "Se borraron definitivamente %{moved} de %{total} elementos, %{size} liberados."
+  gl: "Borráronse definitivamente %{moved} de %{total} elementos, %{size} liberados."
+  it: "Eliminati definitivamente %{moved} di %{total} elementi, %{size} liberati."
+"report.perm_title_left":
+  en: "Some items could not be deleted"
+  es: "Algunos elementos no se pudieron borrar"
+  gl: "Algúns elementos non se puideron borrar"
+  it: "Alcuni elementi non sono stati eliminati"
+"report.perm_partly":
+  en: "Part of these items may be gone, and it cannot be restored. Whatever could not be deleted is still in its place."
+  es: "Parte de estos elementos puede haberse borrado, y no se puede recuperar. Lo que no se pudo borrar sigue en su sitio."
+  gl: "Parte destes elementos pode terse borrado, e non se pode recuperar. O que non se puido borrar segue no seu sitio."
+  it: "Parte di questi elementi potrebbe essere stata eliminata e non si può ripristinare. Ciò che non è stato possibile eliminare è ancora al suo posto."
+"report.other_file_system":
+  en: "Another file system is mounted inside, and it was left alone."
+  es: "Hay otro sistema de archivos montado dentro, y no se ha tocado."
+  gl: "Hai outro sistema de ficheiros montado dentro, e non se tocou."
+  it: "All'interno è montato un altro file system, che non è stato toccato."
+"status.deleting_progress":
+  en: "Deleting permanently · %{done} of %{total} · %{size}"
+  es: "Borrando definitivamente · %{done} de %{total} · %{size}"
+  gl: "Borrando definitivamente · %{done} de %{total} · %{size}"
+  it: "Eliminazione definitiva · %{done} di %{total} · %{size}"
+"toast.deleted.one":
+  en: "Deleted %{n} item permanently"
+  es: "%{n} elemento borrado definitivamente"
+  gl: "%{n} elemento borrado definitivamente"
+  it: "%{n} elemento eliminato definitivamente"
+"toast.deleted.other":
+  en: "Deleted %{n} items permanently"
+  es: "%{n} elementos borrados definitivamente"
+  gl: "%{n} elementos borrados definitivamente"
+  it: "%{n} elementi eliminati definitivamente"

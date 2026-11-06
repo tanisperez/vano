@@ -2,6 +2,7 @@
 
 pub mod about;
 pub mod debug_open;
+pub mod delete;
 pub mod format;
 pub mod linux_trash;
 pub mod locale;

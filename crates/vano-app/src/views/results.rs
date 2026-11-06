@@ -18,8 +18,8 @@ use crate::state::settings::LiveView;
 use crate::state::target::TargetKind;
 use crate::state::treemap::{self, TileKey};
 use crate::theme::metrics::{
-    BREADCRUMB_HEIGHT, PAGE_PADDING, RADIUS_MD, RADIUS_SM, RADIUS_XS, REC_ROW_HEIGHT,
-    SIDE_PANEL_WIDTH,
+    BREADCRUMB_HEIGHT, EXPLORER_MIN_HEIGHT, PAGE_PADDING, RADIUS_MD, RADIUS_SM, RADIUS_XS,
+    REC_ROW_HEIGHT, SIDE_PANEL_WIDTH,
 };
 use crate::theme::{Palette, PaletteExt, VanoColors};
 
@@ -78,26 +78,34 @@ impl AppView {
             None => self.render_recommendations(results, palette, &mono, cx),
         };
 
-        v_flex()
+        // On a short window the page scrolls, so the explorer keeps a usable height.
+        div()
+            .id("results-page")
             .size_full()
-            .p(px(PAGE_PADDING))
-            .gap(px(PAGE_PADDING))
-            .child(panel(palette).flex_none().child(match results.fs {
-                Some(fs) => self.render_disk_usage(results, fs, stats, palette, &mono),
-                None => stats_row(palette, &mono, stats),
-            }))
+            .overflow_y_scrollbar()
             .child(
-                h_flex()
-                    .flex_1()
-                    .min_h_0()
+                v_flex()
+                    .w_full()
+                    .min_h_full()
+                    .p(px(PAGE_PADDING))
                     .gap(px(PAGE_PADDING))
-                    .items_stretch()
-                    .child(explorer)
+                    .child(panel(palette).flex_none().child(match results.fs {
+                        Some(fs) => self.render_disk_usage(results, fs, stats, palette, &mono),
+                        None => stats_row(palette, &mono, stats),
+                    }))
                     .child(
-                        panel(palette)
-                            .flex_none()
-                            .w(px(SIDE_PANEL_WIDTH))
-                            .child(side),
+                        h_flex()
+                            .flex_1()
+                            .min_h(px(EXPLORER_MIN_HEIGHT))
+                            .gap(px(PAGE_PADDING))
+                            .items_stretch()
+                            .child(explorer)
+                            .child(
+                                panel(palette)
+                                    .flex_none()
+                                    .w(px(SIDE_PANEL_WIDTH))
+                                    .child(side),
+                            ),
                     ),
             )
             .into_any_element()
@@ -691,7 +699,7 @@ impl AppView {
                     )
                     .child(
                         h_flex().justify_end().child(
-                            PrimaryButton::new("trash-selected", t!("results.move_to_trash"))
+                            PrimaryButton::new("trash-selected", t!("results.delete"))
                                 .icon(Icon::new(IconName::Delete))
                                 .disabled(!can_trash)
                                 .on_click(move |_, window, cx| {
@@ -933,7 +941,7 @@ impl AppView {
                     )
                     .child(div().flex_1())
                     .child(
-                        PrimaryButton::new("detail-trash", t!("results.move_to_trash"))
+                        PrimaryButton::new("detail-trash", t!("results.delete"))
                             .icon(Icon::new(IconName::Delete))
                             .disabled(self.trashing)
                             .on_click(move |_, window, cx| {
@@ -1094,7 +1102,7 @@ impl AppView {
             // Not for a WSL virtual disk: moving it would delete the whole distribution.
             .when(node != ROOT && !in_info_rec, |footer| {
                 footer.child(
-                    PrimaryButton::new("detail-trash", t!("results.move_to_trash"))
+                    PrimaryButton::new("detail-trash", t!("results.delete"))
                         .icon(Icon::new(IconName::Delete))
                         .disabled(self.trashing)
                         .on_click(move |_, window, cx| {

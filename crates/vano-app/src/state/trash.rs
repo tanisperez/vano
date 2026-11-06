@@ -1,11 +1,24 @@
-//! Moving files to the system Trash and putting them back (the toast's Undo).
+//! Moving files to the system Trash and putting them back (the toast's Undo), and what a batch
+//! shares with deleting for good ([`super::delete`]).
 //!
-//! Blocking calls, run on the background executor. Vano never deletes anything itself: the
-//! Trash keeps every item until the user empties it.
+//! Blocking calls, run on the background executor. The Trash keeps every item until the user
+//! empties it.
 
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering};
+
+/// What the confirmation does with the items. The first choice of a session is always the Trash,
+/// and the choice is never saved.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum DeleteMode {
+    #[default]
+    Trash,
+    Permanent,
+}
+
+/// From this many files, the Trash can take a long time and the confirmation says so.
+pub const SLOW_TRASH_FILES: u64 = 20_000;
 
 /// Why one item could not be moved.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -21,32 +34,66 @@ pub enum TrashError {
 /// What happened to a batch moved one item at a time.
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct Outcome {
-    /// Indices into the batch of the items now in the Trash.
+    /// Indices into the batch of the items now in the Trash, or gone for good.
     pub moved: Vec<usize>,
     /// Indices of the items left in place, with the reason.
     pub failed: Vec<(usize, TrashError)>,
     /// Whether the batch was cancelled before its end.
     pub cancelled: bool,
+    /// Index of the item that was being deleted for good when the batch was cancelled: part of
+    /// it may be gone.
+    pub partial: Vec<usize>,
 }
 
-/// A batch in progress, shared between the background job and the status bar.
+/// A batch in progress, shared between the background job and the confirmation.
 #[derive(Debug, Default)]
 pub struct TrashProgress {
+    pub mode: DeleteMode,
     pub total: usize,
+    pub total_files: u64,
+    pub total_bytes: u64,
     pub done: AtomicUsize,
+    /// Files deleted so far. Only a permanent deletion counts them one by one.
+    pub files: AtomicU64,
     pub bytes: AtomicU64,
-    /// Set by the user to stop before the next item.
+    /// Set by the user to stop before the next item, or the next file when deleting for good.
     pub cancel: AtomicBool,
     /// Set by the job when it returns.
     pub finished: AtomicBool,
 }
 
 impl TrashProgress {
-    pub fn new(total: usize) -> Self {
+    pub fn new(mode: DeleteMode, total: usize, total_files: u64, total_bytes: u64) -> Self {
         Self {
+            mode,
             total,
+            total_files,
+            total_bytes,
             ..Self::default()
         }
+    }
+
+    /// Bytes handled so far. The scan's total is an estimate, so this never goes past it.
+    pub fn bytes_done(&self) -> u64 {
+        self.bytes.load(Ordering::Relaxed).min(self.total_bytes)
+    }
+
+    /// Files deleted so far, never past the scan's estimate.
+    pub fn files_done(&self) -> u64 {
+        self.files.load(Ordering::Relaxed).min(self.total_files)
+    }
+
+    /// How far the batch is, from 0 to 1. A permanent deletion takes its time per file, whatever
+    /// their size. The Trash moves whole items, so it goes by their bytes.
+    pub fn fraction(&self) -> f32 {
+        let (done, total) = if self.mode == DeleteMode::Permanent && self.total_files > 0 {
+            (self.files_done(), self.total_files)
+        } else if self.total_bytes > 0 {
+            (self.bytes_done(), self.total_bytes)
+        } else {
+            (self.done.load(Ordering::Relaxed) as u64, self.total as u64)
+        };
+        (done as f64 / total.max(1) as f64).clamp(0.0, 1.0) as f32
     }
 }
 
@@ -227,6 +274,30 @@ mod tests {
                 path
             })
             .collect()
+    }
+
+    #[test]
+    fn a_permanent_deletion_goes_by_files_and_never_passes_the_estimate() {
+        let progress = TrashProgress::new(DeleteMode::Permanent, 1, 10, 100);
+        assert_eq!(progress.fraction(), 0.0);
+        progress.files.store(5, Ordering::Relaxed);
+        progress.bytes.store(99, Ordering::Relaxed);
+        assert_eq!(progress.fraction(), 0.5);
+        progress.files.store(50, Ordering::Relaxed);
+        progress.bytes.store(500, Ordering::Relaxed);
+        assert_eq!(progress.fraction(), 1.0);
+        assert_eq!(progress.bytes_done(), 100);
+        assert_eq!(progress.files_done(), 10);
+    }
+
+    #[test]
+    fn the_trash_goes_by_bytes_or_by_items_when_it_has_none() {
+        let progress = TrashProgress::new(DeleteMode::Trash, 2, 4, 100);
+        progress.bytes.store(25, Ordering::Relaxed);
+        assert_eq!(progress.fraction(), 0.25);
+        let progress = TrashProgress::new(DeleteMode::Trash, 2, 4, 0);
+        progress.done.store(1, Ordering::Relaxed);
+        assert_eq!(progress.fraction(), 0.5);
     }
 
     #[test]

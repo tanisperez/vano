@@ -1,6 +1,6 @@
 # Vano
 
-> Vano is a light, native, open source disk analyzer for Linux, Windows and macOS. It scans the home folder, the whole disk or any folder in a fraction of a second, shows where the space goes in an animated treemap (also as rings or a ranking), and recommends what can be removed safely. Nothing is deleted directly: items go to the system Trash after confirmation and can be put back.
+> Vano is a light, native, open source disk analyzer for Linux, Windows and macOS. It scans the home folder, the whole disk or any folder in a fraction of a second, shows where the space goes in an animated treemap (also as rings or a ranking), and recommends what can be removed safely. Nothing is removed without confirmation, which asks whether to move the items to the system Trash, where they can be put back, or to delete them permanently.
 
 Key facts:
 

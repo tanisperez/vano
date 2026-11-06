@@ -8,7 +8,7 @@
 Vano (Italian word for an empty space) is a light, native, open source disk analyzer. 
 See what fills your disk in an instant and clear it safely:
 it shows where the space goes in a treemap you can zoom into folder by folder, and
-recommends what can go to the Trash, where everything can still be put back.
+recommends what can go: to the Trash, where it can still be put back, or for good.
 
 [Website](https://vano.tanis.codes) · [Download](https://vano.tanis.codes/install.html) ·
 [Documentation](#documentation)
@@ -37,11 +37,13 @@ recommends what can go to the Trash, where everything can still be put back.
 - Cross-platform desktop app: Linux, Windows and macOS.
 - Scan the home folder, the whole disk or any folder, and watch the result grow live as a
   treemap, rings or a ranking.
+- See how full the disk is, now and after the cleanup you have selected.
 - Explore the result as an animated treemap, colored by category (code projects, package caches,
   SDKs and emulators, AI models, media) or by what can be cleaned.
 - Recommend what is safe to remove (package caches, build outputs, old installers, idle
   `node_modules`, model weights and more) and what needs a look first, and explain why.
-- **Nothing is deleted.** Items go to the system Trash after you confirm, and can be put back.
+- **Nothing goes until you confirm.** Choose the system Trash, where items can be put back, or
+  delete them permanently to free the space right away.
 - **No login, no telemetry, no online sync.** Vano only reads file sizes on your machine, and
   makes an optional update check on macOS and Windows that sends no identifiers.
 - Fully open source.

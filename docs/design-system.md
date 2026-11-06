@@ -208,28 +208,35 @@ Every screen has the title bar on top and the status bar at the bottom.
    with two location cards side by side (the disk, with a usage bar, and "Any folder"); the
    selected one is `accent_subtle` with a 2 px `accent` border. Then the primary "Scan ..."
    button, the recent scans (icon, name, size and date, "Open results" link), and a footer with a
-   top border that says Vano only reads sizes and removes nothing without confirmation.
+   top border that says Vano only reads sizes and removes nothing without confirmation. The disk card's usage bar goes
+   from green to red along the whole track, with the percentage in the color of its severity
+   (from 60% and from 85%).
 3. **Scanning** (`views/scanning.rs`): the stats strip (Files scanned, Counted, Elapsed,
    Throughput), then the "Live view" card on the left (Treemap, Rings or Ranking, chosen with a
    segmented control) and "Found so far" on the right (342 wide), where recommendations appear as
    each folder finishes. "Cancel scan" while it runs, "View results" when it ends; the results
    open by themselves 1.4 s after the end.
-4. **Results** (`views/results.rs`): the stats strip (Free after cleanup, Safe to remove, Needs
-   review, Not scanned), then the "Explorer" card (breadcrumb, the treemap, rings or ranking of
+4. **Results** (`views/results.rs`): the "Disk usage" panel, with a Now and an After cleanup bar
+   that preview the selection (hatched on Now, outlined in `success` on After cleanup) next to
+   Safe to remove, Needs review and Not scanned, then the "Explorer" card (breadcrumb, the treemap, rings or ranking of
    the focused folder, Category or Cleanup coloring, and the legend) and the "Recommendations"
    panel on the right, grouped in Safe to remove and Review first, with checkboxes and "Select
    safe". A click on a recommendation or a tile opens its detail (badge, description, reason,
-   "Largest inside" bars, Files, Last used, "Covered by" links, "Show in folder", "Move to
-   Trash").
-5. **Move to Trash** (`views/feedback.rs`): a modal (482 wide) with the list of items and the
-   total, and a danger button "Move N to Trash". Then a toast at the bottom center, "N freed"
-   with "Undo", for 8 s.
+   "Largest inside" bars, Files, Last used, "Covered by" links, "Show in folder", "Delete…"). Under
+   the explorer's minimum height (480) the page scrolls.
+5. **Delete** (`views/feedback.rs`): a modal (482 wide) that asks "Move to Trash" or "Delete
+   permanently" with two radio cards, starting at the last choice of the session, then the list
+   of items and the total, and a danger button that names the choice. It stays open during the
+   batch, with its progress and a Stop button, and nothing closes it until it ends. Its body
+   scrolls on a short window. Then a toast at the bottom center, "N freed", for 8 s, with "Undo"
+   only for the Trash. A permanent deletion that was stopped stays open and says where it
+   stopped.
 6. **Settings** (`views/settings.rs`): a modal with a left nav and sections for Appearance
    (language, theme, accent, fonts), Scanning (default live view), Advanced (log level) and About
    (version, updates). Every control applies and saves at once; there is no Save button.
 7. **Status bar** (24, `surface`, top border): `hard-drive` icon with the disk's free and total
    space (and the space the file system reserves, when there is any); at the right, the scan
-   progress, the results summary or "Moving to the Trash"; and "Vano X is ready · Restart" when
+   progress, the results summary or the batch's count; and "Vano X is ready · Restart" when
    an update is downloaded.
 
 Every dialog is a modal card drawn by telaio's `framed_dialog`: `overlay` fill, radius 14, a 1 px

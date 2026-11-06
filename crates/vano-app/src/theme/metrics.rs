@@ -37,7 +37,9 @@ pub const USAGE_LABEL_WIDTH: f32 = 215.0;
 /// Width of the percentage column of the disk usage panel.
 pub const USAGE_PERCENT_WIDTH: f32 = 60.0;
 /// Narrowest the three stats next to the disk usage bars get.
-pub const USAGE_STATS_MIN_WIDTH: f32 = 330.0;
+pub const USAGE_STATS_MIN_WIDTH: f32 = 390.0;
+/// Lowest the explorer and the recommendations get: under this, the results page scrolls.
+pub const EXPLORER_MIN_HEIGHT: f32 = 480.0;
 /// Height of a card header (title and subtitle).
 pub const CARD_HEADER_HEIGHT: f32 = 68.0;
 /// Height of the explorer's breadcrumb row.

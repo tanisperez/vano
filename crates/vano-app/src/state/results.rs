@@ -274,7 +274,11 @@ impl Results {
         for (rec, (size, files)) in self.recs.iter_mut().zip(&self.scanned) {
             let left = rec.nodes.iter().filter(|node| !tree.is_removed(**node));
             if left.clone().count() == rec.nodes.len() {
-                (rec.size, rec.files) = (*size, *files);
+                // Something deleted inside its folders, with the folders themselves still there,
+                // takes the recommendation down too.
+                let bytes = left.clone().map(|node| tree.node(*node).size).sum();
+                let count = left.map(|node| u64::from(tree.node(*node).files)).sum();
+                (rec.size, rec.files) = ((*size).min(bytes), (*files).min(count));
             } else {
                 rec.size = left.clone().map(|node| tree.node(*node).size).sum();
                 rec.files = left.map(|node| u64::from(tree.node(*node).files)).sum();

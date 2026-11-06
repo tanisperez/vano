@@ -13,8 +13,9 @@ only adds what is specific to Vano, and wins where the two differ.
 Vano is a native desktop disk analyzer written in Rust with `gpui` (through `gpui-kit` 0.8.0,
 the same stack as Postino in `~/dev/postino`). It scans the home folder, the whole disk or any
 folder, shows what fills it in an animated treemap, and recommends what can be moved to the
-Trash safely. Targets: Linux first, then macOS and Windows. Nothing is ever deleted directly:
-items go to the system Trash and can be put back.
+Trash safely. Targets: Linux first, then macOS and Windows. Nothing is removed without a
+confirmation, which asks whether to move the items to the system Trash, where they can be put
+back, or to delete them for good. It starts at the Trash in every session.
 
 The design system (palettes, type, metrics, screens, motion, icon) is summarized in
 `docs/design-system.md`; the code is its source of truth. The original mockups are kept in git
@@ -46,7 +47,7 @@ About header), all at tag `v0.15.0`.
   live rules that report recommendations as folders finish. Its texts are
   `crates/vano-rules/locales/rules.yml`, linked into the app's `locales/`.
 - `vano-app`: the `vano` binary. `state/` is plain Rust and unit tested (settings, results,
-  treemap layout, spring motion, recents, trash). `views/` only builds elements. `theme/` holds
+  treemap layout, spring motion, recents, trash, permanent deletion, disk usage). `views/` only builds elements. `theme/` holds
   only what telaio does not: the three accents as `Tokens` (Indigo is telaio's default), the
   category and cleanup colors (`VanoColors`) and Vano's own metrics. `state/about.rs` defines
   `IDENTITY`, the `telaio_app::AppIdentity` (name, `vano` slug, app id, `VANO` prefix, repository)
@@ -74,6 +75,9 @@ bands rising from the bottom, sized by the Safe and Review bytes inside it
 
 ## Rules
 
+- Permanent deletion (`state/delete.rs`) never follows a symbolic link and never enters another
+  file system. On Unix every step is relative to a folder already open, with `O_NOFOLLOW`. Only
+  folders that are about to go have their permissions opened up.
 - Performance rules from Postino apply: an idle window does no work (no timers or animation
   frames unless something moves; with the app idle for 10 s the main thread CPU ticks, fields
   14 and 15 of `/proc/<pid>/task/<pid>/stat`, must barely move), and `render` never costs in

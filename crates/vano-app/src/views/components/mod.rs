@@ -8,8 +8,8 @@ pub mod usage_bar;
 
 pub use preview_card::PreviewCard;
 pub use telaio_ui::components::{
-    DangerButton, GhostButton, IconButton, MODAL_INNER_RADIUS, ModalPlacement, PrimaryButton,
-    SecondaryButton, SegmentedControl, SegmentedItem, StatusBadge, ThemeCard, framed_dialog,
-    modal_body, modal_footer, modal_header,
+    DangerButton, GhostButton, IconButton, InlineMessage, InlineMessageKind, MODAL_INNER_RADIUS,
+    ModalPlacement, PrimaryButton, ProgressBar, SecondaryButton, SegmentedControl, SegmentedItem,
+    StatusBadge, ThemeCard, framed_dialog, modal_body, modal_footer, modal_header,
 };
 pub use usage_bar::{UsageBar, UsageMark};

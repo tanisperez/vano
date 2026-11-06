@@ -155,7 +155,7 @@ impl AppView {
                             .children(stat.dot.map(|dot| {
                                 div().flex_none().size(px(6.0)).rounded(px(3.0)).bg(dot)
                             }))
-                            .child(div().truncate().child(stat.label)),
+                            .child(div().min_w_0().child(stat.label)),
                     )
                     .child(
                         div()

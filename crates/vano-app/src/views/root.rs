@@ -33,7 +33,7 @@ use crate::state::settings::{LiveView, Settings, SettingsCategory};
 use crate::state::target::{Target, TargetKind};
 use crate::state::treemap::TileKey;
 use crate::state::update::UpdateState;
-use crate::state::{AppState, format, trash};
+use crate::state::{AppState, delete, format, trash};
 use crate::theme::PaletteExt;
 
 use super::settings::SettingsSelects;
@@ -158,7 +158,7 @@ pub struct Explorer {
     pub forward: Vec<NodeId>,
 }
 
-/// A batch of items moved to the Trash, kept for Undo.
+/// A batch of items moved to the Trash (kept for Undo) or deleted for good.
 #[derive(Debug, Clone)]
 pub struct TrashBatch {
     pub nodes: Vec<NodeId>,
@@ -187,6 +187,7 @@ pub struct TrashReport {
     pub total: usize,
     pub left: Vec<LeftItem>,
     pub undo: Option<TrashBatch>,
+    pub mode: trash::DeleteMode,
 }
 
 /// The toast at the bottom of the window.
@@ -222,8 +223,12 @@ pub struct AppView {
     pub(crate) ring: super::live_views::RingState,
     pub(crate) toast: Option<Toast>,
     pub(crate) trashing: bool,
-    /// The batch being moved to the Trash, while it runs.
+    /// The batch running in the confirmation, moved to the Trash or deleted for good.
     pub(crate) trash_progress: Option<Arc<trash::TrashProgress>>,
+    /// What the confirmation offers first: the last choice of this session.
+    pub(crate) delete_mode: trash::DeleteMode,
+    /// Why the confirmation is still open after a batch: where a permanent deletion stopped.
+    pub(crate) batch_note: Option<String>,
     pub(crate) settings_category: SettingsCategory,
     pub(crate) settings_selects: Option<SettingsSelects>,
     pub(crate) about_info: AboutInfo,
@@ -286,6 +291,8 @@ impl AppView {
             toast: None,
             trashing: false,
             trash_progress: None,
+            delete_mode: trash::DeleteMode::default(),
+            batch_note: None,
             settings_category: SettingsCategory::default(),
             settings_selects: None,
             about_info: AboutInfo::detect(),
@@ -668,18 +675,20 @@ impl AppView {
         cx.notify();
     }
 
-    /// Moves what `request` names to the Trash, in the background.
+    /// Moves what `request` names to the Trash or deletes it for good, as the confirmation
+    /// chose, in the background. The confirmation stays open during the batch. Returns whether a
+    /// batch started.
     pub(crate) fn trash(
         &mut self,
         request: TrashRequest,
         window: &mut Window,
         cx: &mut Context<Self>,
-    ) {
+    ) -> bool {
         let Some(results) = self.results.as_ref() else {
-            return;
+            return false;
         };
         if self.trashing {
-            return;
+            return false;
         }
         let mut nodes: Vec<NodeId> = request
             .rules
@@ -698,7 +707,7 @@ impl AppView {
                 .any(|other| other != node && results.tree.is_within(*node, *other))
         });
         if nodes.is_empty() {
-            return;
+            return false;
         }
         let paths: Vec<PathBuf> = nodes.iter().map(|node| results.tree.path(*node)).collect();
         let sizes: Vec<u64> = nodes
@@ -707,11 +716,21 @@ impl AppView {
             .collect();
         let size: u64 = sizes.iter().sum();
         let count = request.rules.len() + request.nodes.len();
-        let progress = Arc::new(trash::TrashProgress::new(paths.len()));
+        let files = nodes
+            .iter()
+            .map(|node| u64::from(results.tree.node(*node).files))
+            .sum();
+        let mode = self.delete_mode;
+        let progress = Arc::new(trash::TrashProgress::new(mode, paths.len(), files, size));
+        // Permanent deletion looks at the tree once more if it ends early: a copy, so the job
+        // needs nothing from the view. The tree is one flat buffer, so this is quick.
+        let tree = (mode == trash::DeleteMode::Permanent).then(|| results.tree.clone());
+        self.batch_note = None;
         self.trashing = true;
         self.trash_progress = Some(progress.clone());
         cx.notify();
         let at = trash::now();
+        let job_nodes = nodes.clone();
         let batch = TrashBatch {
             nodes,
             paths: paths.clone(),
@@ -719,33 +738,47 @@ impl AppView {
             count,
             at,
         };
-        log::info!("moving {} items ({} bytes) to the Trash", paths.len(), size);
+        log::info!("{mode:?}: {} items ({} bytes)", paths.len(), size);
         let shared = progress.clone();
         let job = cx.background_executor().spawn(async move {
-            let outcome = trash::move_each(&paths, &shared.cancel, |index| {
-                shared.done.fetch_add(1, Ordering::Relaxed);
-                shared.bytes.fetch_add(sizes[index], Ordering::Relaxed);
+            let outcome = match mode {
+                trash::DeleteMode::Trash => trash::move_each(&paths, &shared.cancel, |index| {
+                    shared.done.fetch_add(1, Ordering::Relaxed);
+                    shared.bytes.fetch_add(sizes[index], Ordering::Relaxed);
+                }),
+                trash::DeleteMode::Permanent => delete::delete_each(&paths, &shared),
+            };
+            // What is already gone of the items that were not finished.
+            let gone: Vec<NodeId> = tree.map_or_else(Vec::new, |tree| {
+                outcome
+                    .failed
+                    .iter()
+                    .map(|(index, _)| *index)
+                    .chain(outcome.partial.iter().copied())
+                    .flat_map(|index| delete::gone_under(&tree, job_nodes[index]))
+                    .collect()
             });
             shared.finished.store(true, Ordering::Relaxed);
-            outcome
+            (outcome, gone)
         });
         cx.spawn_in(window, async move |view, cx| {
-            // Repaint the status bar's count while the job runs, a few times a second.
+            // Repaint the confirmation's progress while the job runs, a few times a second.
             while !progress.finished.load(Ordering::Relaxed) {
                 cx.background_executor().timer(POLL_INTERVAL).await;
                 if view.update(cx, |_, cx| cx.notify()).is_err() {
                     break;
                 }
             }
-            let outcome = job.await;
+            let (outcome, gone) = job.await;
             let _ = view.update_in(cx, |view, window, cx| {
-                view.finish_trash(batch, outcome, window, cx);
+                view.finish_trash(batch, outcome, gone, window, cx);
             });
         })
         .detach();
+        true
     }
 
-    /// Stops the batch being moved before its next item.
+    /// Stops the running batch before its next item, or its next file when deleting for good.
     pub(crate) fn cancel_trash(&mut self, cx: &mut Context<Self>) {
         if let Some(progress) = &self.trash_progress {
             progress.cancel.store(true, Ordering::Relaxed);
@@ -757,35 +790,29 @@ impl AppView {
         &mut self,
         batch: TrashBatch,
         outcome: trash::Outcome,
+        gone: Vec<NodeId>,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
         self.trashing = false;
-        self.trash_progress = None;
+        let progress = self.trash_progress.take();
+        let mode = progress
+            .as_ref()
+            .map_or(trash::DeleteMode::Trash, |progress| progress.mode);
+        let fraction = progress.map_or(0.0, |progress| progress.fraction());
         let home = self.home.clone();
         let Some(results) = self.results.as_mut() else {
+            window.close_dialog(cx);
             return;
         };
         for (index, error) in &outcome.failed {
             log::warn!(
-                "could not move {} to the Trash: {error:?}",
+                "{mode:?}: could not remove {}: {error:?}",
                 batch.paths[*index].display()
             );
         }
-        let left: Vec<LeftItem> = outcome
-            .failed
-            .iter()
-            .map(|(index, error)| LeftItem {
-                name: results.tree.display_name(batch.nodes[*index]),
-                path: format::short_path(&batch.paths[*index], home.as_deref()),
-                size: results.tree.node(batch.nodes[*index]).size,
-                reason: match error {
-                    trash::TrashError::Refused => rust_i18n::t!("report.refused").into_owned(),
-                    trash::TrashError::Os(text) => text.clone(),
-                },
-            })
-            .collect();
         let total = batch.nodes.len();
+        let (batch_nodes, batch_paths) = (batch.nodes.clone(), batch.paths.clone());
         // Only what left its place: everything else stays in the tree.
         let complete = outcome.moved.len() == batch.nodes.len();
         let moved = if complete {
@@ -808,7 +835,10 @@ impl AppView {
                 at: batch.at,
             }
         };
-        if !moved.nodes.is_empty() {
+        // Measured before they leave the tree.
+        let gone_size: u64 = gone.iter().map(|node| results.tree.node(*node).size).sum();
+        if !moved.nodes.is_empty() || !gone.is_empty() {
+            results.mark_trashed(&gone);
             results.mark_trashed(&moved.nodes);
             self.explorer.generation += 1;
             if let Some(Detail::Node(node)) = self.detail
@@ -825,17 +855,53 @@ impl AppView {
             while self.explorer.focus != ROOT && results.tree.is_removed(self.explorer.focus) {
                 self.explorer.focus = results.tree.node(self.explorer.focus).parent;
             }
-            // Read again rather than added: the Trash is on the same disk, so the space only
+            // Read again rather than added: the Trash is on the same disk, so its space only
             // comes back when the user empties it.
             results.fs = vano_scan::root_filesystem_usage(&results.target.path);
             self.disk = vano_scan::root_filesystem_usage(&crate::state::target::system_root());
         }
-        let (count, items, freed) = (moved.count, moved.nodes.len(), moved.size);
-        let undo = (trash::can_restore() && items > 0).then_some(moved);
+        // Read after the marks above: a failed item shows what is really left of it.
+        let left: Vec<LeftItem> = outcome
+            .failed
+            .iter()
+            .map(|(index, error)| LeftItem {
+                name: results.tree.display_name(batch_nodes[*index]),
+                path: format::short_path(&batch_paths[*index], home.as_deref()),
+                size: results.tree.node(batch_nodes[*index]).size,
+                reason: match error {
+                    trash::TrashError::Refused => rust_i18n::t!("report.refused").into_owned(),
+                    trash::TrashError::Os(text) => text.clone(),
+                },
+            })
+            .collect();
+        let (count, items) = (moved.count, moved.nodes.len());
+        let freed = moved.size + gone_size;
+        let permanent = mode == trash::DeleteMode::Permanent;
+        let undo = (!permanent && trash::can_restore() && items > 0).then_some(moved);
+        if permanent && outcome.cancelled && left.is_empty() {
+            // Stays open: what is left can still be deleted, or the dialog cancelled.
+            self.batch_note = Some(
+                rust_i18n::t!(
+                    "confirm.stopped",
+                    pct = format::count((fraction * 100.0).round() as u64)
+                )
+                .into_owned(),
+            );
+            cx.notify();
+            return;
+        }
+        window.close_dialog(cx);
         if left.is_empty() && !outcome.cancelled {
             let text = format!(
                 "{} \u{b7} {}",
-                format::counted("toast.moved", count as u64),
+                format::counted(
+                    if permanent {
+                        "toast.deleted"
+                    } else {
+                        "toast.moved"
+                    },
+                    count as u64
+                ),
                 rust_i18n::t!("toast.freed", size = format::size(freed)),
             );
             self.show_toast(text, undo, false, cx);
@@ -847,6 +913,7 @@ impl AppView {
                 total,
                 left,
                 undo,
+                mode,
             };
             self.open_trash_report(report, window, cx);
         }
