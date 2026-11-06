@@ -2,6 +2,7 @@
 
 pub mod common;
 pub mod components;
+pub mod disk_usage;
 pub mod feedback;
 pub mod home;
 pub mod live_views;

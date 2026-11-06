@@ -18,6 +18,8 @@ Where things live (all under `crates/vano-app/src/`):
 | Theme family from the settings, live settings apply | `theme/mod.rs` |
 | Standard widgets (telaio, re-exported), accent and live view cards | `views/components/` |
 | Panel card, card header, stats strip, section label, legend | `views/common.rs` |
+| Disk usage panel of the results, disk usage bar | `views/disk_usage.rs`, `views/components/usage_bar.rs` |
+| Disk usage figures and gradient cuts | `state/usage.rs` |
 | Treemap layout (two levels, "N more" tile) | `state/treemap.rs` |
 | Spring motion of tiles and ranking rows | `state/motion.rs` |
 | Tile colors and drawing | `views/treemap_view.rs` |

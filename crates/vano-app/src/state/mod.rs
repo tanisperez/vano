@@ -14,6 +14,7 @@ pub mod target;
 pub mod trash;
 pub mod treemap;
 pub mod update;
+pub mod usage;
 
 pub use telaio_app::number;
 

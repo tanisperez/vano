@@ -28,6 +28,16 @@ pub const PAGE_PADDING: f32 = 16.0;
 pub const SIDE_PANEL_WIDTH: f32 = 342.0;
 /// Height of a stat cell of the stats strip.
 pub const STAT_HEIGHT: f32 = 90.0;
+/// Height of a bar of the results' disk usage panel.
+pub const USAGE_BAR_HEIGHT: f32 = 14.0;
+/// Height of the disk usage bar of the home screen's disk card.
+pub const HOME_USAGE_BAR_HEIGHT: f32 = 10.0;
+/// Width of the label column of the disk usage panel, enough for "used" and "free" in full.
+pub const USAGE_LABEL_WIDTH: f32 = 215.0;
+/// Width of the percentage column of the disk usage panel.
+pub const USAGE_PERCENT_WIDTH: f32 = 60.0;
+/// Narrowest the three stats next to the disk usage bars get.
+pub const USAGE_STATS_MIN_WIDTH: f32 = 330.0;
 /// Height of a card header (title and subtitle).
 pub const CARD_HEADER_HEIGHT: f32 = 68.0;
 /// Height of the explorer's breadcrumb row.

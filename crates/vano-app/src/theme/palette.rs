@@ -9,11 +9,13 @@
 
 use std::sync::OnceLock;
 
-use gpui_kit::Hsla;
+use gpui_kit::{Hsla, Rgba, white};
 use telaio_ui::Tokens;
 use telaio_ui::palette::hex;
 pub use telaio_ui::{Palette, PaletteExt};
 use vano_core::Category;
+
+use crate::state::usage::Severity;
 
 use crate::state::settings::Accent;
 
@@ -194,9 +196,38 @@ pub trait VanoColors {
     fn review_fill(&self) -> Hsla;
     /// Border of a tile that needs review.
     fn review_line(&self) -> Hsla;
+    /// The diagonal hatch over the part of a disk usage bar that a cleanup would free.
+    fn usage_hatch(&self) -> Hsla;
+    /// The colors of a disk usage bar at [`crate::state::usage::GRADIENT_STOPS`].
+    fn usage_gradient(&self) -> [Hsla; 5];
+    /// The color of a disk usage figure of `severity`.
+    fn usage_severity(&self, severity: Severity) -> Hsla;
 }
 
 impl VanoColors for Palette {
+    fn usage_hatch(&self) -> Hsla {
+        // On top of the gradient, whatever the mode.
+        white().opacity(0.75)
+    }
+
+    fn usage_gradient(&self) -> [Hsla; 5] {
+        [
+            self.success,
+            mix_oklab(self.success, self.warning, 0.55),
+            self.warning,
+            mix_oklab(self.warning, self.danger, 0.6),
+            self.danger,
+        ]
+    }
+
+    fn usage_severity(&self, severity: Severity) -> Hsla {
+        match severity {
+            Severity::Low => self.success,
+            Severity::Mid => self.warning,
+            Severity::High => self.danger,
+        }
+    }
+
     fn category(&self, category: Category) -> CategoryColors {
         let index = Category::ALL
             .iter()
@@ -231,10 +262,66 @@ fn cleanup(dark: bool) -> &'static Cleanup {
     if dark { &CLEANUP_DARK } else { &CLEANUP_LIGHT }
 }
 
+/// `from` and `to` mixed in the Oklab color space, `amount` of the way to `to`.
+pub fn mix_oklab(from: Hsla, to: Hsla, amount: f32) -> Hsla {
+    let (a, b) = (to_oklab(from), to_oklab(to));
+    let t = amount.clamp(0.0, 1.0);
+    let mixed = [0, 1, 2].map(|i| a[i] + (b[i] - a[i]) * t);
+    let [r, g, blue] = from_oklab(mixed);
+    Hsla::from(Rgba {
+        r,
+        g,
+        b: blue,
+        a: from.a + (to.a - from.a) * t,
+    })
+}
+
+/// The transfer function of sRGB, one channel to linear light.
+fn to_linear(channel: f32) -> f32 {
+    if channel <= 0.04045 {
+        channel / 12.92
+    } else {
+        ((channel + 0.055) / 1.055).powf(2.4)
+    }
+}
+
+/// One channel of linear light back to sRGB, clamped to its gamut.
+fn from_linear(channel: f32) -> f32 {
+    let channel = channel.clamp(0.0, 1.0);
+    if channel <= 0.003_130_8 {
+        channel * 12.92
+    } else {
+        1.055 * channel.powf(1.0 / 2.4) - 0.055
+    }
+}
+
+fn to_oklab(color: Hsla) -> [f32; 3] {
+    let rgba = Rgba::from(color);
+    let (r, g, b) = (to_linear(rgba.r), to_linear(rgba.g), to_linear(rgba.b));
+    let l = (0.412_221_46 * r + 0.536_332_55 * g + 0.051_445_995 * b).cbrt();
+    let m = (0.211_903_5 * r + 0.680_699_5 * g + 0.107_396_96 * b).cbrt();
+    let s = (0.088_302_46 * r + 0.281_718_85 * g + 0.629_978_7 * b).cbrt();
+    [
+        0.210_454_26 * l + 0.793_617_8 * m - 0.004_072_047 * s,
+        1.977_998_5 * l - 2.428_592_2 * m + 0.450_593_7 * s,
+        0.025_904_037 * l + 0.782_771_77 * m - 0.808_675_77 * s,
+    ]
+}
+
+fn from_oklab([big_l, a, b]: [f32; 3]) -> [f32; 3] {
+    let l = (big_l + 0.396_337_78 * a + 0.215_803_76 * b).powi(3);
+    let m = (big_l - 0.105_561_346 * a - 0.063_854_17 * b).powi(3);
+    let s = (big_l - 0.089_484_18 * a - 1.291_485_5 * b).powi(3);
+    [
+        from_linear(4.076_741_7 * l - 3.307_711_6 * m + 0.230_969_94 * s),
+        from_linear(-1.268_438 * l + 2.609_757_4 * m - 0.341_319_4 * s),
+        from_linear(-0.004_196_086_3 * l - 0.703_418_6 * m + 1.707_614_7 * s),
+    ]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui_kit::Rgba;
     use pretty_assertions::assert_eq;
 
     /// Round-trips an [`Hsla`] back to a `#rrggbb` string, sidestepping float precision noise.
@@ -246,6 +333,15 @@ mod tests {
             (rgba.g * 255.0).round() as u8,
             (rgba.b * 255.0).round() as u8,
         )
+    }
+
+    #[test]
+    fn oklab_mixing_keeps_its_ends_and_passes_through_the_middle() {
+        let (black, white) = (hex("#000000"), hex("#ffffff"));
+        assert_eq!(to_hex(mix_oklab(black, white, 0.0)), "#000000");
+        assert_eq!(to_hex(mix_oklab(black, white, 1.0)), "#ffffff");
+        // Half way in Oklab is lighter than half way in sRGB (#808080).
+        assert_eq!(to_hex(mix_oklab(black, white, 0.5)), "#636363");
     }
 
     #[test]

@@ -145,6 +145,11 @@ _version: 2
   es: "Cualquier carpeta o disco externo"
   gl: "Calquera cartafol ou disco externo"
   it: "Qualsiasi cartella o disco esterno"
+"home.disk_full":
+  en: "%{pct}% full"
+  es: "%{pct}% lleno"
+  gl: "%{pct}% cheo"
+  it: "%{pct}% pieno"
 "home.footer":
   en: "Vano only reads file sizes. Nothing is removed until you confirm, and removed items go to the Trash."
   es: "Vano solo lee el tamaño de los archivos. No se elimina nada hasta que lo confirmas, y lo eliminado va a la papelera."
@@ -210,11 +215,6 @@ _version: 2
   es: "Explorador"
   gl: "Explorador"
   it: "Esplora"
-"results.free_after":
-  en: "Free after cleanup"
-  es: "Libre tras limpiar"
-  gl: "Libre tras limpar"
-  it: "Libero dopo la pulizia"
 "results.group_empty":
   en: "Nothing left in this group."
   es: "No queda nada en este grupo."
@@ -330,11 +330,6 @@ _version: 2
   es: "sistema y apps"
   gl: "sistema e apps"
   it: "sistema e app"
-"results.nothing_selected":
-  en: "nothing selected"
-  es: "nada seleccionado"
-  gl: "nada seleccionado"
-  it: "nessuna selezione"
 "results.open":
   en: "Open"
   es: "Abrir"
@@ -665,3 +660,38 @@ _version: 2
   es: "%{size} reservados para el sistema"
   gl: "%{size} reservados para o sistema"
   it: "%{size} riservati al sistema"
+"results.usage_title":
+  en: "Disk usage"
+  es: "Uso del disco"
+  gl: "Uso do disco"
+  it: "Utilizzo del disco"
+"results.usage_legend":
+  en: "selected, will be freed"
+  es: "seleccionado, se liberará"
+  gl: "seleccionado, liberarase"
+  it: "selezionato, verrà liberato"
+"results.usage_hint":
+  en: "Select items to preview the result"
+  es: "Selecciona elementos para ver el resultado"
+  gl: "Selecciona elementos para ver o resultado"
+  it: "Seleziona gli elementi per vedere il risultato"
+"results.usage_delta":
+  en: "−%{points} pts · %{size} freed"
+  es: "−%{points} pts · %{size} liberados"
+  gl: "−%{points} pts · %{size} liberados"
+  it: "−%{points} pti · %{size} liberati"
+"results.usage_now":
+  en: "Now"
+  es: "Ahora"
+  gl: "Agora"
+  it: "Ora"
+"results.usage_after":
+  en: "After cleanup"
+  es: "Tras limpiar"
+  gl: "Tras limpar"
+  it: "Dopo la pulizia"
+"results.usage_figures":
+  en: "%{used} used · %{free} free"
+  es: "%{used} usados · %{free} libres"
+  gl: "%{used} usados · %{free} libres"
+  it: "%{used} usati · %{free} liberi"

@@ -10,13 +10,15 @@ use rust_i18n::t;
 
 use crate::state::format;
 use crate::state::target::{Target, TargetKind};
+use crate::state::usage::Severity;
 use crate::theme::metrics::{
-    HOME_COLUMN_WIDTH, HOME_LOGO_SIZE, LOCATION_CARD_HEIGHT, RADIUS_LG, RECENT_ROW_HEIGHT,
+    HOME_COLUMN_WIDTH, HOME_LOGO_SIZE, HOME_USAGE_BAR_HEIGHT, LOCATION_CARD_HEIGHT, RADIUS_LG,
+    RECENT_ROW_HEIGHT,
 };
-use crate::theme::{Palette, PaletteExt};
+use crate::theme::{Palette, PaletteExt, VanoColors};
 
 use super::common::eyebrow;
-use super::components::PrimaryButton;
+use super::components::{PrimaryButton, UsageBar};
 use super::root::AppView;
 use super::title_bar::target_icon;
 
@@ -333,21 +335,32 @@ impl AppView {
                     .text_color(palette.fg_subtle)
                     .child(path),
             )
-            .children(fraction.map(|f| {
-                div().h(px(4.0)).rounded(px(2.0)).bg(palette.hover).child(
-                    div()
-                        .h_full()
-                        .w(relative(f.clamp(0.0, 1.0)))
-                        .rounded(px(2.0))
-                        .bg(palette.fg_muted),
-                )
-            }))
+            .children(fraction.map(|f| UsageBar::new(f, HOME_USAGE_BAR_HEIGHT).round_fill()))
             .child(
-                div()
-                    .text_size(px(12.5))
-                    .line_height(px(17.0))
-                    .text_color(palette.fg_muted)
-                    .child(caption),
+                h_flex()
+                    .items_baseline()
+                    .justify_between()
+                    .gap(px(8.0))
+                    .child(
+                        div()
+                            .min_w_0()
+                            .text_size(px(12.5))
+                            .line_height(px(17.0))
+                            .text_color(palette.fg_muted)
+                            .child(caption),
+                    )
+                    .children(fraction.map(|f| {
+                        div()
+                            .flex_none()
+                            .font_family(mono.clone())
+                            .text_size(px(13.0))
+                            .font_weight(FontWeight::MEDIUM)
+                            .text_color(palette.usage_severity(Severity::of(f)))
+                            .child(t!(
+                                "home.disk_full",
+                                pct = format::count((f * 100.0).round() as u64)
+                            ))
+                    })),
             )
             .on_click(cx.listener(move |view, _, _, cx| {
                 if picker {

@@ -82,11 +82,10 @@ impl AppView {
             .size_full()
             .p(px(PAGE_PADDING))
             .gap(px(PAGE_PADDING))
-            .child(
-                panel(palette)
-                    .flex_none()
-                    .child(stats_row(palette, &mono, stats)),
-            )
+            .child(panel(palette).flex_none().child(match results.fs {
+                Some(fs) => self.render_disk_usage(results, fs, stats, palette, &mono),
+                None => stats_row(palette, &mono, stats),
+            }))
             .child(
                 h_flex()
                     .flex_1()
@@ -105,32 +104,13 @@ impl AppView {
     }
 
     fn results_stats(&self, results: &Results, palette: &Palette) -> Vec<Stat> {
-        let selected = results.selected_size();
         let (safe, safe_count) = results.total(Status::Safe);
         let (review, review_count) = results.total(Status::Review);
         let scanned = results.tree.node(ROOT).size;
-        let free = results.fs.map(|disk| disk.available);
         // What files take on the disk but the scan did not count: folders it could not read,
         // the folders' own blocks and metadata. The administrator's reserve is not in it.
         let not_scanned = results.fs.map(|disk| disk.used().saturating_sub(scanned));
         vec![
-            Stat {
-                label: t!("results.free_after").into(),
-                dot: None,
-                value: free
-                    .map_or("-".to_string(), |f| format::size(f + selected))
-                    .into(),
-                sub: if selected > 0 {
-                    format!("+{}", format::size(selected)).into()
-                } else {
-                    t!("results.nothing_selected").into()
-                },
-                sub_color: if selected > 0 {
-                    palette.success
-                } else {
-                    palette.fg_subtle
-                },
-            },
             Stat {
                 label: t!("results.safe").into(),
                 dot: Some(palette.success),

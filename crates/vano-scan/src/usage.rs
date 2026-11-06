@@ -43,8 +43,13 @@ pub fn root_filesystem_usage(path: &Path) -> Option<DiskUsage> {
     })
 }
 
-/// Not implemented off Unix: there is no safe API in the dependency set to ask.
-#[cfg(not(unix))]
-pub fn root_filesystem_usage(_path: &Path) -> Option<DiskUsage> {
-    None
+/// Total, available and free bytes of the volume holding `path`, `None` if it cannot be asked.
+#[cfg(windows)]
+pub fn root_filesystem_usage(path: &Path) -> Option<DiskUsage> {
+    let stats = fs4::statvfs(path).ok()?;
+    Some(DiskUsage {
+        total: stats.total_space(),
+        available: stats.available_space(),
+        free: stats.free_space(),
+    })
 }

@@ -18,5 +18,9 @@ rustix = { workspace = true }
 [dev-dependencies]
 tempfile = { workspace = true }
 
+[target.'cfg(windows)'.dependencies]
+# Disk capacity through a safe API: `unsafe` is forbidden in this workspace.
+fs4 = "1.1"
+
 [lints]
 workspace = true
