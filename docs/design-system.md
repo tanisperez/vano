@@ -247,7 +247,9 @@ Every dialog is a modal card drawn by telaio's `framed_dialog`: `overlay` fill, 
 `border` border and the shadow token, `scrim` behind, a 52 px header and footer. See
 `docs/gpui-notes.md`, "Dialogs".
 
-The app's minimum window size is 900 x 560. The mockup also had narrow layouts down to 560 wide;
+The app's minimum window size is 900 x 840, the height the home screen needs with four recent
+scans and its footer (on Wayland it includes the 40 of the window shadow), and the window always
+opens at least that tall. The mockup also had narrow layouts down to 560 wide;
 they were not implemented.
 
 ## Motion

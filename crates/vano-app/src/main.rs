@@ -24,6 +24,9 @@ use state::about::IDENTITY;
 use state::settings::ThemeChoice;
 use views::AppView;
 
+/// Lowest the window gets: the home screen with its four recent scans and the footer fit.
+const MIN_WINDOW_HEIGHT: f32 = 840.0;
+
 fn main() {
     let settings = state::settings::load_settings();
     let log_env_var = logging::env_var(&IDENTITY);
@@ -56,14 +59,19 @@ fn main() {
         theme::install(cx, &settings);
 
         // Centered at 1400x900, capped to 90% of the display (see `window::options`).
-        let window_options = window::options(
+        let mut window_options = window::options(
             cx,
             &IDENTITY,
             WindowSizes {
                 default: (1400.0, 900.0),
-                min: (900.0, 560.0),
+                min: (900.0, MIN_WINDOW_HEIGHT),
             },
         );
+        // Neither telaio's cap nor its fixed size for a display not known yet (always the case
+        // on Wayland at startup) looks at the minimum, and the first size is not clamped to it.
+        if let Some(WindowBounds::Windowed(bounds)) = &mut window_options.window_bounds {
+            bounds.size.height = bounds.size.height.max(px(MIN_WINDOW_HEIGHT));
+        }
 
         cx.spawn(async move |cx| {
             let opened = cx.open_window(window_options, move |window, cx| {
