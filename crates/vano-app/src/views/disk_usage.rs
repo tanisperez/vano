@@ -54,7 +54,7 @@ impl AppView {
         };
         let header = h_flex()
             .flex_wrap()
-            .items_baseline()
+            .items_center()
             .gap_x(px(10.0))
             .gap_y(px(2.0))
             .child(
@@ -95,7 +95,6 @@ impl AppView {
             .child(div().flex_1())
             .child(
                 div()
-                    .font_family(mono.clone())
                     .text_size(px(12.0))
                     .text_color(delta_color)
                     .child(delta),
@@ -168,7 +167,6 @@ impl AppView {
                     .child(
                         div()
                             .truncate()
-                            .font_family(mono.clone())
                             .text_size(px(11.5))
                             .text_color(stat.sub_color)
                             .child(stat.sub),
@@ -213,8 +211,7 @@ fn usage_row(
                 .child(
                     div()
                         .truncate()
-                        .font_family(mono.clone())
-                        .text_size(px(11.0))
+                        .text_size(px(11.5))
                         .text_color(palette.fg_subtle)
                         .child(t!(
                             "results.usage_figures",

@@ -93,18 +93,26 @@ impl AppView {
                         Some(fs) => self.render_disk_usage(results, fs, stats, palette, &mono),
                         None => stats_row(palette, &mono, stats),
                     }))
+                    // Absolute, so the lists inside scroll on their own instead of stretching the
+                    // page: the row takes what the window leaves, or the minimum height.
                     .child(
-                        h_flex()
+                        div()
+                            .relative()
                             .flex_1()
                             .min_h(px(EXPLORER_MIN_HEIGHT))
-                            .gap(px(PAGE_PADDING))
-                            .items_stretch()
-                            .child(explorer)
                             .child(
-                                panel(palette)
-                                    .flex_none()
-                                    .w(px(SIDE_PANEL_WIDTH))
-                                    .child(side),
+                                h_flex()
+                                    .absolute()
+                                    .inset_0()
+                                    .gap(px(PAGE_PADDING))
+                                    .items_stretch()
+                                    .child(explorer)
+                                    .child(
+                                        panel(palette)
+                                            .flex_none()
+                                            .w(px(SIDE_PANEL_WIDTH))
+                                            .child(side),
+                                    ),
                             ),
                     ),
             )
