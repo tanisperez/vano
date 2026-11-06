@@ -19,7 +19,7 @@ back, or to delete them for good. It starts at the Trash in every session.
 
 The design system (palettes, type, metrics, screens, motion, icon) is summarized in
 `docs/design-system.md`; the code is its source of truth. The original mockups are kept in git
-history under the tag `design-mockups`.
+history under the tag `design-mockups`, and the 0.3.0 one under `design-mockups-0.3.0`.
 
 ## Architecture
 
