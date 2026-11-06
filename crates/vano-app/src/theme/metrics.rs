@@ -41,6 +41,8 @@ pub const USAGE_PERCENT_WIDTH: f32 = 60.0;
 pub const USAGE_STATS_MIN_SHARE: f32 = 0.38;
 /// Lowest the explorer and the recommendations get: under this, the results page scrolls.
 pub const EXPLORER_MIN_HEIGHT: f32 = 360.0;
+/// Width of the Delete button of the recommendations.
+pub const RECS_DELETE_WIDTH: f32 = 180.0;
 /// Least width of a card header's title, under which the control next to it drops to a new row.
 pub const CARD_TITLE_MIN_WIDTH: f32 = 180.0;
 /// Least height of a card header (title and subtitle).

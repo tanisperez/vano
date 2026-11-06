@@ -19,7 +19,7 @@ use crate::state::target::TargetKind;
 use crate::state::treemap::{self, TileKey};
 use crate::theme::metrics::{
     BREADCRUMB_HEIGHT, EXPLORER_MIN_HEIGHT, PAGE_PADDING, RADIUS_MD, RADIUS_SM, RADIUS_XS,
-    REC_ROW_HEIGHT, SIDE_PANEL_WIDTH,
+    REC_ROW_HEIGHT, RECS_DELETE_WIDTH, SIDE_PANEL_WIDTH,
 };
 use crate::theme::{Palette, PaletteExt, VanoColors};
 
@@ -706,8 +706,9 @@ impl AppView {
                             )),
                     )
                     .child(
-                        h_flex().justify_end().child(
+                        h_flex().justify_center().child(
                             PrimaryButton::new("trash-selected", t!("results.delete"))
+                                .min_width(RECS_DELETE_WIDTH)
                                 .icon(Icon::new(IconName::Delete))
                                 .disabled(!can_trash)
                                 .on_click(move |_, window, cx| {

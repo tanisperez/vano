@@ -223,7 +223,7 @@ Every screen has the title bar on top and the status bar at the bottom.
    Safe to remove, Needs review and Not scanned, then the "Explorer" card (breadcrumb, the treemap, rings or ranking of
    the focused folder, Category or Cleanup coloring, and the legend) and the "Recommendations"
    panel on the right, grouped in Safe to remove and Review first, with checkboxes and "Select
-   safe". A click on a recommendation or a tile opens its detail (badge, description, reason,
+   safe", and a centered "Delete" 180 wide. A click on a recommendation or a tile opens its detail (badge, description, reason,
    "Largest inside" bars, Files, Last used, "Covered by" links, "Show in folder", "Delete"). Under
    the explorer's minimum height (360) the page scrolls.
 5. **Delete** (`views/feedback.rs`): a modal (482 wide) that asks "Move to Trash" or "Delete
