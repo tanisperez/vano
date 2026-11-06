@@ -183,6 +183,8 @@ gear, Rescan) 26, segmented item 22, status badge 22, stat cell 90, card header 
 38, recommendation row 56, ranking row 42, location card (home) 110, recent row 40, modal header
 and footer 52.
 
+Card headers are at least 68 tall. Under a 180 wide title, their control drops to its own row.
+
 Widths (px): home column 680, right column (Recommendations, Found so far) 342, Move to Trash
 confirmation 482, ring 250 with a 20 thickness.
 

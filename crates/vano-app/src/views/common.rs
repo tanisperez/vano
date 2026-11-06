@@ -5,7 +5,7 @@ use gpui_kit::prelude::*;
 use gpui_kit::*;
 
 use crate::theme::Palette;
-use crate::theme::metrics::{CARD_HEADER_HEIGHT, RADIUS_LG, STAT_HEIGHT};
+use crate::theme::metrics::{CARD_HEADER_HEIGHT, CARD_TITLE_MIN_WIDTH, RADIUS_LG, STAT_HEIGHT};
 
 /// A raised, bordered panel with radius 10 that clips its content.
 pub fn panel(palette: &Palette) -> Div {
@@ -27,19 +27,25 @@ pub fn card_header(
 ) -> Div {
     h_flex()
         .flex_none()
-        .h(px(CARD_HEADER_HEIGHT))
+        .flex_wrap()
+        .min_h(px(CARD_HEADER_HEIGHT))
         .px(px(16.0))
-        .gap(px(12.0))
+        .py(px(10.0))
+        .gap_x(px(12.0))
+        .gap_y(px(8.0))
         .items_center()
         .border_b_1()
         .border_color(palette.border)
         .child(
+            // Its least width makes the control on the right drop to its own row on a narrow
+            // panel, instead of squeezing the title.
             v_flex()
                 .flex_1()
-                .min_w_0()
+                .min_w(px(CARD_TITLE_MIN_WIDTH))
                 .gap(px(3.0))
                 .child(
                     div()
+                        .truncate()
                         .text_size(px(14.5))
                         .font_weight(FontWeight::SEMIBOLD)
                         .child(title.into()),
