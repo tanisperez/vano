@@ -24,8 +24,10 @@ use state::about::IDENTITY;
 use state::settings::ThemeChoice;
 use views::AppView;
 
-/// Lowest the window gets: the home screen with its four recent scans and the footer fit.
-const MIN_WINDOW_HEIGHT: f32 = 840.0;
+/// The height the window opens with when the display is not known yet: the home screen with its
+/// four recent scans and the footer fits. A small screen must still hold the window, so this is
+/// not the minimum: under this height the home screen scrolls.
+const OPENING_HEIGHT: f32 = 840.0;
 
 fn main() {
     let settings = state::settings::load_settings();
@@ -64,13 +66,15 @@ fn main() {
             &IDENTITY,
             WindowSizes {
                 default: (1400.0, 900.0),
-                min: (900.0, MIN_WINDOW_HEIGHT),
+                min: (900.0, 640.0),
             },
         );
-        // Neither telaio's cap nor its fixed size for a display not known yet (always the case
-        // on Wayland at startup) looks at the minimum, and the first size is not clamped to it.
-        if let Some(WindowBounds::Windowed(bounds)) = &mut window_options.window_bounds {
-            bounds.size.height = bounds.size.height.max(px(MIN_WINDOW_HEIGHT));
+        // With no display known yet (always the case on Wayland at startup), telaio opens a fixed
+        // size that ignores the default, and is too short for the home screen.
+        if cx.primary_display().is_none()
+            && let Some(WindowBounds::Windowed(bounds)) = &mut window_options.window_bounds
+        {
+            bounds.size.height = px(OPENING_HEIGHT);
         }
 
         cx.spawn(async move |cx| {
