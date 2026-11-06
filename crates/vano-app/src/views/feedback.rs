@@ -112,10 +112,14 @@ impl AppView {
                     let mono = cx.theme().mono_font_family.clone();
                     let request = request.clone();
                     let weak = weak.clone();
+                    // `min_h_0` down to the list lets it shrink on a short window, where the
+                    // dialog stops at the window's height, so the buttons stay in view.
                     v_flex()
+                        .min_h_0()
                         .child(modal_header(title.clone(), cx))
                         .child(
                             modal_body()
+                                .min_h_0()
                                 .child(
                                     div()
                                         .text_color(palette.fg_muted)
@@ -251,10 +255,14 @@ impl AppView {
                     let palette = cx.palette();
                     let undo = undo.clone();
                     let weak = weak.clone();
+                    // `min_h_0` down to the list lets it shrink on a short window, where the
+                    // dialog stops at the window's height, so the buttons stay in view.
                     v_flex()
+                        .min_h_0()
                         .child(modal_header(title.clone(), cx))
                         .child(
                             modal_body()
+                                .min_h_0()
                                 .child(
                                     div()
                                         .text_color(palette.fg_muted)
@@ -421,11 +429,12 @@ fn item_list(
         .rounded(px(RADIUS_LG))
         .border_1()
         .border_color(palette.border)
+        .min_h_0()
         .overflow_hidden()
         // The scroll area needs a definite height: the capped column gives it one, the layout
         // gpui-component's own max height test uses.
         .child(
-            v_flex().max_h(px(CONFIRM_LIST_MAX_HEIGHT)).child(
+            v_flex().min_h_0().max_h(px(CONFIRM_LIST_MAX_HEIGHT)).child(
                 v_flex().flex_1().overflow_hidden().child(
                     div().flex_1().overflow_hidden().child(
                         v_flex()
