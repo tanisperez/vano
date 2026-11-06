@@ -203,7 +203,8 @@ and 40 inside each parent; smaller entries are grouped into one "N more" tile.
 Every screen has the title bar on top and the status bar at the bottom.
 
 1. **Title bar** (`surface`, bottom border): the "V" logo square in `accent` (a click goes home),
-   "Vano", the scan target switcher (home folder, whole disk or a folder), Rescan on the results,
+   "Vano", the scan target switcher (a menu of the home folder, the whole disk or a folder: picking
+   one scans it), Rescan on the results,
    the settings gear, and the window controls drawn by gpui-kit's `TitleBar`.
 2. **Home** (`views/home.rs`): one centered column, 680 wide. Header with a 48 logo square
    (radius 12, "V" 24/600) beside "Vano" and the tagline in 14 `fg_muted`. Then "What to scan"

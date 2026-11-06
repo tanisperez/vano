@@ -347,8 +347,9 @@ impl AppView {
         cx.notify();
     }
 
-    /// Opens the system folder picker and selects the folder chosen.
-    pub(crate) fn choose_folder(&mut self, cx: &mut Context<Self>) {
+    /// Opens the system folder picker and selects the folder chosen, scanning it right away when
+    /// `scan` is set.
+    pub(crate) fn choose_folder(&mut self, scan: bool, cx: &mut Context<Self>) {
         let receiver = cx.prompt_for_paths(PathPromptOptions {
             files: false,
             directories: true,
@@ -364,6 +365,9 @@ impl AppView {
             };
             let _ = view.update(cx, |view, cx| {
                 view.set_target(Target::folder(path), cx);
+                if scan {
+                    view.start_scan(cx);
+                }
             });
         })
         .detach();
@@ -983,7 +987,7 @@ impl AppView {
 
     fn on_choose_folder(&mut self, _: &ChooseFolder, _: &mut Window, cx: &mut Context<Self>) {
         if self.screen == Screen::Home {
-            self.choose_folder(cx);
+            self.choose_folder(false, cx);
         }
     }
 

@@ -64,7 +64,7 @@ impl AppView {
             .into_any_element()
     }
 
-    /// The target switcher: the current target and a menu to pick another one.
+    /// The target switcher: the current target and a menu to scan another one.
     fn render_target_switcher(&self, weak: WeakEntity<Self>, palette: &Palette) -> AnyElement {
         let target = match self.screen {
             Screen::Scanning => self.scan.as_ref().map(|s| s.target.clone()),
@@ -97,8 +97,7 @@ impl AppView {
                         let choice = choice.clone();
                         let _ = weak.update(cx, |view, cx| {
                             view.target = choice;
-                            view.screen = Screen::Home;
-                            cx.notify();
+                            view.start_scan(cx);
                         });
                     }));
                 }
@@ -106,10 +105,7 @@ impl AppView {
                 menu.separator()
                     .item(
                         PopupMenuItem::new(t!("home.choose")).on_click(move |_, _, cx| {
-                            let _ = weak.update(cx, |view, cx| {
-                                view.screen = Screen::Home;
-                                view.choose_folder(cx);
-                            });
+                            let _ = weak.update(cx, |view, cx| view.choose_folder(true, cx));
                         }),
                     )
             })

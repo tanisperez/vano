@@ -364,7 +364,7 @@ impl AppView {
             )
             .on_click(cx.listener(move |view, _, _, cx| {
                 if picker {
-                    view.choose_folder(cx);
+                    view.choose_folder(false, cx);
                 } else {
                     view.set_target(target.clone(), cx);
                 }
