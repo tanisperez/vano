@@ -2,7 +2,8 @@
 //! a restart show the last results without scanning again.
 //!
 //! The list is `<config dir>/vano/recents.json`; each tree is a file under
-//! `<cache dir>/vano/scans/`. Losing either is harmless: the scan just runs again.
+//! `<cache dir>/vano/scans/`. Losing either is harmless: the scan just runs again. A tree whose
+//! scan left the list has no use and can be large, so [`prune_scans`] removes it.
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -70,7 +71,7 @@ pub fn record(recent: Recent) -> Vec<Recent> {
     list
 }
 
-/// Takes `target` out of the list and saves it. Its saved tree is the caller's to remove.
+/// Takes `target` out of the list and saves it. [`prune_scans`] then removes its saved tree.
 pub fn forget(target: &Target) -> Vec<Recent> {
     let Some(base) = dirs::config_dir() else {
         return Vec::new();
@@ -90,6 +91,31 @@ fn push(mut list: Vec<Recent>, recent: Recent) -> Vec<Recent> {
     list.insert(0, recent);
     list.truncate(MAX_RECENTS);
     list
+}
+
+/// Removes the saved trees that are not in `keep`, a list of cache file names. A blocking call,
+/// for the background executor.
+pub fn prune_scans(keep: &[String]) {
+    if let Some(dir) = scans_dir() {
+        prune(&dir, keep);
+    }
+}
+
+fn prune(dir: &Path, keep: &[String]) {
+    // No folder yet is the normal state before the first scan.
+    let Ok(entries) = fs::read_dir(dir) else {
+        return;
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        let kept = keep.iter().any(|name| entry.file_name() == name.as_str());
+        if !kept
+            && path.extension().is_some_and(|ext| ext == "vtree")
+            && let Err(error) = fs::remove_file(&path)
+        {
+            log::warn!("could not remove {}: {error}", path.display());
+        }
+    }
 }
 
 fn file(base: &Path) -> PathBuf {
@@ -169,6 +195,24 @@ mod tests {
             .collect();
         write(dir.path(), &long);
         assert_eq!(read(dir.path()), long[..MAX_RECENTS]);
+    }
+
+    #[test]
+    fn pruning_only_removes_trees_out_of_the_list() {
+        let dir = tempfile::tempdir().expect("tempdir");
+        for name in ["kept.vtree", "old.vtree", "other.txt"] {
+            fs::write(dir.path().join(name), "x").expect("write");
+        }
+        prune(dir.path(), &["kept.vtree".to_string()]);
+        assert!(dir.path().join("kept.vtree").exists());
+        assert!(!dir.path().join("old.vtree").exists());
+        assert!(dir.path().join("other.txt").exists());
+    }
+
+    #[test]
+    fn pruning_without_a_folder_does_nothing() {
+        let dir = tempfile::tempdir().expect("tempdir");
+        prune(&dir.path().join("missing"), &[]);
     }
 
     #[test]

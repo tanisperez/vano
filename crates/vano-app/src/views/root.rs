@@ -303,6 +303,7 @@ impl AppView {
         };
         view.live_treemap.motion.set_spring(LIVE_SPRING);
         view.schedule_startup_update_check(cx);
+        view.prune_saved_scans(cx);
         if let Some(debug) = debug {
             view.apply_debug_open(debug, window, cx);
         }
@@ -559,6 +560,7 @@ impl AppView {
                 .detach();
         }
         self.recents = recents::record(recent);
+        self.prune_saved_scans(cx);
         self.results = Some(Results::with(target, tree, categories, recs, seconds));
         self.open_results_screen(cx);
     }
@@ -634,18 +636,20 @@ impl AppView {
     /// not touched.
     pub(crate) fn forget_recent(&mut self, recent: &Recent, cx: &mut Context<Self>) {
         self.recents = recents::forget(&recent.target);
-        if let Some(path) = recent.cache_path() {
-            cx.background_executor()
-                .spawn(async move {
-                    if let Err(error) = std::fs::remove_file(&path)
-                        && error.kind() != std::io::ErrorKind::NotFound
-                    {
-                        log::warn!("could not remove {}: {error}", path.display());
-                    }
-                })
-                .detach();
-        }
+        self.prune_saved_scans(cx);
         cx.notify();
+    }
+
+    /// Removes the saved trees of the scans no longer in the recent list, in the background.
+    fn prune_saved_scans(&self, cx: &mut Context<Self>) {
+        let keep: Vec<String> = self
+            .recents
+            .iter()
+            .map(|recent| recent.cache.clone())
+            .collect();
+        cx.background_executor()
+            .spawn(async move { recents::prune_scans(&keep) })
+            .detach();
     }
 
     /// Stops the running scan and goes back home.
