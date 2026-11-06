@@ -170,7 +170,9 @@ impl AppView {
                     ),
             )
             .child(
-                h_flex().justify_center().child(
+                // The label under the button has some air over its letters: the extra space
+                // above makes both visible gaps equal.
+                h_flex().justify_center().pt(px(5.0)).child(
                     PrimaryButton::new("scan", scan_label)
                         .min_width(HOME_SCAN_WIDTH)
                         .on_click(cx.listener(|view, _, _, cx| view.start_scan(cx))),
