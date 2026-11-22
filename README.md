@@ -11,7 +11,13 @@ it shows where the space goes in a treemap you can zoom into folder by folder, a
 recommends what can go: to the Trash, where it can still be put back, or for good.
 
 [Website](https://vano.tanis.codes) · [Download](https://vano.tanis.codes/install.html) ·
-[Documentation](#documentation)
+[Documentation](https://vano.tanis.codes/docs/)
+
+On Linux, one command installs it for your user, and Vano then updates itself:
+
+```sh
+curl -fsSL https://vano.tanis.codes/install.sh | bash
+```
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="site/img/hero-dark.webp">
@@ -80,7 +86,9 @@ On Linux and macOS the `Makefile` wraps the usual commands (`make run`, `make re
 
 ## Documentation
 
-Reference documents in this repository:
+The user documentation is at <https://vano.tanis.codes/docs/>, with the
+[command line](https://vano.tanis.codes/docs/command-line.html). Reference documents in this
+repository:
 
 - [Architecture](AGENTS.md): the crates, the scanner, the treemap and its animation.
 - [Design system](docs/design-system.md): colors, type, metrics, screens and motion.
