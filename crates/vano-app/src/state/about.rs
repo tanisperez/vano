@@ -3,22 +3,12 @@
 
 use std::path::PathBuf;
 
-use telaio_app::AppIdentity;
 use telaio_update::Platform;
 
 use super::update::{CURRENT_VERSION, download_dir, is_portable};
 
-/// Who Vano is, for `telaio-app`: the log file and folder, the `VANO_*` environment variables,
-/// the window's app id (the Linux `codes.tanis.vano.desktop` file uses the same value) and the
-/// About header.
-pub const IDENTITY: AppIdentity = AppIdentity {
-    name: "Vano",
-    slug: "vano",
-    app_id: "codes.tanis.vano",
-    version: CURRENT_VERSION,
-    env_prefix: "VANO",
-    repository: "https://github.com/tanisperez/vano",
-};
+/// Who Vano is, for `telaio-app`. Defined with the command line, which needs it without gpui.
+pub use vano_cli::IDENTITY;
 
 /// The install page of the website, with the apt, dnf and AUR instructions.
 pub const INSTALL_URL: &str = "https://vano.tanis.codes/install.html";

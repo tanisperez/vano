@@ -26,7 +26,9 @@ history under the tag `design-mockups`, and the 0.3.0 one under `design-mockups-
 A Cargo workspace, UI kept thin. Dependency direction (no cycles):
 
 ```
-vano-app ──> vano-delete ─> vano-core
+vano-app ──> vano-cli ───> vano-scan, vano-rules, vano-delete, vano-system
+    │──────> vano-delete ─> vano-core
+    │──────> vano-system
     │──────> vano-scan ──> vano-core
     │──────> vano-rules ─> vano-core
     └──────> vano-core
@@ -50,12 +52,18 @@ About header), all at tag `v0.32.0`.
 - `vano-delete`: moving items to the system Trash and putting them back (`trash`), the
   freedesktop Trash of a WSL 2 distribution (`linux_trash`), and permanent deletion (`delete`).
   Blocking calls with no UI and no texts, shared by the app and the command line.
+- `vano-system`: what the computer offers to scan: the connected disks (`drives`, through
+  `sysinfo` plus Vano's filters, unit tested on synthetic mounts).
+- `vano-cli`: the command line (`vano drives`, `scan`, `clean`, `completions`), as Postino's
+  `postino-cli`. `main` calls `vano_cli::run_if_cli` first and opens the window only when it
+  returns `None`. It also defines `IDENTITY`. English only; rule names come from `rules.yml`.
+  The JSON field names are a stable interface: add fields, never rename or remove them.
 - `vano-app`: the `vano` binary. `state/` is plain Rust and unit tested (settings, results,
   treemap layout, spring motion, recents, the texts that name the Trash, disk usage). `views/` only
   builds elements. `theme/` holds
   only what telaio does not: the three accents as `Tokens` (Indigo is telaio's default), the
-  category and cleanup colors (`VanoColors`) and Vano's own metrics. `state/about.rs` defines
-  `IDENTITY`, the `telaio_app::AppIdentity` (name, `vano` slug, app id, `VANO` prefix, repository)
+  category and cleanup colors (`VanoColors`) and Vano's own metrics. `state/about.rs` re-exports
+  `IDENTITY` from `vano-cli`, the `telaio_app::AppIdentity` (name, `vano` slug, app id, `VANO` prefix, repository)
   that the app passes to every `telaio-app` piece, so the log file, `VANO_LOG` and the window app
   id are the same as before. The standard components are re-exported from
   `views/components/mod.rs`; the accent and live view cards of Settings (`PreviewCard`) are Vano's.

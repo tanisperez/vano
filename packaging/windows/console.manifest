@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Merged into the manifest gpui embeds in vano.exe (DPI awareness, common controls) by
+     merge-manifest.ps1, after the release build. gpui-pre always embeds its own manifest
+     resource and an executable holds only one, so it cannot be a second resource of vano.rc.
+
+     vano.exe is a console subsystem binary, so shells wait for its commands and read
+     their exit code. `detached` keeps Windows 11 24H2 and later from opening a console window
+     when Vano starts from Explorer, the Start menu or a shortcut. Older Windows ignore it, and
+     the app frees the console they open (`telaio_app::cli::detach_from_console`). -->
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <consoleAllocationPolicy xmlns="http://schemas.microsoft.com/SMI/2024/WindowsSettings">detached</consoleAllocationPolicy>
+    </windowsSettings>
+  </application>
+</assembly>

@@ -1,7 +1,10 @@
 //! Vano, the disk analyzer. Binary entry point: initializes `gpui`, the theme and the main window.
 
-// A GUI application on Windows: never open a console window behind the main window.
-#![cfg_attr(windows, windows_subsystem = "windows")]
+// On Windows `vano.exe` is a console subsystem binary, as Postino's: shells wait for the
+// commands (`vano scan`, `vano drives`, ...) and read their exit code, and pipes work. The
+// manifest merged at release time (`packaging/windows/console.manifest`) keeps Windows 11 24H2
+// from opening a console for a double click, and `detach_from_console` below frees the terminal
+// when the window opens.
 
 mod actions;
 mod state;
@@ -11,6 +14,7 @@ mod views;
 rust_i18n::i18n!("locales", fallback = "en");
 
 use std::path::Path;
+use std::process::ExitCode;
 
 use gpui_kit::component::Root;
 use gpui_kit::*;
@@ -29,7 +33,19 @@ use views::AppView;
 /// not the minimum: under this height the home screen scrolls.
 const OPENING_HEIGHT: f32 = 840.0;
 
-fn main() {
+fn main() -> ExitCode {
+    // `--help`, `--version` and the console subcommands run and exit before anything else: no
+    // settings, no log, no window.
+    let args: Vec<_> = std::env::args_os().skip(1).collect();
+    if let Some(code) = vano_cli::run_if_cli(&args) {
+        return code;
+    }
+    // The window never holds the terminal it was started from: on Windows, a detached copy of
+    // this process opens it and this one exits.
+    if telaio_app::cli::detach_from_console() == telaio_app::cli::GuiLaunch::Relaunched {
+        return ExitCode::SUCCESS;
+    }
+
     let settings = state::settings::load_settings();
     let log_env_var = logging::env_var(&IDENTITY);
     let env_level = std::env::var(&log_env_var).ok();
@@ -96,6 +112,7 @@ fn main() {
         })
         .detach();
     });
+    ExitCode::SUCCESS
 }
 
 /// The first lines of every log.

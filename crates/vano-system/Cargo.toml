@@ -1,0 +1,20 @@
+[package]
+name = "vano-system"
+description = "What the computer offers to scan: the connected disks, and the WSL 2 distributions on Windows."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+# Disks through a safe API on every OS: `unsafe` is forbidden in this workspace. Only the disk
+# part, the rest of sysinfo is not built.
+sysinfo = { workspace = true }
+log = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+
+[lints]
+workspace = true

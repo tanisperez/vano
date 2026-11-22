@@ -34,6 +34,10 @@ crossbeam-deque = "0.8"
 crossbeam-utils = "0.8"
 rustix = { version = "1.1", features = ["fs"] }
 trash = "5"
+# The command line (vano-cli), as Postino's.
+clap = { version = "4.5", default-features = false, features = ["std", "derive", "help", "usage", "error-context", "suggestions"] }
+clap_complete = "4.5"
+sysinfo = { version = "0.40", default-features = false, features = ["disk"] }
 
 [workspace.lints.clippy]
 all = "warn"

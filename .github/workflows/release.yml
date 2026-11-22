@@ -98,6 +98,13 @@ jobs:
           VANO_UPDATER: ${{ matrix.updater }}
         run: cargo build --release --locked --target ${{ matrix.target }}
 
+      # vano.exe is a console subsystem binary: adds `consoleAllocationPolicy` to the manifest
+      # gpui embeds, so a double click opens no console window (packaging/windows).
+      - name: Merge the Windows manifest
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: packaging\windows\merge-manifest.ps1 "target\${{ matrix.target }}\release\vano.exe"
+
       # Tarball, deb and rpm (packaging/linux).
       - name: Package for Linux
         if: runner.os == 'Linux'

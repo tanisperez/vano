@@ -27,6 +27,7 @@ telaio-app = { workspace = true }
 vano-scan = { path = "../vano-scan" }
 vano-rules = { path = "../vano-rules" }
 vano-delete = { path = "../vano-delete" }
+vano-cli = { path = "../vano-cli" }
 
 [target.'cfg(windows)'.build-dependencies]
 embed-resource = "3"

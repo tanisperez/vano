@@ -1,0 +1,29 @@
+[package]
+name = "vano-cli"
+description = "The command line of Vano: the commands that run in the terminal instead of opening the window."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+telaio-app = { workspace = true }
+vano-core = { path = "../vano-core" }
+vano-scan = { path = "../vano-scan" }
+vano-rules = { path = "../vano-rules" }
+vano-delete = { path = "../vano-delete" }
+vano-system = { path = "../vano-system" }
+clap = { workspace = true }
+clap_complete = { workspace = true }
+dirs = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+rust-i18n = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+pretty_assertions = { workspace = true }
+
+[lints]
+workspace = true
