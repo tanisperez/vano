@@ -25,7 +25,7 @@ pretty_assertions = "1.4"
 tempfile = "3"
 dirs = "7"
 dunce = "1"
-toml = "0.8"
+toml = "1"
 log = "0.4"
 # Already built by gpui-component (translations); same version.
 rust-i18n = "4.2"

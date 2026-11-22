@@ -280,11 +280,11 @@ fn read_settings(base: &Path) -> Settings {
 /// [`Settings::default`] as documented on [`read_settings`].
 fn parse_settings(content: &str) -> Settings {
     let defaults = Settings::default();
-    let Ok(value) = content.parse::<toml::Value>() else {
+    // A whole document parses as a table; since toml 0.9, `toml::Value` parses one value only.
+    let Ok(table) = content.parse::<toml::Table>() else {
         return defaults;
     };
-    let table = value.as_table();
-    let get = |key: &str| table.and_then(|table| table.get(key));
+    let get = |key: &str| table.get(key);
     let get_str = |key: &str| get(key).and_then(toml::Value::as_str);
 
     Settings {
