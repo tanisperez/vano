@@ -33,29 +33,43 @@ pub(crate) fn target(path: Option<&Path>) -> Result<PathBuf, String> {
     }
 }
 
-/// Scans `root` to the end. With `live`, a line on stderr counts the files as they are found
-/// (only when stderr is a terminal, so pipes and files get clean output).
-pub(crate) fn run(root: &Path, one_file_system: bool, live: bool) -> Scanned {
+/// How a running scan shows its progress on stderr.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Live {
+    /// Nothing.
+    Quiet,
+    /// One line that counts the files, only when stderr is a terminal, so pipes and files get
+    /// clean output.
+    Terminal,
+}
+
+/// Scans `root` to the end, showing the progress as `live` says.
+pub(crate) fn run(root: &Path, one_file_system: bool, live: Live) -> Scanned {
     let mut options = ScanOptions::new(root);
     options.one_file_system = one_file_system;
     let handle = vano_scan::start(options);
-    let live = live && std::io::stderr().is_terminal();
+    let live = match live {
+        Live::Terminal if !std::io::stderr().is_terminal() => Live::Quiet,
+        other => other,
+    };
     while !handle.is_finished() {
         std::thread::sleep(Duration::from_millis(100));
-        if live {
-            let progress = handle.progress();
-            eprint!(
+        let progress = handle.progress();
+        match live {
+            Live::Quiet => {}
+            Live::Terminal => eprint!(
                 "\rScanning {}: {} files, {}\x1b[K",
                 report::show_path(root),
                 report::count(progress.files),
                 vano_core::size::format_plain(progress.bytes),
-            );
-            let _ = std::io::stderr().flush();
+            ),
         }
+        let _ = std::io::stderr().flush();
     }
     handle.wait();
-    if live {
-        eprint!("\r\x1b[K");
+    match live {
+        Live::Quiet => {}
+        Live::Terminal => eprint!("\r\x1b[K"),
     }
     let progress = handle.progress();
     let tree = handle
@@ -73,7 +87,12 @@ pub fn command(args: &ScanArgs) -> u8 {
             return exit::FAILED;
         }
     };
-    let scanned = run(&root, !args.cross_file_systems, !args.json);
+    let live = if args.json {
+        Live::Quiet
+    } else {
+        Live::Terminal
+    };
+    let scanned = run(&root, !args.cross_file_systems, live);
     let rules = vano_rules::Context::current();
     let recommendations = vano_rules::evaluate(&scanned.tree, &rules);
     let report = ScanReport::new(&scanned, &recommendations, args.top);
@@ -113,7 +132,7 @@ mod tests {
         std::fs::create_dir(dir.path().join("sub")).unwrap();
         std::fs::write(dir.path().join("sub/a"), vec![0u8; 5000]).unwrap();
         std::fs::write(dir.path().join("b"), b"x").unwrap();
-        let scanned = run(dir.path(), true, false);
+        let scanned = run(dir.path(), true, Live::Quiet);
         assert_eq!(scanned.progress.files, 2);
         assert!(scanned.tree.node(vano_core::ROOT).size >= 5000);
     }

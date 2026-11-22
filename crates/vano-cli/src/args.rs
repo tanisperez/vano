@@ -11,7 +11,7 @@ use clap_complete::Shell;
 use crate::exit;
 
 /// The names that make Vano run in console mode when they are the first argument.
-pub const SUBCOMMANDS: [&str; 4] = ["drives", "scan", "clean", "completions"];
+pub const SUBCOMMANDS: [&str; 5] = ["drives", "scan", "clean", "wsl", "completions"];
 
 #[derive(Debug, Parser)]
 #[command(
@@ -33,8 +33,24 @@ pub enum ConsoleCommand {
     Scan(ScanArgs),
     /// Remove the Safe recommendations of a folder: caches and build outputs
     Clean(CleanArgs),
+    /// The WSL 2 distributions (Windows only)
+    #[command(subcommand)]
+    Wsl(WslCommand),
     /// Print the completion script of a shell
     Completions(CompletionsArgs),
+}
+
+#[derive(Debug, Subcommand)]
+pub enum WslCommand {
+    /// List the WSL 2 distributions, with the size of their virtual disks
+    List(WslListArgs),
+}
+
+#[derive(Debug, Args)]
+pub struct WslListArgs {
+    /// Print JSON instead of a table
+    #[arg(long)]
+    pub json: bool,
 }
 
 #[derive(Debug, Args)]
@@ -98,8 +114,11 @@ mod tests {
     #[test]
     fn every_subcommand_name_is_a_clap_subcommand() {
         let command = Cli::command();
-        let names: Vec<_> = command.get_subcommands().map(|c| c.get_name()).collect();
-        assert_eq!(names, SUBCOMMANDS);
+        let mut names: Vec<_> = command.get_subcommands().map(|c| c.get_name()).collect();
+        let mut expected = SUBCOMMANDS.to_vec();
+        names.sort_unstable();
+        expected.sort_unstable();
+        assert_eq!(names, expected);
     }
 
     #[test]

@@ -20,6 +20,7 @@ pub mod exit;
 pub mod info;
 mod report;
 mod scan;
+mod wsl;
 
 use std::ffi::{OsStr, OsString};
 use std::process::ExitCode;
@@ -95,6 +96,7 @@ fn run_console(args: &[OsString]) -> u8 {
         ConsoleCommand::Drives(args) => drives::command(&args),
         ConsoleCommand::Scan(args) => scan::command(&args),
         ConsoleCommand::Clean(args) => clean::command(&args),
+        ConsoleCommand::Wsl(args::WslCommand::List(args)) => wsl::list_command(&args),
         ConsoleCommand::Completions(args) => args::completions_command(&args),
     }
 }

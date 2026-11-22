@@ -12,6 +12,12 @@ authors.workspace = true
 # part, the rest of sysinfo is not built.
 sysinfo = { workspace = true }
 log = { workspace = true }
+vano-core = { path = "../vano-core" }
+vano-scan = { path = "../vano-scan" }
+
+[target.'cfg(windows)'.dependencies]
+# The WSL distributions and their virtual disks, from the registry (safe API).
+winreg = "0.56"
 
 [dev-dependencies]
 pretty_assertions = { workspace = true }

@@ -53,6 +53,10 @@ pub(crate) struct Shared {
     pub(crate) elapsed_ns: AtomicU64,
     pub(crate) started: Instant,
     pub(crate) taken: AtomicBool,
+    /// Why an external scan could not run (see `external`).
+    pub(crate) failure: Mutex<Option<String>>,
+    /// The home folder of the scanned system, reported by an external scan.
+    pub(crate) home: Mutex<Option<PathBuf>>,
 }
 
 impl Shared {
@@ -71,6 +75,8 @@ impl Shared {
             elapsed_ns: AtomicU64::new(0),
             started: Instant::now(),
             taken: AtomicBool::new(false),
+            failure: Mutex::new(None),
+            home: Mutex::new(None),
         }
     }
 }

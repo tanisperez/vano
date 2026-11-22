@@ -7252,6 +7252,21 @@ dependencies = [
  "log",
  "pretty_assertions",
  "sysinfo 0.40.4",
+ "vano-core",
+ "vano-scan",
+ "winreg",
+]
+
+[[package]]
+name = "vano-wsl"
+version = "0.4.0-dev"
+dependencies = [
+ "dirs 7.0.0",
+ "tempfile",
+ "vano-core",
+ "vano-delete",
+ "vano-scan",
+ "vano-system",
 ]
 
 [[package]]

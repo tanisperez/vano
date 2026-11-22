@@ -62,6 +62,7 @@ Commands (run in the terminal, without the window):
   clean [PATH]      Remove the Safe recommendations: caches and build
                     outputs their tools recreate. Asks first, or lists
                     only with --dry-run; --yes removes without asking
+  wsl list          List the WSL 2 distributions (Windows only)
   completions <SHELL>
                     Print the completion script of a shell
   Run vano <COMMAND> --help for its options.
@@ -106,7 +107,11 @@ mod tests {
     #[test]
     fn the_help_lists_every_subcommand_and_never_uses_an_em_dash() {
         let help = Info::Help.output();
-        for name in crate::args::SUBCOMMANDS {
+        // `delete` is hidden: the app runs it inside a WSL distribution.
+        for name in crate::args::SUBCOMMANDS
+            .iter()
+            .filter(|name| **name != "delete")
+        {
             assert!(help.contains(&format!("  {name}")), "{name} is missing");
         }
         assert!(!help.contains('\u{2014}'));

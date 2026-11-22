@@ -1,0 +1,23 @@
+[package]
+name = "vano-wsl"
+description = "The Linux program the Windows app runs inside a WSL 2 distribution: a native scan and a native permanent deletion."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+authors.workspace = true
+
+# No gpui and no telaio: built static (x86_64-unknown-linux-musl) so it runs in any distribution,
+# and shipped next to vano.exe.
+[dependencies]
+vano-core = { path = "../vano-core" }
+vano-scan = { path = "../vano-scan" }
+vano-delete = { path = "../vano-delete" }
+vano-system = { path = "../vano-system" }
+dirs = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+
+[lints]
+workspace = true

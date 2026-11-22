@@ -53,8 +53,15 @@ About header), all at tag `v0.32.0`.
   freedesktop Trash of a WSL 2 distribution (`linux_trash`), and permanent deletion (`delete`).
   Blocking calls with no UI and no texts, shared by the app and the command line.
 - `vano-system`: what the computer offers to scan: the connected disks (`drives`, through
-  `sysinfo` plus Vano's filters, unit tested on synthetic mounts).
-- `vano-cli`: the command line (`vano drives`, `scan`, `clean`, `completions`), as Postino's
+  `sysinfo` plus Vano's filters, unit tested on synthetic mounts) and the WSL 2 distributions
+  (`wsl`: the registry and `wsl.exe`, the scan and the deletion inside a distribution, and the
+  line protocol `vano-wsl` speaks).
+- `vano-wsl`: a small static Linux binary (`x86_64-unknown-linux-musl`, no gpui, no telaio) that
+  the Windows app runs inside a distribution with `wsl.exe --cd <its folder> --exec ./vano-wsl`:
+  `scan /` writes the tree in the `persist` format to stdout, `delete` deletes for good the
+  NUL-separated paths of stdin. Shipped next to `vano.exe`; `VANO_WSL_AGENT` points elsewhere
+  during development. `vano_scan::start_external` turns that work into a normal `ScanHandle`.
+- `vano-cli`: the command line (`vano drives`, `scan`, `clean`, `wsl list`, `completions`), as Postino's
   `postino-cli`. `main` calls `vano_cli::run_if_cli` first and opens the window only when it
   returns `None`. It also defines `IDENTITY`. English only; rule names come from `rules.yml`.
   The JSON field names are a stable interface: add fields, never rename or remove them.

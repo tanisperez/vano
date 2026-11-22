@@ -5,6 +5,7 @@
 //! [`ScanHandle::read_tree`], and move the finished tree out with [`ScanHandle::take_tree`].
 
 pub mod cache;
+mod external;
 mod hardlinks;
 mod linux_root;
 mod listing;
@@ -19,6 +20,7 @@ use std::time::Duration;
 
 use vano_core::tree::{NodeId, Tree};
 
+pub use external::{ExternalScan, start_external};
 pub use linux_root::linux_root_of;
 pub use usage::{DiskUsage, root_filesystem_usage};
 
@@ -204,6 +206,24 @@ impl ScanHandle {
                 }
             }
         }
+    }
+
+    /// Why an external scan ([`start_external`]) could not run, once it ended.
+    pub fn failure(&self) -> Option<String> {
+        self.shared
+            .failure
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .clone()
+    }
+
+    /// The home folder of the scanned system, as an external scan reported it.
+    pub fn home(&self) -> Option<PathBuf> {
+        self.shared
+            .home
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .clone()
     }
 
     /// Moves the finished tree out. `None` while the scan runs or after it was already taken.

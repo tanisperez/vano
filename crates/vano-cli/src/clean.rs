@@ -68,7 +68,12 @@ pub fn command(args: &CleanArgs) -> u8 {
             return exit::FAILED;
         }
     };
-    let scanned = scan::run(&root, true, !args.json);
+    let live = if args.json {
+        scan::Live::Quiet
+    } else {
+        scan::Live::Terminal
+    };
+    let scanned = scan::run(&root, true, live);
     let rules = vano_rules::Context::current();
     let recs: Vec<Rec> = vano_rules::evaluate(&scanned.tree, &rules)
         .iter()
