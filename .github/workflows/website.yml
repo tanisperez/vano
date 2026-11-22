@@ -28,9 +28,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # site/screenshots holds the screenshot tooling, not pages.
+      # The documentation pages, sitemap.xml and llms.txt are generated (site/README.md).
+      - name: Build the documentation
+        run: python3 site/docs-src/build.py
+
+      # site/screenshots holds the screenshot tooling, and site/docs-src the sources of site/docs,
+      # not pages.
       - name: Assemble the site
-        run: rsync -a --exclude screenshots/ --exclude README.md site/ _site/
+        run: rsync -a --exclude screenshots/ --exclude docs-src/ --exclude README.md site/ _site/
 
       - uses: actions/configure-pages@v6
 

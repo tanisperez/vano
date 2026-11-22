@@ -1,0 +1,28 @@
+title: Introduction
+description: Vano is a fast, native disk analyzer for Linux, Windows and macOS. It shows what fills your disk and recommends what can be removed safely.
+---
+<h1>Vano documentation</h1>
+<p class="lead">Vano is a free, open source disk analyzer for Linux, Windows and macOS. It scans a folder, a disk or a WSL 2 distribution in seconds, shows where the space goes as a treemap, rings or a ranking, and recommends what can be removed safely.</p>
+
+<div class="cards">
+    <a href="quick-start.html"><strong>Quick start</strong><span>Scan your home folder and free your first gigabytes in two minutes.</span></a>
+    <a href="installation.html"><strong>Installation</strong><span>Installers, the Linux install script and building from source.</span></a>
+    <a href="recommendations.html"><strong>Recommendations</strong><span>What Vano suggests removing, and why each one is Safe or worth a Review.</span></a>
+    <a href="command-line.html"><strong>Command line</strong><span>List disks, scan and clean up from a terminal or a script.</span></a>
+</div>
+
+<h2>What Vano is</h2>
+<p>A disk fills up slowly and then all at once. Vano answers two questions: what takes the space, and what of it can go. It reads the size of every file with a parallel scanner, so a home folder of hundreds of thousands of files takes well under a second with a warm cache, and draws the result on the GPU, with no web view behind it.</p>
+<p>Then it looks for things that are safe to remove: package caches, build outputs, browser caches, old installers, virtual disks. Each recommendation says what it is and whether the tool that made it recreates it by itself.</p>
+
+<h2>What Vano never does</h2>
+<ul>
+    <li>It never removes anything without a confirmation, which shows what goes and asks whether to move it to the Trash, where it can be put back, or to delete it for good.</li>
+    <li>It never reads the contents of your files, only their sizes and dates.</li>
+    <li>It never needs an account, and sends no telemetry. The only network request is the optional update check.</li>
+</ul>
+
+<div class="callout tip">
+    <span class="title">Tip</span>
+    <p>Press <kbd>/</kbd> or <kbd>Ctrl</kbd> <kbd>K</kbd> on any page of this documentation to search it.</p>
+</div>

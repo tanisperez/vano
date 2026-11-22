@@ -1,0 +1,23 @@
+title: Troubleshooting
+description: Solutions to common problems: unreadable folders, Full Disk Access on macOS, WSL scans, the Trash, and how to report a bug.
+---
+<h1>Troubleshooting</h1>
+
+<h2>Part of the disk shows as Not scanned</h2>
+<p>Vano counts only what your user can read. System folders and other users' files are left out. On macOS, system folders also need Full Disk Access: open System Settings, Privacy and Security, Full Disk Access, and turn on Vano.</p>
+
+<h2>The scan of a WSL distribution fails</h2>
+<ul>
+    <li>Check that the distribution starts: run <code>wsl -d &lt;name&gt;</code> in a terminal.</li>
+    <li>Its drives must be mounted under <code>/mnt</code>, the default: Vano runs its program from there.</li>
+    <li>Starting a stopped distribution can take a while on a slow or busy machine. Scan it again once it runs.</li>
+</ul>
+
+<h2>Moving to the Trash is slow</h2>
+<p>The Trash moves whole items, and on some systems copies them. For many thousands of files, <a href="removing.html#delete-permanently">delete them permanently</a> instead: it is faster and frees the space at once.</p>
+
+<h2>The disk is not freer after cleaning up</h2>
+<p>Items in the Trash still take their space until you empty it. Inside a WSL distribution, the virtual disk does not shrink by itself (see <a href="wsl.html#the-virtual-disk-does-not-shrink">WSL 2 distributions</a>).</p>
+
+<h2>Reporting a bug</h2>
+<p>Set the log level to Debug in <a href="settings.html#advanced">Settings, Advanced</a>, or start Vano with <code>VANO_LOG=debug</code>, reproduce the problem, and attach the log (see <a href="files-and-folders.html">Files and folders</a>) to an <a href="https://github.com/tanisperez/vano/issues">issue on GitHub</a>.</p>

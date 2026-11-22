@@ -1,0 +1,76 @@
+title: Command line
+description: The vano command: list disks, scan a folder, clean up caches, list WSL distributions, with JSON output and exit codes for scripts.
+---
+<h1>Command line</h1>
+<p class="lead">The same <code>vano</code> program runs commands in the terminal. Without a command it opens the window.</p>
+<p>On Windows, the installer adds Vano to your <code>PATH</code>, so <code>vano</code> works in any new terminal. With the Linux install script it is in <code>~/.local/bin</code>.</p>
+
+<h2>vano drives</h2>
+<p>The connected disks, as the home screen lists them.</p>
+```shell
+$ vano drives
+MOUNT                  LABEL   KIND              FS                USED
+/                              NVMe SSD, system  ext4  249 GB of 501 GB  50%
+/run/media/ana/Backup  Backup  External HDD      exfat 1.2 TB of 2.0 TB  60%
+```
+<p><code>--json</code> prints the same as JSON, with the sizes in bytes.</p>
+
+<h2>vano scan</h2>
+<p>Scans a folder or a disk, the home folder when left out, and prints the biggest entries and the recommendations.</p>
+```shell
+$ vano scan ~/dev --top 5
+~/dev: 17.6 GB in 26,672 files, scanned in 0.1 s
+
+Biggest
+    17.6 GB  target/
+    26.0 MB  .git/
+
+Recommendations
+  Safe      17.6 GB  Rust build output  ~/dev/target
+```
+<div class="table"><table>
+    <thead><tr><th>Option</th><th>What it does</th></tr></thead>
+    <tbody>
+        <tr><td><code>--top N</code></td><td>How many of the biggest entries to list (10 by default).</td></tr>
+        <tr><td><code>--json</code></td><td>Prints JSON: totals, the biggest entries and every recommendation with its paths.</td></tr>
+        <tr><td><code>--cross-file-systems</code></td><td>Also enters other file systems mounted inside the folder.</td></tr>
+    </tbody>
+</table></div>
+
+<h2>vano clean</h2>
+<p>Scans a folder, the home folder when left out, and removes its <a href="recommendations.html#safe">Safe recommendations</a>. Review recommendations are never removed from the terminal: they need someone to look at them in the window.</p>
+<p>It lists what it would remove first, then:</p>
+<ul>
+    <li>in a terminal, asks before removing anything;</li>
+    <li>with <code>--dry-run</code>, or with no terminal to ask (a script, a pipe), only lists;</li>
+    <li>with <code>--yes</code>, removes without asking.</li>
+</ul>
+<p>Items go to the Trash unless you pass <code>--permanent</code>. <code>--json</code> prints the outcome as JSON.</p>
+```shell
+$ vano clean ~/dev --dry-run
+17.6 GB to clean in ~/dev:
+  Safe      17.6 GB  Rust build output  ~/dev/target
+
+Nothing was removed. Run vano clean --yes to move them to the Trash.
+```
+
+<h2>vano wsl list</h2>
+<p>On Windows, the WSL 2 distributions: running or stopped, the size of the virtual disk and, for running ones, the space used inside. The default one has a <code>*</code>. <code>--json</code> prints JSON.</p>
+
+<h2>vano completions</h2>
+<p>Prints the completion script of <code>bash</code>, <code>zsh</code>, <code>fish</code>, <code>elvish</code> or <code>powershell</code>:</p>
+```shell
+$ vano completions bash > ~/.local/share/bash-completion/completions/vano
+```
+
+<h2>Exit codes</h2>
+<div class="table"><table>
+    <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+    <tbody>
+        <tr><td><code>0</code></td><td>Done, a dry run included.</td></tr>
+        <tr><td><code>1</code></td><td>Something failed: a path that cannot be read, items that could not be removed.</td></tr>
+        <tr><td><code>2</code></td><td>The command line is wrong.</td></tr>
+        <tr><td><code>3</code></td><td><code>vano clean</code> found nothing to clean.</td></tr>
+    </tbody>
+</table></div>
+<p>The JSON field names are stable: new versions may add fields, never rename or remove them.</p>

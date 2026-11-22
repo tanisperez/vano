@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>$title · Vano docs</title>
+    <meta name="description" content="$description">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#15161a" media="(prefers-color-scheme: dark)">
+    <meta name="author" content="Estanislao Pérez Nartallo">
+    <link rel="canonical" href="https://vano.tanis.codes/docs/$canonical">
+    <link rel="icon" href="../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../img/logo.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../img/icon-512.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Vano">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="$og_title">
+    <meta property="og:description" content="$description">
+    <meta property="og:url" content="https://vano.tanis.codes/docs/$canonical">
+    <meta property="og:image" content="https://vano.tanis.codes/img/og.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Vano, the disk analyzer: a treemap of a home folder with its recommendations.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="$og_title">
+    <meta name="twitter:description" content="$description">
+    <meta name="twitter:image" content="https://vano.tanis.codes/img/og.png">
+    <meta name="twitter:image:alt" content="Vano, the disk analyzer: a treemap of a home folder with its recommendations.">
+    <script type="application/ld+json">
+$json_ld
+    </script>
+    <link rel="preload" href="../fonts/Geist-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../fonts/Geist-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <script src="../js/theme.js"></script>
+    <script src="../js/docs.js" defer></script>
+</head>
+<body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="../">
+                <img src="../img/logo.svg" alt="" width="28" height="28">
+                Vano
+            </a>
+            <button class="search-trigger" type="button" aria-label="Search the documentation">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <span class="label">Search docs</span>
+                <kbd>Ctrl K</kbd>
+            </button>
+            <nav class="nav" aria-label="Main">
+                <a class="nav-wide" href="../#features">Features</a>
+                <a href="../install.html">Download</a>
+                <a href="./" aria-current="page">Docs</a>
+                <a class="nav-github" href="https://github.com/tanisperez/vano" aria-label="Vano on GitHub">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    <span>GitHub</span>
+                </a>
+                <button class="theme-toggle" type="button" aria-label="Dark theme" title="Switch between light and dark">
+                    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="docs">
+        <button class="docs-menu" type="button" aria-expanded="false" aria-controls="docs-nav">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            Menu
+        </button>
+        <nav class="docs-nav" id="docs-nav" aria-label="Documentation">
+$nav
+        </nav>
+
+        <main class="docs-main" id="main">
+            <article class="article">
+                <p class="breadcrumb"><a href="./">Docs</a> / $group</p>
+$body
+                <p class="page-meta">Found a mistake? <a href="https://github.com/tanisperez/vano/edit/main/site/docs-src/pages/$file">Edit this page on GitHub</a> or <a href="https://github.com/tanisperez/vano/issues">open an issue</a>.</p>
+                <nav class="pager" aria-label="Previous and next page">
+$pager
+                </nav>
+            </article>
+        </main>
+
+        <aside class="docs-toc" aria-label="On this page"></aside>
+    </div>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <span>Vano is open source under the Apache License 2.0.</span>
+            <nav aria-label="Footer">
+                <a href="https://github.com/tanisperez/vano">GitHub</a>
+                <a href="https://github.com/tanisperez/vano/releases">Releases</a>
+                <a href="https://github.com/tanisperez/vano/issues">Report an issue</a>
+                <a href="https://tanis.codes">tanis.codes</a>
+            </nav>
+        </div>
+    </footer>
+
+    <dialog class="search-dialog" aria-label="Search the documentation">
+        <div class="search-box">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" placeholder="Search the docs" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+            <kbd>Esc</kbd>
+        </div>
+        <ul class="search-results" role="listbox" aria-label="Results"></ul>
+        <div class="search-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd>to move</span>
+            <span><kbd>↵</kbd>to open</span>
+            <span><kbd>/</kbd>or <kbd>Ctrl K</kbd>to search from any page</span>
+        </div>
+    </dialog>
+</body>
+</html>

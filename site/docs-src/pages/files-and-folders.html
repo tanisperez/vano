@@ -1,0 +1,17 @@
+title: Files and folders
+description: Where Vano keeps its settings, saved scans, logs, downloaded updates and the WSL program, on each system.
+---
+<h1>Files and folders</h1>
+<p class="lead">Vano writes only these files. Deleting any of them is harmless: it starts over with defaults, or scans again.</p>
+<div class="table"><table>
+    <thead><tr><th>What</th><th>Linux</th><th>macOS</th><th>Windows</th></tr></thead>
+    <tbody>
+        <tr><td>Settings, <code>settings.toml</code></td><td><code>~/.config/vano/</code></td><td><code>~/Library/Application Support/vano/</code></td><td><code>%APPDATA%\vano\</code></td></tr>
+        <tr><td>Recent scans, <code>recents.json</code></td><td><code>~/.config/vano/</code></td><td><code>~/Library/Application Support/vano/</code></td><td><code>%APPDATA%\vano\</code></td></tr>
+        <tr><td>Saved scans</td><td><code>~/.cache/vano/scans/</code></td><td><code>~/Library/Caches/vano/scans/</code></td><td><code>%LOCALAPPDATA%\vano\scans\</code></td></tr>
+        <tr><td>Logs, <code>vano.log</code></td><td><code>~/.local/state/vano/</code></td><td><code>~/Library/Logs/Vano/</code></td><td><code>%LOCALAPPDATA%\Vano\logs\</code></td></tr>
+        <tr><td>Downloaded updates</td><td><code>~/.cache/vano/updates/</code></td><td><code>~/Library/Caches/vano/updates/</code></td><td><code>%LOCALAPPDATA%\vano\updates\</code></td></tr>
+        <tr><td>The WSL program</td><td></td><td></td><td><code>%LOCALAPPDATA%\Vano\wsl\</code></td></tr>
+    </tbody>
+</table></div>
+<p>The log is rotated at 5 MB, keeping the last 10 files. The Linux paths follow <code>XDG_CONFIG_HOME</code>, <code>XDG_CACHE_HOME</code> and <code>XDG_STATE_HOME</code> when they are set.</p>

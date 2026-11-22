@@ -1,0 +1,27 @@
+title: What to scan
+description: Scan your home folder, a whole disk, an external disk, any folder or a WSL 2 distribution, and what Vano counts.
+---
+<h1>What to scan</h1>
+<p class="lead">Anything with files: your home folder, a whole disk, an external disk, a folder, or a WSL 2 distribution.</p>
+
+<h2>Home folder</h2>
+<p>Your files, projects and caches. It is where most recommendations are, and the fastest scan.</p>
+
+<h2>Disks</h2>
+<p>The system disk is <code>/</code> on Linux and macOS (<strong>File system</strong>, <strong>Macintosh HD</strong>) and <code>C:</code> on Windows. Other disks are listed with their label: internal ones, USB disks and memory cards. Vano leaves out what is not a disk you would clean: boot partitions, snaps, container layers, network shares, and the extra mount points of one btrfs disk.</p>
+<p>A scan stays on one file system: it lists a disk mounted inside the folder, but does not enter it. Scan that disk on its own.</p>
+
+<h2>Any folder</h2>
+<p><strong>Choose a folder…</strong>, or <kbd>Ctrl</kbd> <kbd>O</kbd> (<kbd>⌘</kbd> <kbd>O</kbd> on macOS), opens the system folder picker. A network share works too, but goes as fast as the network does.</p>
+
+<h2>WSL 2 distributions</h2>
+<p>On Windows, each distribution is scanned from inside, natively. See <a href="wsl.html">WSL 2 distributions</a>.</p>
+
+<h2>What Vano counts</h2>
+<ul>
+    <li>The space files take on disk (allocated bytes), not their apparent length. A sparse file counts what it really uses.</li>
+    <li>A file with several hard links counts once.</li>
+    <li>Symbolic links count their own tiny size, never what they point to.</li>
+    <li>What Vano cannot read (folders of other users, system folders without permission) is shown as <strong>Not scanned</strong>. On macOS, system folders need Full Disk Access (see <a href="troubleshooting.html">Troubleshooting</a>).</li>
+</ul>
+<p>Every finished scan is saved, so <strong>Open results</strong> brings it back after a restart. The last four are kept.</p>

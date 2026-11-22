@@ -1,0 +1,67 @@
+title: Recommendations
+description: What Vano recommends removing, how it decides, and the difference between Safe and Review.
+---
+<h1>Recommendations</h1>
+<p class="lead">Vano looks for well known space eaters and sorts them in two groups: Safe, which their tool recreates by itself, and Review, which you may still need.</p>
+
+<h2>How Vano decides</h2>
+<p>The rules are conservative. A match is either a well known location (<code>~/.npm</code>, <code>~/.cache/pip</code>) or a folder with a given name next to the file that proves what it is: <code>target</code> next to <code>Cargo.toml</code>, <code>node_modules</code> next to <code>package.json</code>. The outermost match wins, so recommendations never overlap, and Vano never looks inside one. Locations follow each system: the same cache lives in different places on Linux, macOS and Windows.</p>
+
+<h2>Safe</h2>
+<p>Caches and build outputs. Removing them loses nothing: the tool downloads or builds them again when it needs them, at the cost of some time the next time. Safe recommendations start selected.</p>
+<div class="table"><table>
+    <thead><tr><th>Recommendation</th><th>What it is</th></tr></thead>
+    <tbody>
+        <tr><td>npm cache</td><td>Packages npm downloaded before.</td></tr>
+        <tr><td>Yarn &amp; pnpm caches</td><td>Packages downloaded by Yarn and pnpm.</td></tr>
+        <tr><td>Cargo registry &amp; git caches</td><td>Downloaded crates and git checkouts. Installed tools in <code>~/.cargo/bin</code> are not touched.</td></tr>
+        <tr><td>Rust build output</td><td>The <code>target</code> folders of Rust projects.</td></tr>
+        <tr><td>Gradle caches</td><td>Dependency and build caches.</td></tr>
+        <tr><td>pip, uv &amp; Poetry caches</td><td>Python packages and wheels downloaded before.</td></tr>
+        <tr><td>Puppeteer &amp; Playwright browsers</td><td>Browser builds downloaded for test automation.</td></tr>
+        <tr><td>Go build &amp; module caches</td><td>Compiled packages and downloaded modules.</td></tr>
+        <tr><td>Next.js &amp; Turbo build output</td><td>Build artifacts.</td></tr>
+        <tr><td>Python bytecode &amp; tool caches</td><td><code>__pycache__</code> and the caches of pytest, mypy and ruff.</td></tr>
+        <tr><td>Thumbnail cache</td><td>Previews of images and files.</td></tr>
+        <tr><td>Shader &amp; font caches</td><td>Compiled graphics shaders and font lists.</td></tr>
+        <tr><td>Browser caches</td><td>Pages and files browsers keep to load sites faster.</td></tr>
+        <tr><td>JetBrains caches</td><td>Indexes and caches of JetBrains IDEs.</td></tr>
+        <tr><td>Dart &amp; Flutter package cache</td><td>Packages downloaded by pub.</td></tr>
+        <tr><td>Flutter &amp; Dart build output</td><td><code>build</code> and <code>.dart_tool</code> folders.</td></tr>
+        <tr><td>Gradle build output</td><td><code>build</code> and <code>.gradle</code> folders of Gradle projects.</td></tr>
+        <tr><td>Maven build output</td><td><code>target</code> folders of Maven projects.</td></tr>
+        <tr><td>Xcode build data</td><td>DerivedData and device support files.</td></tr>
+        <tr><td>Homebrew, CocoaPods &amp; Xcode caches</td><td>Downloads and caches in <code>Library/Caches</code>.</td></tr>
+        <tr><td>Flatpak app caches</td><td>The cache folder of each Flatpak app.</td></tr>
+    </tbody>
+</table></div>
+
+<h2>Review</h2>
+<p>Things you may still need. Each one says why it is worth a look, and none starts selected.</p>
+<div class="table"><table>
+    <thead><tr><th>Recommendation</th><th>What it is</th></tr></thead>
+    <tbody>
+        <tr><td>Maven repository</td><td>Dependencies in <code>~/.m2</code>.</td></tr>
+        <tr><td>Package manager caches</td><td>Packages pacman or apt downloaded.</td></tr>
+        <tr><td>System journal logs</td><td>Logs systemd keeps.</td></tr>
+        <tr><td>Trash</td><td>Files you already deleted.</td></tr>
+        <tr><td>Android SDK &amp; emulators</td><td>SDK platforms, build tools and emulator images.</td></tr>
+        <tr><td>Ollama models</td><td>Language models pulled with Ollama.</td></tr>
+        <tr><td>Hugging Face cache</td><td>Models and datasets of Hugging Face libraries.</td></tr>
+        <tr><td>LM Studio models</td><td>Models downloaded with LM Studio.</td></tr>
+        <tr><td>node_modules in idle projects</td><td>Dependencies of projects with no changes in 60 days.</td></tr>
+        <tr><td>Git worktrees</td><td>Extra worktrees under <code>.claude/worktrees</code>.</td></tr>
+        <tr><td>Docker data</td><td>Images, containers and volumes.</td></tr>
+        <tr><td>Old installers</td><td>Installers and disk images in Downloads older than 30 days.</td></tr>
+        <tr><td>Screen recordings &amp; big videos</td><td>Videos over 100 MB on the Desktop or in Screencasts.</td></tr>
+        <tr><td>Python virtual environments</td><td><code>.venv</code> folders of Python projects.</td></tr>
+        <tr><td>CocoaPods dependencies</td><td><code>Pods</code> folders of iOS and macOS projects.</td></tr>
+        <tr><td>iOS simulators</td><td>Simulator devices and their apps.</td></tr>
+        <tr><td>WSL and Docker virtual disks</td><td>The virtual disk of each WSL 2 distribution. Shown for information only.</td></tr>
+    </tbody>
+</table></div>
+
+<div class="callout note">
+    <span class="title">Information only</span>
+    <p>Some recommendations cannot be removed from Vano, because their space only comes back through their own tool. The virtual disk of a WSL distribution is one: Vano explains how to shrink it instead. To clean inside a distribution, <a href="wsl.html">scan it</a>.</p>
+</div>

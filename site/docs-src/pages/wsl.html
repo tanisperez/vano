@@ -1,0 +1,24 @@
+title: WSL 2 distributions
+description: Scan your WSL 2 distributions on Windows from inside, and clean them up, with no setup.
+---
+<h1>WSL 2 distributions</h1>
+<p class="lead">On Windows, Vano lists your WSL 2 distributions and scans each one from inside, natively, in seconds.</p>
+
+<h2>On the home screen</h2>
+<p>The <strong>Linux (WSL 2)</strong> section lists every WSL 2 distribution: its name, a <strong>Docker</strong> tag for Docker Desktop's own, whether it is running, the space used inside (only when it runs, asking would start it) and the size of its virtual disk on your Windows disk. Double click one, or select it and click <strong>Scan</strong>.</p>
+
+<h2>How the scan works</h2>
+<p>Reading a distribution's files from Windows, through <code>\\wsl$</code>, is slow. Vano carries a small Linux program inside <code>vano.exe</code>, <code>vano-wsl</code>, and runs it in the distribution with <code>wsl.exe</code>: it scans <code>/</code> natively and sends the result back. You install nothing in the distribution, and the portable copy works too.</p>
+<ul>
+    <li>A stopped distribution starts for the scan, which adds a few seconds.</li>
+    <li>It scans as your default user of the distribution, so folders only root can read show as Not scanned.</li>
+    <li>It stays on the distribution's own disk: <code>/mnt/c</code> and other mounts are left out.</li>
+    <li>The recommendations are those of Linux, with your home folder inside the distribution.</li>
+</ul>
+<p>The first scan writes <code>vano-wsl</code> to <code>%LOCALAPPDATA%\Vano\wsl</code>; the uninstaller removes it.</p>
+
+<h2 id="removing">Removing files</h2>
+<p>Files are deleted inside the distribution, natively, and always for good: the Recycle Bin cannot take them. The same rules apply as for any <a href="removing.html#delete-permanently">permanent deletion</a>.</p>
+
+<h2>The virtual disk does not shrink</h2>
+<p>Each distribution keeps its whole system in an <code>ext4.vhdx</code> that grows as files are added and does not shrink by itself when they are deleted. Removing files frees space inside the distribution; to give it back to Windows, compact the virtual disk with the tools WSL documents, such as its sparse mode.</p>

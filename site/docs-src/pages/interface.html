@@ -1,0 +1,45 @@
+title: The interface
+description: The home screen, the scanning screen and the results: treemap, rings and ranking, colors and the details panel.
+---
+<h1>The interface</h1>
+<p class="lead">Vano has three screens: the home screen picks what to scan, the scanning screen shows the scan live, and the results explore it and clean up.</p>
+
+<h2>Home screen</h2>
+<p>It lists what you can scan, in sections:</p>
+<ul>
+    <li><strong>Drives</strong>: every disk connected, internal and external, with how full it is. A disk over 90% full says <strong>Almost full</strong>.</li>
+    <li><strong>Linux (WSL 2)</strong>: on Windows, your <a href="wsl.html">WSL 2 distributions</a>, whether each one is running, and the size of its virtual disk.</li>
+    <li><strong>Folders</strong>: your home folder, and <strong>Choose a folder…</strong> for any other.</li>
+    <li><strong>Recent</strong>: the last scans. <strong>Open results</strong> shows one again without scanning; the cross forgets it.</li>
+</ul>
+<p>Click a place to select it, and <strong>Scan</strong> at the bottom, or double click it to scan at once. The list of disks is read again whenever the window comes to the front, so a disk you just plugged in shows up.</p>
+<div class="shot">
+    <img class="light" src="../img/home-light.webp" width="2100" height="1260" loading="lazy" alt="The home screen with the disks, the folders and the recent scans.">
+    <img class="dark" src="../img/home-dark.webp" width="2100" height="1260" loading="lazy" alt="The home screen with the disks, the folders and the recent scans.">
+</div>
+
+<h2>Title bar</h2>
+<p>The name of what is selected or shown opens a menu with every place of the home screen, to scan another one from anywhere. The <strong>V</strong> logo goes back home. On the results, <strong>Rescan</strong> scans the same place again, and the gear opens <a href="settings.html">Settings</a>.</p>
+
+<h2>Scanning screen</h2>
+<p>Counters at the top: files read, bytes counted, time and speed, with the percentage when Vano knows how much there is (the disk's used space, or the last scan of the same place). The live view grows as folders are read, as a treemap, rings or a ranking. On the right, the recommendations found so far. <strong>Cancel scan</strong> stops it and goes back home.</p>
+
+<h2>Results</h2>
+<p>At the top, how much is Safe to remove, how much is worth a Review, and what could not be read. Below, the explorer and the recommendations.</p>
+<h3>Explorer</h3>
+<p>The focused folder as one of three views, switched at its top right:</p>
+<ul>
+    <li><strong>Treemap</strong>: every entry is a rectangle sized by its bytes, with its own biggest children inside.</li>
+    <li><strong>Rings</strong>: the same as concentric rings.</li>
+    <li><strong>Ranking</strong>: a list, biggest first.</li>
+</ul>
+<p>Click a folder to open it, right click anything to see its details: size, files, dates, its category and the recommendations inside. Back and forward follow your mouse's side buttons and <kbd>Alt</kbd> <kbd>←</kbd> <kbd>→</kbd>.</p>
+<h3>Colors</h3>
+<p><strong>Category</strong> paints every folder by what mostly fills it: documents and media, code projects, SDKs and emulators, AI models, package caches, or other. <strong>Cleanup</strong> paints what can go: Safe in green, Review in amber, as bands that rise from the bottom of each folder with the share it holds.</p>
+<div class="shot">
+    <img class="light" src="../img/explore-light.webp" width="2100" height="1260" loading="lazy" alt="The explorer showing a treemap colored by category.">
+    <img class="dark" src="../img/explore-dark.webp" width="2100" height="1260" loading="lazy" alt="The explorer showing a treemap colored by category.">
+</div>
+
+<h2>Status bar</h2>
+<p>The free space of the system disk, what a scan or a deletion is doing, and the update when one is ready. The keyboard button opens the <a href="keyboard-shortcuts.html">shortcuts</a>.</p>

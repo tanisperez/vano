@@ -1,0 +1,91 @@
+title: Installation
+description: Install Vano on Linux, Windows or macOS with an installer, the Linux install script, a package or from source.
+---
+<h1>Installation</h1>
+<p class="lead">Vano is a single desktop application with no account and no sign in. Download it for your system, or install it with the Linux install script to get updates from the app.</p>
+
+<h2>System requirements</h2>
+<div class="table"><table>
+    <thead><tr><th>System</th><th>Supported</th><th>Packages</th></tr></thead>
+    <tbody>
+        <tr><td>Linux</td><td>x86_64, Wayland or X11, a GPU driver with Vulkan</td><td>Install script, <code>.deb</code>, <code>.rpm</code>, <code>.tar.gz</code></td></tr>
+        <tr><td>Windows</td><td>Windows 10 and 11, 64 bit</td><td>Installer (<code>-setup.exe</code>), portable zip (<code>-portable.zip</code>)</td></tr>
+        <tr><td>macOS</td><td>Apple silicon (M1 and later)</td><td>Disk image (<code>.dmg</code>)</td></tr>
+    </tbody>
+</table></div>
+<p>Every file is published on the <a href="https://github.com/tanisperez/vano/releases/latest">latest release</a> page on GitHub, with its SHA-256 checksum. The <a href="../install.html">download page</a> links to the right one for each system.</p>
+
+<h2>Linux</h2>
+
+<h3 id="install-script">Install script</h3>
+<p>On any distribution, one command installs the latest release for your user, with no sudo:</p>
+```shell
+$ curl -fsSL https://vano.tanis.codes/install.sh | bash
+```
+<p>The script downloads the <a href="#tarball">tarball</a> of the latest release, checks it against the release's <code>SHA256SUMS</code> and installs it under <code>~/.local</code>: the program in <code>~/.local/bin/vano</code>, and the menu entry and the icons under <code>~/.local/share</code>. It writes the list of the files it installed to <code>~/.local/share/vano/installed-files</code>, so updating and uninstalling touch exactly those.</p>
+<p>A copy installed this way <a href="#updates">updates itself from the app</a>. Running the same command again also updates it.</p>
+<p>To pass options, put them after <code>bash -s --</code>:</p>
+```shell
+$ curl -fsSL https://vano.tanis.codes/install.sh | bash -s -- --uninstall
+```
+<div class="table"><table>
+    <thead><tr><th>Option</th><th>What it does</th></tr></thead>
+    <tbody>
+        <tr><td><code>--version X.Y.Z</code></td><td>Installs that release instead of the latest one.</td></tr>
+        <tr><td><code>--prefix DIR</code></td><td>Installs under <code>DIR</code> instead of <code>~/.local</code>. A system folder such as <code>/usr/local</code> needs <code>sudo bash</code>, and then updates come from running the command again.</td></tr>
+        <tr><td><code>--uninstall</code></td><td>Removes the files the script installed. Your settings, saved scans and logs stay.</td></tr>
+        <tr><td><code>--purge</code></td><td>With <code>--uninstall</code>, also deletes your settings and logs (see <a href="files-and-folders.html">Files and folders</a>).</td></tr>
+        <tr><td><code>--tarball FILE</code></td><td>Installs from a release tarball already on disk. The in-app updater uses it after verifying the file.</td></tr>
+        <tr><td><code>-h</code>, <code>--help</code></td><td>Shows the options.</td></tr>
+    </tbody>
+</table></div>
+<p>The script refuses to install a second copy when a package manager already installed Vano in <code>/usr/bin</code>: remove the package first.</p>
+
+<h3>Debian and Ubuntu</h3>
+```shell
+$ sudo apt install ./vano_*_amd64.deb
+```
+<h3>Fedora and openSUSE</h3>
+```shell
+$ sudo dnf install ./vano-*.x86_64.rpm
+$ sudo zypper install ./vano-*.x86_64.rpm
+```
+<p>To update a package, install the package of the new version the same way. The app does not offer updates in a copy a package manager owns.</p>
+
+<h3 id="tarball">Tarball</h3>
+<p>The tarball has a <code>/usr</code>-like layout: the binary in <code>bin/</code>, the desktop entry and the icons in <code>share/</code>, and the install script at the top.</p>
+```shell
+$ tar -xzf vano-*-linux-x86_64.tar.gz
+$ ./vano-*/bin/vano
+```
+
+<h2>Windows</h2>
+<p>The installer is for your user only and needs no administrator rights. It puts Vano in <code>%LOCALAPPDATA%\Programs\Vano</code>, adds it to the Start menu and, unless you untick it, to your <code>PATH</code>, so <a href="command-line.html"><code>vano</code></a> works in any new terminal. It updates itself.</p>
+<p>The portable zip holds only <code>vano.exe</code>. It needs no installer, writes nothing next to itself and scans <a href="wsl.html">WSL 2 distributions</a> like the installed copy. It does not update itself: the app tells you when there is a new zip.</p>
+
+<h2>macOS</h2>
+<p>Open the disk image and drag Vano to Applications. It updates itself.</p>
+
+<h2>First launch</h2>
+<p>Vano is not code signed yet, so your system asks once before opening it. Updates are not affected.</p>
+<ul>
+    <li><strong>macOS</strong>: if it says it cannot verify the developer, open System Settings, Privacy and Security, and choose Open Anyway. Or run <code>xattr -dr com.apple.quarantine /Applications/Vano.app</code> once.</li>
+    <li><strong>Windows</strong>: if SmartScreen shows Windows protected your PC, choose More info and then Run anyway.</li>
+</ul>
+
+<h2 id="updates">Updates</h2>
+<p>Ten seconds after it starts, Vano checks once whether a newer version exists. It downloads it in the background and verifies its checksum, then shows <strong>Restart</strong> in the status bar. Nothing installs without that click. You can turn the check off, or check by hand, in <a href="settings.html#about">Settings, About</a>.</p>
+<p>When you restart to update, Vano checks again first, so it always installs the latest release, even if the window was open while two of them came out.</p>
+<div class="table"><table>
+    <thead><tr><th>Copy</th><th>Updates</th></tr></thead>
+    <tbody>
+        <tr><td>Windows installer, macOS app</td><td>Downloaded and installed from the app.</td></tr>
+        <tr><td>Linux install script in <code>~/.local</code></td><td>Downloaded and installed from the app.</td></tr>
+        <tr><td>Linux install script in a system folder</td><td>Announced; run the install command again.</td></tr>
+        <tr><td>Windows portable zip, Linux tarball</td><td>Announced, with a link to the release.</td></tr>
+        <tr><td><code>.deb</code>, <code>.rpm</code></td><td>From your package manager; the app shows nothing.</td></tr>
+    </tbody>
+</table></div>
+
+<h2>Build from source</h2>
+<p>Vano builds with the stable Rust toolchain. Clone the <a href="https://github.com/tanisperez/vano">repository</a> and run <code>cargo run --release</code>. The README lists the system libraries each platform needs.</p>

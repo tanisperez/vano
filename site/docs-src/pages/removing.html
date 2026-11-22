@@ -1,0 +1,25 @@
+title: Removing files
+description: Move items to the Trash or delete them for good, what happens on each system, undo, and what Vano never deletes.
+---
+<h1>Removing files</h1>
+<p class="lead">Nothing goes without a confirmation. It shows what goes and asks how: to the Trash, which you can undo, or for good.</p>
+
+<h2>What you can remove</h2>
+<ul>
+    <li>The selected recommendations, with <strong>Delete</strong> under the list.</li>
+    <li>One folder or file of the explorer, from its details panel (right click it).</li>
+</ul>
+
+<h2>Move to Trash</h2>
+<p>Items go to the system Trash (the Recycle Bin on Windows), where they can be put back. Right after, the toast's <strong>Undo</strong> puts them back for you, on Linux and Windows. The Trash keeps their space until you empty it, so the disk does not get freer yet.</p>
+<p>Many thousands of files can take a while to move: the confirmation warns you from 20,000 files.</p>
+
+<h2>Delete permanently</h2>
+<p>Items are deleted for good, one file at a time, so the progress shows and <strong>Stop</strong> halts before the next file. It is faster than the Trash and frees the space at once. It cannot be undone.</p>
+<p>A permanent deletion never follows a symbolic link and never enters another file system mounted inside a folder: it removes what the scan counted and nothing it reaches by accident.</p>
+
+<h2>Inside a WSL distribution</h2>
+<p>The Recycle Bin cannot take the files of a WSL distribution, so there the confirmation only offers to delete them for good. See <a href="wsl.html#removing">WSL 2 distributions</a>.</p>
+
+<h2>When something stays</h2>
+<p>An item that could not be removed stays in place, and a report says which and why: a file in use, a permission, or a Recycle Bin that refuses something too big. The rest of the batch goes on.</p>

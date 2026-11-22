@@ -1,0 +1,890 @@
+/* Vano documentation. Loaded after style.css and built on its tokens: a three column layout
+   (navigation, article, "On this page"), the search dialog and the article typography. */
+
+:root {
+    --header-h: 60px;
+    --nav-w: 264px;
+    --toc-w: 220px;
+    --article: 760px;
+}
+
+/* Header search button. Hidden without JavaScript, since search needs it. */
+
+.search-trigger {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    width: 240px;
+    height: 36px;
+    margin-left: 24px;
+    padding: 0 8px 0 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    color: var(--fg-subtle);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition:
+        border-color 0.15s,
+        color 0.15s;
+}
+
+:root[data-theme] .search-trigger {
+    display: inline-flex;
+}
+
+.search-trigger:hover {
+    border-color: var(--border-strong);
+    color: var(--fg-muted);
+}
+
+.search-trigger svg,
+.search-box svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.search-trigger .label {
+    flex: 1;
+    text-align: left;
+}
+
+.search-trigger kbd {
+    font-size: 11px;
+}
+
+/* Layout */
+
+.docs {
+    display: grid;
+    grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--toc-w);
+    gap: 48px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+.docs-nav {
+    position: sticky;
+    top: var(--header-h);
+    align-self: start;
+    max-height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    padding: 32px 8px 48px 0;
+    scrollbar-width: thin;
+}
+
+.docs-nav .group + .group {
+    margin-top: 24px;
+}
+
+.docs-nav h2 {
+    margin: 0 0 6px;
+    padding: 0 12px;
+    color: var(--fg);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.docs-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.docs-nav a {
+    display: block;
+    padding: 5px 12px;
+    border-radius: var(--r-sm);
+    color: var(--fg-muted);
+    font-size: 14.5px;
+    line-height: 1.4;
+}
+
+.docs-nav a:hover {
+    background: var(--hover);
+    color: var(--fg);
+    text-decoration: none;
+}
+
+.docs-nav a[aria-current="page"] {
+    background: var(--accent-subtle);
+    color: var(--accent-text);
+    font-weight: 500;
+}
+
+/* Mobile navigation toggle: only shown on narrow screens, see the media queries below. */
+.docs-menu {
+    display: none;
+}
+
+.docs-main {
+    min-width: 0;
+    padding: 40px 0 96px;
+}
+
+.docs-toc {
+    position: sticky;
+    top: var(--header-h);
+    align-self: start;
+    max-height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    padding: 40px 0 48px;
+    font-size: 13.5px;
+}
+
+.docs-toc h2 {
+    margin: 0 0 10px;
+    color: var(--fg);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.docs-toc ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid var(--border);
+}
+
+.docs-toc a {
+    display: block;
+    margin-left: -1px;
+    padding: 4px 0 4px 14px;
+    border-left: 1px solid transparent;
+    color: var(--fg-muted);
+    line-height: 1.4;
+}
+
+.docs-toc .h3 a {
+    padding-left: 26px;
+}
+
+.docs-toc a:hover {
+    color: var(--fg);
+    text-decoration: none;
+}
+
+.docs-toc a.active {
+    border-left-color: var(--accent);
+    color: var(--accent-text);
+}
+
+/* Article */
+
+.article {
+    max-width: var(--article);
+}
+
+.breadcrumb {
+    margin: 0 0 12px;
+    color: var(--fg-subtle);
+    font-size: 14px;
+}
+
+.breadcrumb a {
+    color: var(--fg-muted);
+}
+
+.article h1 {
+    font-size: clamp(32px, 4.4vw, 42px);
+    letter-spacing: -0.03em;
+}
+
+.article .lead {
+    margin-top: 16px;
+    color: var(--fg-muted);
+    font-size: 19px;
+    line-height: 1.55;
+}
+
+.article h2 {
+    margin: 56px 0 0;
+    padding-top: 8px;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+}
+
+.article h3 {
+    margin: 36px 0 0;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+}
+
+.article h4 {
+    margin: 28px 0 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.article :is(h2, h3, h4) {
+    position: relative;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+}
+
+/* Heading anchors, added by js/docs.js. */
+.article .anchor {
+    margin-left: 8px;
+    color: var(--fg-subtle);
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.article :is(h2, h3, h4):hover .anchor,
+.article .anchor:focus-visible {
+    opacity: 1;
+    text-decoration: none;
+}
+
+.article p,
+.article ul,
+.article ol,
+.article dl {
+    margin: 16px 0 0;
+}
+
+.article ul,
+.article ol {
+    padding-left: 24px;
+}
+
+.article li + li {
+    margin-top: 6px;
+}
+
+.article li > ul,
+.article li > ol {
+    margin-top: 6px;
+}
+
+.article strong {
+    font-weight: 600;
+}
+
+.article a {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent-text) 35%, transparent);
+    text-underline-offset: 3px;
+}
+
+.article a:hover {
+    text-decoration-color: currentColor;
+}
+
+.article a.btn,
+.article .anchor,
+.article .cards a,
+.article .pager a {
+    text-decoration: none;
+}
+
+.article hr {
+    margin: 48px 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+}
+
+.article dt {
+    margin-top: 16px;
+    font-weight: 600;
+}
+
+.article dd {
+    margin: 4px 0 0;
+    color: var(--fg-muted);
+}
+
+.article .shot {
+    margin: 24px -1.4% 0;
+}
+
+.article figure {
+    margin: 24px 0 0;
+}
+
+/* A crop of the window has no shadow margin of its own: it gets a frame instead. */
+.article .shot.crop {
+    margin: 24px 0 0;
+}
+
+.article .shot.crop img {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+/* A page of the PDF report, always light like the report, as a sheet. */
+.article .report-page {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 16px 48px -24px rgba(0, 0, 0, 0.35);
+}
+
+.article figcaption.caption {
+    margin-top: 8px;
+    color: var(--fg-subtle);
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Code blocks */
+
+.article .code {
+    position: relative;
+    margin-top: 20px;
+    border-radius: var(--r-lg);
+    box-shadow: none;
+}
+
+.article .code pre {
+    font-size: 13.5px;
+    line-height: 1.65;
+}
+
+.article .code-title {
+    padding: 8px 14px;
+    font-size: 12.5px;
+}
+
+.copy-code {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    background: var(--raised);
+    color: var(--fg-muted);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.code:hover .copy-code,
+.copy-code:focus-visible {
+    opacity: 1;
+}
+
+.copy-code:hover {
+    color: var(--fg);
+}
+
+/* With a title bar the button sits in it. */
+.code:has(.code-title) .copy-code {
+    top: 4px;
+}
+
+.code .kw {
+    color: var(--m-patch);
+}
+
+.code .m-post {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.code .m-put {
+    color: var(--info);
+    font-weight: 600;
+}
+
+.code .m-patch {
+    color: var(--m-patch);
+    font-weight: 600;
+}
+
+.code .m-delete {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.code .m-other {
+    color: var(--fg-muted);
+    font-weight: 600;
+}
+
+.code .prompt {
+    color: var(--fg-subtle);
+    user-select: none;
+}
+
+/* Tables */
+
+.table {
+    margin-top: 20px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+}
+
+.article table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    line-height: 1.5;
+}
+
+.article th,
+.article td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.article th {
+    background: var(--surface);
+    color: var(--fg);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.article tr:last-child td {
+    border-bottom: 0;
+}
+
+.article td code {
+    white-space: nowrap;
+}
+
+/* Callouts */
+
+.callout {
+    margin: 24px 0 0;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--info);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    font-size: 15px;
+}
+
+.callout > :first-child {
+    margin-top: 0;
+}
+
+.callout .title {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--info);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.callout.tip {
+    border-left-color: var(--success);
+}
+
+.callout.tip .title {
+    color: var(--success);
+}
+
+.callout.warning {
+    border-left-color: var(--warning);
+}
+
+.callout.warning .title {
+    color: var(--warning);
+}
+
+/* Step list for tutorials */
+
+.steps {
+    counter-reset: step;
+    padding-left: 0 !important;
+    list-style: none;
+}
+
+.steps > li {
+    position: relative;
+    padding-left: 44px;
+    counter-increment: step;
+}
+
+.steps > li + li {
+    margin-top: 20px;
+}
+
+.steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-subtle);
+    color: var(--accent-text);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Cards that link to other pages */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cards a {
+    display: block;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--raised);
+    color: var(--fg);
+    transition: border-color 0.15s;
+}
+
+.cards a:hover {
+    border-color: var(--accent);
+}
+
+.cards strong {
+    display: block;
+    font-size: 16px;
+}
+
+.cards span {
+    display: block;
+    margin-top: 4px;
+    color: var(--fg-muted);
+    font-size: 14.5px;
+    line-height: 1.5;
+}
+
+/* Previous and next page */
+
+.pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 64px;
+}
+
+.pager a {
+    display: block;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    color: var(--fg);
+    font-weight: 500;
+    transition: border-color 0.15s;
+}
+
+.pager a:hover {
+    border-color: var(--accent);
+}
+
+.pager small {
+    display: block;
+    color: var(--fg-subtle);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.pager .next {
+    grid-column: 2;
+    text-align: right;
+}
+
+.page-meta {
+    margin-top: 32px;
+    color: var(--fg-subtle);
+    font-size: 14px;
+}
+
+.page-meta a {
+    color: var(--fg-muted);
+}
+
+/* Search dialog */
+
+.search-dialog {
+    width: min(640px, calc(100vw - 32px));
+    max-height: min(560px, calc(100vh - 96px));
+    margin: 72px auto 0;
+    padding: 0;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-xl);
+    background: var(--raised);
+    color: var(--fg);
+    box-shadow: 0 24px 64px -16px rgba(16, 18, 40, 0.35);
+    overflow: hidden;
+}
+
+.search-dialog[open] {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-dialog::backdrop {
+    background: rgba(16, 18, 26, 0.45);
+    backdrop-filter: blur(2px);
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg-subtle);
+}
+
+.search-box input {
+    flex: 1;
+    min-width: 0;
+    height: 52px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    font-size: 16px;
+}
+
+.search-box input::-webkit-search-cancel-button {
+    display: none;
+}
+
+.search-box kbd {
+    font-size: 11px;
+}
+
+.search-results {
+    flex: 1;
+    margin: 0;
+    padding: 8px;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.search-results .group {
+    padding: 10px 10px 4px;
+    color: var(--fg-subtle);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.search-results a {
+    display: block;
+    padding: 9px 12px;
+    border-radius: var(--r-md);
+    color: var(--fg);
+}
+
+.search-results a:hover {
+    text-decoration: none;
+}
+
+.search-results a[aria-selected="true"] {
+    background: var(--accent-subtle);
+}
+
+.search-results .heading {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 500;
+}
+
+.search-results .excerpt {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--fg-muted);
+    font-size: 13px;
+    line-height: 1.45;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.search-results mark {
+    padding: 0 1px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+    color: inherit;
+}
+
+.search-empty {
+    padding: 32px 16px;
+    color: var(--fg-muted);
+    font-size: 14px;
+    text-align: center;
+}
+
+.search-foot {
+    display: flex;
+    gap: 16px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--fg-subtle);
+    font-size: 12.5px;
+}
+
+.search-foot kbd {
+    margin-right: 4px;
+    font-size: 11px;
+}
+
+/* Responsive */
+
+@media (max-width: 1240px) {
+    .docs {
+        grid-template-columns: var(--nav-w) minmax(0, 1fr);
+    }
+
+    .docs-toc {
+        display: none;
+    }
+}
+
+@media (max-width: 980px) {
+    .search-trigger {
+        width: auto;
+        margin-left: auto;
+    }
+
+    .search-trigger .label,
+    .search-trigger kbd {
+        display: none;
+    }
+
+    .site-header .nav {
+        margin-left: 0;
+    }
+
+    .docs {
+        display: block;
+    }
+
+    /* The navigation folds into a "Menu" bar under the header. Without JavaScript it stays open
+       above the article. */
+    .docs-menu {
+        position: sticky;
+        top: var(--header-h);
+        z-index: 4;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: calc(100% + 2 * var(--gutter));
+        margin: 0 calc(-1 * var(--gutter));
+        padding: 10px var(--gutter);
+        border: 0;
+        border-bottom: 1px solid var(--border);
+        background: color-mix(in srgb, var(--bg) 92%, transparent);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: var(--fg-muted);
+        font: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    :root:not([data-theme]) .docs-menu {
+        display: none;
+    }
+
+    .docs-menu svg {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+    }
+
+    .docs-nav {
+        position: static;
+        max-height: none;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    :root[data-theme] .docs:not(.nav-open) .docs-nav {
+        display: none;
+    }
+
+    .docs-main {
+        padding-top: 28px;
+    }
+
+    /* Clear the sticky Menu bar as well as the header. */
+    .article :is(h2, h3, h4) {
+        scroll-margin-top: calc(var(--header-h) + 64px);
+    }
+}
+
+@media (max-width: 640px) {
+    .search-trigger {
+        margin-left: auto;
+        width: 36px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .article h2 {
+        margin-top: 44px;
+        font-size: 23px;
+    }
+
+    .article .lead {
+        font-size: 17px;
+    }
+
+    .cards,
+    .pager {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pager .next {
+        grid-column: 1;
+    }
+
+    .search-dialog {
+        margin-top: 16px;
+        max-height: calc(100vh - 32px);
+    }
+
+    .search-foot {
+        display: none;
+    }
+
+    .copy-code {
+        opacity: 1;
+    }
+}
+
+/* The GitHub link is also in the footer; drop it where the header runs out of room. */
+@media (max-width: 420px) {
+    .site-header .nav .nav-github {
+        display: none;
+    }
+}
