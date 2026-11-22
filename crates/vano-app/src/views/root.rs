@@ -234,8 +234,14 @@ pub struct AppView {
     pub(crate) about_info: AboutInfo,
     pub(crate) rules_ctx: RulesContext,
     pub(crate) home: Option<PathBuf>,
+    /// The connected disks, the system one first, read in the background when the home screen
+    /// shows or the window gets the focus.
+    pub(crate) drives: Vec<vano_system::Drive>,
+    /// The WSL 2 distributions (Windows only), read with the disks.
+    pub(crate) distros: Vec<vano_system::wsl::Distro>,
     focus_handle: FocusHandle,
     _evaluation: Option<Task<()>>,
+    _places: Option<Task<()>>,
 }
 
 impl AppView {
@@ -298,9 +304,20 @@ impl AppView {
             about_info: AboutInfo::detect(),
             rules_ctx: RulesContext::current(),
             home: dirs::home_dir(),
+            drives: Vec::new(),
+            distros: Vec::new(),
             focus_handle,
             _evaluation: None,
+            _places: None,
         };
+        // Disks come and go: read them again whenever the window comes back to the front.
+        cx.observe_window_activation(window, |view, window, cx| {
+            if window.is_window_active() && view.screen == Screen::Home {
+                view.refresh_places(cx);
+            }
+        })
+        .detach();
+        view.refresh_places(cx);
         view.live_treemap.motion.set_spring(LIVE_SPRING);
         view.schedule_startup_update_check(cx);
         view.prune_saved_scans(cx);
@@ -342,6 +359,52 @@ impl AppView {
         self.trashing
     }
 
+    /// Reads the disks and the WSL distributions again, in the background: `wsl.exe` takes tens
+    /// of milliseconds. Never on a timer, see the performance rules.
+    pub(crate) fn refresh_places(&mut self, cx: &mut Context<Self>) {
+        let job = cx
+            .background_executor()
+            .spawn(async move { (vano_system::list_drives(), vano_system::wsl::list_distros()) });
+        self._places = Some(cx.spawn(async move |view, cx| {
+            let (drives, distros) = job.await;
+            let _ = view.update(cx, |view, cx| {
+                if view.drives != drives || view.distros != distros {
+                    log::debug!(
+                        "places: {} disks, {} WSL distributions",
+                        drives.len(),
+                        distros.len()
+                    );
+                    view.drives = drives;
+                    view.distros = distros;
+                    cx.notify();
+                }
+            });
+        }));
+    }
+
+    /// The rules context of a scan of `target`: a WSL distribution is a Linux system with its
+    /// own home folder.
+    pub(crate) fn rules_ctx_for(&self, target: &Target) -> RulesContext {
+        if target.kind == TargetKind::Wsl {
+            RulesContext {
+                home: target.home.clone(),
+                os: vano_rules::Os::Linux,
+                ..self.rules_ctx.clone()
+            }
+        } else {
+            self.rules_ctx.clone()
+        }
+    }
+
+    /// What the next deletion does: the Recycle Bin cannot take the files of a WSL distribution,
+    /// so there it is always for good.
+    pub(crate) fn effective_delete_mode(&self) -> trash::DeleteMode {
+        match &self.results {
+            Some(results) if results.target.kind == TargetKind::Wsl => trash::DeleteMode::Permanent,
+            _ => self.delete_mode,
+        }
+    }
+
     /// Picks what the next scan reads.
     pub(crate) fn set_target(&mut self, target: Target, cx: &mut Context<Self>) {
         self.target = target;
@@ -381,9 +444,29 @@ impl AppView {
         }
         let target = self.target.clone();
         log::info!("scan started: {}", target.path.display());
-        let handle = Arc::new(vano_scan::start(ScanOptions::new(target.path.clone())));
+        let handle = Arc::new(match target.kind {
+            TargetKind::Wsl => start_wsl_scan(target.label()),
+            _ => vano_scan::start(ScanOptions::new(target.path.clone())),
+        });
+        let distro_used = (target.kind == TargetKind::Wsl)
+            .then(|| {
+                self.distros
+                    .iter()
+                    .find(|distro| Some(&distro.name) == target.name.as_ref())
+                    .and_then(|distro| distro.used_inside)
+            })
+            .flatten();
+        let drive_used = (target.kind == TargetKind::Drive)
+            .then(|| {
+                self.drives
+                    .iter()
+                    .find(|drive| drive.mount_point == target.path)
+                    .map(vano_system::Drive::used)
+            })
+            .flatten();
         let estimate = match target.kind {
             TargetKind::Disk => self.disk.map(|usage| usage.used()),
+            _ if distro_used.or(drive_used).is_some() => distro_used.or(drive_used),
             _ => self
                 .recents
                 .iter()
@@ -401,6 +484,7 @@ impl AppView {
                 }
             }
         });
+        let rules = LiveRules::new(self.rules_ctx_for(&target));
         self.scan = Some(ScanSession {
             target,
             handle,
@@ -415,7 +499,7 @@ impl AppView {
                 cancelled: false,
             },
             estimate,
-            rules: LiveRules::new(self.rules_ctx.clone()),
+            rules,
             found: Vec::new(),
             found_status: HashMap::new(),
             generation: 0,
@@ -476,10 +560,19 @@ impl AppView {
             return;
         };
         if session.progress.cancelled {
+            let failure = session.handle.failure();
+            let name = session.target.label();
             log::info!("scan cancelled");
             self.scan = None;
             self.screen = Screen::Home;
+            if let Some(error) = failure {
+                let text = rust_i18n::t!("toast.scan_failed", target = name, error = error);
+                self.show_toast(text.into_owned(), None, true, cx);
+            }
             return;
+        }
+        if session.target.kind == TargetKind::Wsl {
+            session.target.home = session.handle.home().or(session.target.home.take());
         }
         let Some(tree) = session.handle.take_tree() else {
             return;
@@ -497,7 +590,7 @@ impl AppView {
             progress.elapsed.as_secs_f64(),
         );
         let target = session.target.clone();
-        let ctx = self.rules_ctx.clone();
+        let ctx = self.rules_ctx_for(&target);
         let started = Instant::now();
         let evaluate = cx.background_executor().spawn({
             let tree = tree.clone();
@@ -601,7 +694,7 @@ impl AppView {
             self.start_scan(cx);
             return;
         };
-        let ctx = self.rules_ctx.clone();
+        let ctx = self.rules_ctx_for(&recent.target);
         let load = cx.background_executor().spawn(async move {
             let tree = vano_scan::cache::load(&path).ok()?;
             let categories = vano_rules::categorize(&tree, &ctx);
@@ -665,11 +758,12 @@ impl AppView {
     pub(crate) fn go_home(&mut self, cx: &mut Context<Self>) {
         if self.screen == Screen::Scanning {
             self.cancel_scan(cx);
-            return;
+        } else {
+            self.screen = Screen::Home;
+            self.detail = None;
+            cx.notify();
         }
-        self.screen = Screen::Home;
-        self.detail = None;
-        cx.notify();
+        self.refresh_places(cx);
     }
 
     /// Shows a short message at the bottom of the window.
@@ -735,7 +829,15 @@ impl AppView {
         if nodes.is_empty() {
             return false;
         }
-        let paths: Vec<PathBuf> = nodes.iter().map(|node| results.tree.path(*node)).collect();
+        let paths: Vec<PathBuf> = nodes.iter().map(|node| results.node_path(*node)).collect();
+        // Inside a WSL distribution the paths are its own, built from the names in the tree.
+        let wsl = (results.target.kind == TargetKind::Wsl).then(|| {
+            let linux: Vec<String> = nodes
+                .iter()
+                .map(|node| vano_system::wsl::linux_path(&results.tree, *node))
+                .collect();
+            (results.target.label(), linux)
+        });
         let sizes: Vec<u64> = nodes
             .iter()
             .map(|node| results.tree.node(*node).size)
@@ -746,11 +848,13 @@ impl AppView {
             .iter()
             .map(|node| u64::from(results.tree.node(*node).files))
             .sum();
-        let mode = self.delete_mode;
+        let mode = self.effective_delete_mode();
         let progress = Arc::new(trash::TrashProgress::new(mode, paths.len(), files, size));
         // Permanent deletion looks at the tree once more if it ends early: a copy, so the job
-        // needs nothing from the view. The tree is one flat buffer, so this is quick.
-        let tree = (mode == trash::DeleteMode::Permanent).then(|| results.tree.clone());
+        // needs nothing from the view. The tree is one flat buffer, so this is quick. Not inside
+        // a WSL distribution, whose paths Windows cannot look at quickly.
+        let tree =
+            (mode == trash::DeleteMode::Permanent && wsl.is_none()).then(|| results.tree.clone());
         self.batch_note = None;
         self.trashing = true;
         self.trash_progress = Some(progress.clone());
@@ -767,12 +871,15 @@ impl AppView {
         log::info!("{mode:?}: {} items ({} bytes)", paths.len(), size);
         let shared = progress.clone();
         let job = cx.background_executor().spawn(async move {
-            let outcome = match mode {
-                trash::DeleteMode::Trash => trash::move_each(&paths, &shared.cancel, |index| {
-                    shared.done.fetch_add(1, Ordering::Relaxed);
-                    shared.bytes.fetch_add(sizes[index], Ordering::Relaxed);
-                }),
-                trash::DeleteMode::Permanent => delete::delete_each(&paths, &shared),
+            let outcome = match (mode, wsl) {
+                (_, Some((distro, linux))) => crate::state::wsl::delete(&distro, &linux, &shared),
+                (trash::DeleteMode::Trash, None) => {
+                    trash::move_each(&paths, &shared.cancel, |index| {
+                        shared.done.fetch_add(1, Ordering::Relaxed);
+                        shared.bytes.fetch_add(sizes[index], Ordering::Relaxed);
+                    })
+                }
+                (trash::DeleteMode::Permanent, None) => delete::delete_each(&paths, &shared),
             };
             // What is already gone of the items that were not finished.
             let gone: Vec<NodeId> = tree.map_or_else(Vec::new, |tree| {
@@ -883,7 +990,7 @@ impl AppView {
             }
             // Read again rather than added: the Trash is on the same disk, so its space only
             // comes back when the user empties it.
-            results.fs = vano_scan::root_filesystem_usage(&results.target.path);
+            results.fs = crate::state::results::read_fs(&results.target);
             self.disk = vano_scan::root_filesystem_usage(&crate::state::target::system_root());
         }
         // Read after the marks above: a failed item shows what is really left of it.
@@ -981,7 +1088,7 @@ impl AppView {
                             results.mark_restored(&batch.nodes);
                         }
                         if let Some(results) = view.results.as_mut() {
-                            results.fs = vano_scan::root_filesystem_usage(&results.target.path);
+                            results.fs = crate::state::results::read_fs(&results.target);
                         }
                         view.disk =
                             vano_scan::root_filesystem_usage(&crate::state::target::system_root());
@@ -1159,4 +1266,13 @@ fn navigation_buttons(view: WeakEntity<AppView>) -> impl IntoElement {
     )
     .absolute()
     .size_0()
+}
+
+/// A scan run inside the WSL distribution `name` by `vano-wsl`, see `vano_system::wsl`.
+fn start_wsl_scan(name: String) -> ScanHandle {
+    vano_scan::start_external(PathBuf::from("/"), move |scan| {
+        let agent = vano_system::wsl::agent()
+            .ok_or_else(|| format!("{} is missing", vano_system::wsl::AGENT))?;
+        vano_system::wsl::scan(&name, &agent, scan)
+    })
 }

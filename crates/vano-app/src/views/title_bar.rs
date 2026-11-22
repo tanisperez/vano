@@ -74,6 +74,13 @@ impl AppView {
         .unwrap_or_else(|| self.target.clone());
         let icon = target_icon(target.kind);
         let busy = self.screen == Screen::Scanning || self.trashing;
+        // The same places as the home screen: the home folder, every disk, every distribution.
+        let mut choices: Vec<Target> = Target::home().into_iter().collect();
+        if self.drives.is_empty() {
+            choices.push(Target::disk());
+        }
+        choices.extend(self.drives.iter().map(Target::drive));
+        choices.extend(self.distros.iter().map(|distro| Target::wsl(&distro.name)));
         Button::new("target-switcher")
             .ghost()
             .h(px(ENV_PILL_HEIGHT))
@@ -85,12 +92,7 @@ impl AppView {
             .dropdown_caret(true)
             .disabled(busy)
             .dropdown_menu(move |mut menu, _, _| {
-                let mut choices = Vec::new();
-                if let Some(home) = Target::home() {
-                    choices.push(home);
-                }
-                choices.push(Target::disk());
-                for choice in choices {
+                for choice in choices.clone() {
                     let weak = weak.clone();
                     let label = choice.label();
                     menu = menu.item(PopupMenuItem::new(label).on_click(move |_, _, cx| {
@@ -117,7 +119,8 @@ impl AppView {
 pub(crate) fn target_icon(kind: TargetKind) -> Lucide {
     match kind {
         TargetKind::Home => Lucide::House,
-        TargetKind::Disk => Lucide::HardDrive,
+        TargetKind::Disk | TargetKind::Drive => Lucide::HardDrive,
+        TargetKind::Wsl => Lucide::Terminal,
         TargetKind::Folder => Lucide::Folder,
     }
 }

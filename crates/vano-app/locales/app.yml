@@ -140,21 +140,11 @@ _version: 2
   es: "%{used} usados de %{total}"
   gl: "%{used} usados de %{total}"
   it: "%{used} usati su %{total}"
-"home.folder_caption":
-  en: "Opens the system folder picker."
-  es: "Abre el selector de carpetas del sistema."
-  gl: "Abre o selector de cartafoles do sistema."
-  it: "Apre il selettore di cartelle del sistema."
-"home.folder_change":
-  en: "Click to pick another folder."
-  es: "Haz clic para elegir otra carpeta."
-  gl: "Preme para escoller outro cartafol."
-  it: "Fai clic per scegliere un'altra cartella."
 "home.folder_path":
-  en: "Any folder or external drive"
-  es: "Cualquier carpeta o disco externo"
-  gl: "Calquera cartafol ou disco externo"
-  it: "Qualsiasi cartella o disco esterno"
+  en: "Any folder, network share or drive"
+  es: "Cualquier carpeta, recurso de red o disco"
+  gl: "Calquera cartafol, recurso de rede ou disco"
+  it: "Qualsiasi cartella, condivisione di rete o disco"
 "home.disk_full":
   en: "%{pct}% full"
   es: "%{pct}% lleno"
@@ -175,11 +165,6 @@ _version: 2
   es: "Quitar del historial"
   gl: "Quitar do historial"
   it: "Rimuovi dalla cronologia"
-"home.home_caption":
-  en: "Your files, projects and caches."
-  es: "Tus archivos, proyectos y cachés."
-  gl: "Os teus ficheiros, proxectos e cachés."
-  it: "I tuoi file, progetti e cache."
 "home.open_results":
   en: "Open results"
   es: "Abrir resultados"
@@ -200,11 +185,6 @@ _version: 2
   es: "Mira qué llena tu disco y libéralo con seguridad."
   gl: "Mira que enche o teu disco e libérao con seguridade."
   it: "Scopri cosa riempie il disco e liberalo in sicurezza."
-"home.what":
-  en: "What to scan"
-  es: "Qué analizar"
-  gl: "Que analizar"
-  it: "Cosa analizzare"
 "results.color.category":
   en: "Category"
   es: "Categoría"
@@ -880,3 +860,88 @@ _version: 2
   es: "%{n} elementos borrados definitivamente"
   gl: "%{n} elementos borrados definitivamente"
   it: "%{n} elementi eliminati definitivamente"
+"home.almost_full":
+  en: "Almost full"
+  es: "Casi lleno"
+  gl: "Case cheo"
+  it: "Quasi pieno"
+"home.drive_caption":
+  en: "%{used} used of %{total} · %{free} free"
+  es: "%{used} usados de %{total} · %{free} libres"
+  gl: "%{used} usados de %{total} · %{free} libres"
+  it: "%{used} usati su %{total} · %{free} liberi"
+"home.drive_count.one":
+  en: "%{n} drive"
+  es: "%{n} disco"
+  gl: "%{n} disco"
+  it: "%{n} disco"
+"home.drive_count.other":
+  en: "%{n} drives"
+  es: "%{n} discos"
+  gl: "%{n} discos"
+  it: "%{n} dischi"
+"home.drives":
+  en: "Drives"
+  es: "Discos"
+  gl: "Discos"
+  it: "Dischi"
+"home.folders":
+  en: "Folders"
+  es: "Carpetas"
+  gl: "Cartafoles"
+  it: "Cartelle"
+"home.kind_disk":
+  en: "Disk"
+  es: "Disco"
+  gl: "Disco"
+  it: "Disco"
+"home.kind_external":
+  en: "External %{kind}"
+  es: "%{kind} externo"
+  gl: "%{kind} externo"
+  it: "%{kind} esterno"
+"home.wsl":
+  en: "Linux (WSL 2)"
+  es: "Linux (WSL 2)"
+  gl: "Linux (WSL 2)"
+  it: "Linux (WSL 2)"
+"home.wsl_count.one":
+  en: "%{n} distribution"
+  es: "%{n} distribución"
+  gl: "%{n} distribución"
+  it: "%{n} distribuzione"
+"home.wsl_count.other":
+  en: "%{n} distributions"
+  es: "%{n} distribuciones"
+  gl: "%{n} distribucións"
+  it: "%{n} distribuzioni"
+"home.wsl_inside":
+  en: "%{size} used inside"
+  es: "%{size} usados dentro"
+  gl: "%{size} usados dentro"
+  it: "%{size} usati all'interno"
+"home.wsl_on_disk":
+  en: "%{size} on disk"
+  es: "%{size} en disco"
+  gl: "%{size} no disco"
+  it: "%{size} su disco"
+"home.wsl_running":
+  en: "Running"
+  es: "En ejecución"
+  gl: "En execución"
+  it: "In esecuzione"
+"home.wsl_stopped":
+  en: "Stopped"
+  es: "Detenida"
+  gl: "Detida"
+  it: "Arrestata"
+"confirm.wsl_permanent":
+  en: "Files inside a WSL distribution cannot go to the Recycle Bin, so they are deleted for good."
+  es: "Los archivos de una distribución WSL no pueden ir a la papelera de reciclaje, así que se borran definitivamente."
+  gl: "Os ficheiros dunha distribución WSL non poden ir á papeleira de reciclaxe, así que se borran definitivamente."
+  it: "I file di una distribuzione WSL non possono andare nel Cestino, quindi vengono eliminati definitivamente."
+"toast.scan_failed":
+  en: "Could not scan %{target}: %{error}"
+  es: "No se pudo analizar %{target}: %{error}"
+  gl: "Non se puido analizar %{target}: %{error}"
+  it: "Impossibile analizzare %{target}: %{error}"

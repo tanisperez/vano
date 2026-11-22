@@ -7183,6 +7183,7 @@ dependencies = [
  "vano-delete",
  "vano-rules",
  "vano-scan",
+ "vano-system",
 ]
 
 [[package]]

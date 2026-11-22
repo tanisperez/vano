@@ -30,8 +30,8 @@ pub const SIDE_PANEL_WIDTH: f32 = 342.0;
 pub const STAT_HEIGHT: f32 = 90.0;
 /// Height of a bar of the results' disk usage panel.
 pub const USAGE_BAR_HEIGHT: f32 = 14.0;
-/// Height of the disk usage bar of the home screen's disk card.
-pub const HOME_USAGE_BAR_HEIGHT: f32 = 10.0;
+/// Height of the usage bar of a disk card on the home screen.
+pub const DRIVE_BAR_HEIGHT: f32 = 8.0;
 /// Width of the label column of the disk usage panel, enough for "used" and "free" in full.
 pub const USAGE_LABEL_WIDTH: f32 = 190.0;
 /// Width of the percentage column of the disk usage panel.
@@ -58,13 +58,13 @@ pub const RING_SIZE: f32 = 250.0;
 /// Thickness of the ring.
 pub const RING_THICKNESS: f32 = 20.0;
 
-/// Width of the home screen's column.
-pub const HOME_COLUMN_WIDTH: f32 = 680.0;
+/// Width of the home screen's column: two disk cards side by side.
+pub const HOME_COLUMN_WIDTH: f32 = 780.0;
 /// Side length of the home screen's logo square.
-pub const HOME_LOGO_SIZE: f32 = 48.0;
-/// Least width of the Scan button of the home screen.
-pub const HOME_SCAN_WIDTH: f32 = 240.0;
-/// Height of a location card on the home screen.
-pub const LOCATION_CARD_HEIGHT: f32 = 110.0;
+pub const HOME_LOGO_SIZE: f32 = 40.0;
+/// Height of the home folder and folder picker cards.
+pub const FOLDER_CARD_HEIGHT: f32 = 40.0;
+/// Height of a WSL distribution row.
+pub const WSL_ROW_HEIGHT: f32 = 38.0;
 /// Height of a recent scan row.
-pub const RECENT_ROW_HEIGHT: f32 = 40.0;
+pub const RECENT_ROW_HEIGHT: f32 = 32.0;

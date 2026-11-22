@@ -317,6 +317,7 @@ pub fn scan(distro: &str, agent: &Path, scan: &ExternalScan) -> Result<Tree, Str
                     let _ = lines_tx.send(parsed);
                 }
                 None => {
+                    log::debug!("wsl.exe: {line}");
                     other.push_str(&line);
                     other.push('\n');
                 }
@@ -324,6 +325,8 @@ pub fn scan(distro: &str, agent: &Path, scan: &ExternalScan) -> Result<Tree, Str
         }
         other
     });
+    let started = std::time::Instant::now();
+    log::debug!("wsl scan of {distro}: wsl.exe started");
     let status = loop {
         for line in lines_rx.try_iter() {
             match line {
@@ -345,6 +348,10 @@ pub fn scan(distro: &str, agent: &Path, scan: &ExternalScan) -> Result<Tree, Str
             Err(error) => return Err(error.to_string()),
         }
     };
+    log::debug!(
+        "wsl scan of {distro}: wsl.exe ended with {status} after {:?}",
+        started.elapsed()
+    );
     let bytes = reader
         .join()
         .map_err(|_| "the output reader stopped".to_string())?

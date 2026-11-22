@@ -16,6 +16,7 @@ pub use vano_delete::delete;
 pub mod treemap;
 pub mod update;
 pub mod usage;
+pub mod wsl;
 
 pub use telaio_app::number;
 

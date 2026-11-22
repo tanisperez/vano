@@ -6,7 +6,7 @@ use std::collections::{HashMap, HashSet};
 use vano_core::{Category, NodeId, ROOT, Tree};
 use vano_rules::{Recommendation, Status};
 
-use super::target::Target;
+use super::target::{Target, TargetKind};
 
 /// Recommendations smaller than this are not worth the user's attention.
 pub const MIN_REC_SIZE: u64 = 1_000_000;
@@ -40,7 +40,30 @@ pub struct Results {
     reclaim: HashMap<NodeId, (u64, u64)>,
 }
 
+/// The disk usage of the file system `target` is on. None for a WSL distribution: asking
+/// through `\\wsl.localhost` goes over 9P.
+pub fn read_fs(target: &Target) -> Option<vano_scan::DiskUsage> {
+    if target.kind == TargetKind::Wsl {
+        return None;
+    }
+    vano_scan::root_filesystem_usage(&target.path)
+}
+
 impl Results {
+    /// The path of a node as this system reaches it: for a WSL distribution, under
+    /// `\\wsl.localhost\<name>`, so Explorer can show it.
+    pub fn node_path(&self, id: NodeId) -> std::path::PathBuf {
+        if self.target.kind != TargetKind::Wsl {
+            return self.tree.path(id);
+        }
+        let linux = vano_system::wsl::linux_path(&self.tree, id);
+        let mut path = self.target.path.clone();
+        for part in linux.split('/').filter(|part| !part.is_empty()) {
+            path.push(part);
+        }
+        path
+    }
+
     /// Builds results from the categories and recommendations of a finished `tree`. Safe
     /// recommendations start selected, like the design.
     pub fn with(
@@ -50,7 +73,6 @@ impl Results {
         recs: Vec<Recommendation>,
         seconds: f64,
     ) -> Self {
-        let target_path = target.path.clone();
         let recs: Vec<Recommendation> = recs
             .into_iter()
             .filter(|rec| rec.size >= MIN_REC_SIZE)
@@ -68,6 +90,7 @@ impl Results {
             .collect();
         let scanned = recs.iter().map(|rec| (rec.size, rec.files)).collect();
         let (dominant, category_sums) = dominant_categories(&tree, &categories);
+        let fs = read_fs(&target);
         let mut results = Self {
             target,
             tree,
@@ -77,7 +100,7 @@ impl Results {
             selected,
             covered,
             scanned,
-            fs: vano_scan::root_filesystem_usage(&target_path),
+            fs,
             dominant,
             category_sums,
             reclaim: HashMap::new(),

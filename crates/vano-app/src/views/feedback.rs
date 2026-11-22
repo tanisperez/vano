@@ -13,6 +13,7 @@ use telaio_ui::Tone;
 use vano_rules::Status;
 
 use crate::state::format;
+use crate::state::target::TargetKind;
 use crate::state::trash::{DeleteMode, SLOW_TRASH_FILES, TrashProgress, trash_key};
 use crate::theme::metrics::{
     CONFIRM_LIST_MAX_HEIGHT, CONFIRM_WIDTH, MODAL_HEADER_HEIGHT, RADIUS_LG, RADIUS_MD,
@@ -129,7 +130,7 @@ impl AppView {
             contents.files += u64::from(data.files);
             contents.items.push(ListItem {
                 name: results.tree.display_name(*node),
-                path: format::short_path(&results.tree.path(*node), self.home.as_deref()),
+                path: format::short_path(&results.node_path(*node), self.home.as_deref()),
                 size: data.size,
                 dot: Dot::Plain,
                 note: None,
@@ -158,8 +159,13 @@ impl AppView {
         let contents = self.confirm_contents(request);
         let progress = self.trash_progress.clone();
         let running = progress.is_some();
-        let mode = self.delete_mode;
+        let mode = self.effective_delete_mode();
         let permanent = mode == DeleteMode::Permanent;
+        // Inside a WSL distribution there is no Trash: deleting for good is the only way.
+        let wsl = self
+            .results
+            .as_ref()
+            .is_some_and(|results| results.target.kind == TargetKind::Wsl);
         let size = format::size(contents.size);
 
         let title = match (permanent, contents.items.as_slice()) {
@@ -175,32 +181,40 @@ impl AppView {
         let header = confirm_header(title, !running, palette);
 
         let body = modal_body()
-            .child(
-                v_flex()
-                    .gap(px(8.0))
-                    .child(delete_option(
-                        "confirm-mode-trash",
-                        DeleteMode::Trash,
-                        mode,
-                        running,
-                        t!(trash_key!("confirm.trash_title")).into(),
-                        t!(trash_key!("confirm.trash_desc")).into(),
-                        None,
-                        weak.clone(),
-                        palette,
-                    ))
-                    .child(delete_option(
-                        "confirm-mode-permanent",
-                        DeleteMode::Permanent,
-                        mode,
-                        running,
-                        t!("confirm.perm_title").into(),
-                        t!(trash_key!("confirm.perm_desc")).into(),
-                        Some(t!("confirm.faster").into()),
-                        weak.clone(),
-                        palette,
-                    )),
-            )
+            .when(!wsl, |body| {
+                body.child(
+                    v_flex()
+                        .gap(px(8.0))
+                        .child(delete_option(
+                            "confirm-mode-trash",
+                            DeleteMode::Trash,
+                            mode,
+                            running,
+                            t!(trash_key!("confirm.trash_title")).into(),
+                            t!(trash_key!("confirm.trash_desc")).into(),
+                            None,
+                            weak.clone(),
+                            palette,
+                        ))
+                        .child(delete_option(
+                            "confirm-mode-permanent",
+                            DeleteMode::Permanent,
+                            mode,
+                            running,
+                            t!("confirm.perm_title").into(),
+                            t!(trash_key!("confirm.perm_desc")).into(),
+                            Some(t!("confirm.faster").into()),
+                            weak.clone(),
+                            palette,
+                        )),
+                )
+            })
+            .when(wsl, |body| {
+                body.child(InlineMessage::new(
+                    InlineMessageKind::Info,
+                    t!("confirm.wsl_permanent"),
+                ))
+            })
             .when(!permanent && contents.files > SLOW_TRASH_FILES, |body| {
                 body.child(InlineMessage::new(
                     InlineMessageKind::Info,

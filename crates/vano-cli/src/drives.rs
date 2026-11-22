@@ -136,6 +136,7 @@ mod tests {
             read_only: false,
             total: 1_000_000_000_000,
             available: 250_000_000_000,
+            free: 250_000_000_000,
         }
     }
 

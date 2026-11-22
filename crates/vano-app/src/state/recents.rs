@@ -161,6 +161,8 @@ mod tests {
             target: Target {
                 kind: TargetKind::Folder,
                 path: PathBuf::from(path),
+                name: None,
+                home: None,
             },
             size,
             files: 1,

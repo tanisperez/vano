@@ -28,6 +28,7 @@ vano-scan = { path = "../vano-scan" }
 vano-rules = { path = "../vano-rules" }
 vano-delete = { path = "../vano-delete" }
 vano-cli = { path = "../vano-cli" }
+vano-system = { path = "../vano-system" }
 
 [target.'cfg(windows)'.build-dependencies]
 embed-resource = "3"

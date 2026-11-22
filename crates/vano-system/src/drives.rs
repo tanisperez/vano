@@ -53,12 +53,16 @@ pub struct Drive {
     pub total: u64,
     /// Free bytes the user can still write.
     pub available: u64,
+    /// Bytes no file uses. More than `available` when the file system keeps a reserve for the
+    /// administrator (ext4 keeps 5%), which is neither free for the user nor taken by files.
+    pub free: u64,
 }
 
 impl Drive {
-    /// Bytes in use, as the system counts them (capacity minus what is free for the user).
+    /// Bytes files take: everything that is not free. The administrator's reserve is not
+    /// counted, as on the rest of Vano's screens.
     pub fn used(&self) -> u64 {
-        self.total.saturating_sub(self.available)
+        self.total.saturating_sub(self.free.max(self.available))
     }
 
     /// The name to show: the label, or the mount point when there is none.
@@ -136,11 +140,21 @@ pub fn list_drives() -> Vec<Drive> {
                 read_only: disk.is_read_only(),
                 total: disk.total_space(),
                 available: disk.available_space(),
+                free: disk.available_space(),
                 mount_point,
             }
         })
         .collect();
-    select(raw, platform)
+    let mut drives = select(raw, platform);
+    // The same measure as the rest of the app, which tells the reserve apart.
+    for drive in &mut drives {
+        if let Some(usage) = vano_scan::root_filesystem_usage(&drive.mount_point) {
+            drive.total = usage.total;
+            drive.available = usage.available;
+            drive.free = usage.free;
+        }
+    }
+    drives
 }
 
 /// Whether `mount_point` is the root of the Windows system drive (`SystemDrive`, as `C:`).
@@ -296,6 +310,7 @@ mod tests {
             read_only: false,
             total: 100,
             available: 40,
+            free: 40,
         }
     }
 
@@ -397,5 +412,13 @@ mod tests {
         let mut odd = drive("/", "/dev/sda1", "ext4");
         odd.available = 200;
         assert_eq!(odd.used(), 0);
+    }
+
+    #[test]
+    fn the_reserve_of_the_administrator_is_not_used_space() {
+        let mut ext4 = drive("/", "/dev/sda1", "ext4");
+        ext4.available = 40;
+        ext4.free = 45;
+        assert_eq!(ext4.used(), 55);
     }
 }

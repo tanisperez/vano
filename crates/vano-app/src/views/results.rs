@@ -149,7 +149,9 @@ impl AppView {
                 value: not_scanned.map_or("-".to_string(), format::size).into(),
                 sub: match results.target.kind {
                     TargetKind::Home => t!("results.not_scanned_home"),
-                    TargetKind::Disk => t!("results.not_scanned_disk"),
+                    TargetKind::Disk | TargetKind::Drive | TargetKind::Wsl => {
+                        t!("results.not_scanned_disk")
+                    }
                     TargetKind::Folder => t!("results.not_scanned_folder"),
                 }
                 .into(),
@@ -898,7 +900,7 @@ impl AppView {
             .then(|| crate::state::format::tr(&format!("rules.{rule}.reason")));
         let inside = largest_inside_rec(results, rec);
         let on = results.selected.contains(rule);
-        let first = rec.nodes.first().map(|node| results.tree.path(*node));
+        let first = rec.nodes.first().map(|node| results.node_path(*node));
         let size = if rec.approx {
             format::approx_size(rec.size)
         } else {
@@ -1016,7 +1018,7 @@ impl AppView {
             .take(LARGEST_INSIDE)
             .map(|child| (tree.display_name(child), tree.node(child).size))
             .collect();
-        let path = tree.path(node);
+        let path = results.node_path(node);
         let shown_path = format::short_path(&path, self.home.as_deref());
         let data = tree.node(node);
         let meta = vec![
@@ -1187,7 +1189,7 @@ fn largest_inside_rec(results: &Results, rec: &Recommendation) -> Vec<(String, u
             .filter(|node| !tree.is_removed(**node))
             .take(LARGEST_INSIDE)
             .map(|node| {
-                let path = tree.path(*node);
+                let path = results.node_path(*node);
                 let short = format::short_path(&path, home.as_deref());
                 (short, tree.node(*node).size)
             })
