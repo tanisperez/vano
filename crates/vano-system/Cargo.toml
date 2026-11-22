@@ -12,6 +12,7 @@ authors.workspace = true
 # part, the rest of sysinfo is not built.
 sysinfo = { workspace = true }
 log = { workspace = true }
+dirs = { workspace = true }
 vano-core = { path = "../vano-core" }
 vano-scan = { path = "../vano-scan" }
 
@@ -21,6 +22,7 @@ winreg = "0.56"
 
 [dev-dependencies]
 pretty_assertions = { workspace = true }
+tempfile = { workspace = true }
 
 [lints]
 workspace = true

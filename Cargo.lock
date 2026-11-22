@@ -7250,9 +7250,11 @@ dependencies = [
 name = "vano-system"
 version = "0.4.0-dev"
 dependencies = [
+ "dirs 7.0.0",
  "log",
  "pretty_assertions",
  "sysinfo 0.40.4",
+ "tempfile",
  "vano-core",
  "vano-scan",
  "winreg",

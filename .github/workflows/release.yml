@@ -49,7 +49,7 @@ jobs:
           echo "Version $version, pre-release: $prerelease"
 
   # vano-wsl, the static Linux program the Windows app runs inside WSL 2 distributions. Built once
-  # for musl, so it runs in any distribution, and packaged next to vano.exe.
+  # for musl, so it runs in any distribution, and built into vano.exe.
   agent:
     name: Build the WSL agent
     needs: check
@@ -116,10 +116,20 @@ jobs:
 
       # No Cargo cache: release builds are rare, and the Build workflow's Linux cache comes from a
       # newer Ubuntu whose glibc the build scripts restored here could need.
-      # VANO_UPDATER is empty on Linux, which has no in-app updater.
+      # vano.exe carries vano-wsl inside (VANO_EMBED_WSL_AGENT, see crates/vano-app/build.rs).
+      - name: Download the WSL agent
+        if: runner.os == 'Windows'
+        uses: actions/download-artifact@v8
+        with:
+          name: vano-wsl
+          path: wsl-agent
+
+      # VANO_UPDATER is empty on Linux, which has no in-app updater. VANO_EMBED_WSL_AGENT only
+      # matters on Windows, where the agent was just downloaded.
       - name: Build
         env:
           VANO_UPDATER: ${{ matrix.updater }}
+          VANO_EMBED_WSL_AGENT: ${{ runner.os == 'Windows' && format('{0}/wsl-agent/vano-wsl', github.workspace) || '' }}
         run: cargo build --release --locked --target ${{ matrix.target }}
 
       # vano.exe is a console subsystem binary: adds `consoleAllocationPolicy` to the manifest
@@ -150,13 +160,6 @@ jobs:
         run: |
           packaging/macos/bundle.sh "$VERSION" "target/${{ matrix.target }}/release/vano" dist
 
-      - name: Download the WSL agent
-        if: runner.os == 'Windows'
-        uses: actions/download-artifact@v8
-        with:
-          name: vano-wsl
-          path: target/${{ matrix.target }}/release
-
       # Per-user Inno Setup installer (packaging/windows).
       - name: Package for Windows
         if: runner.os == 'Windows'
@@ -168,13 +171,11 @@ jobs:
           if (-not (Test-Path $iscc)) { choco install innosetup --no-progress -y }
           & $iscc /Q "/DAppVersion=$env:VERSION" `
             "/DSourceExe=$PWD\target\${{ matrix.target }}\release\vano.exe" `
-            "/DSourceAgent=$PWD\target\${{ matrix.target }}\release\vano-wsl" `
             "/DOutputDir=$PWD\dist" packaging\windows\vano.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       # Portable zip, for machines where running an installer is not allowed. Entries sit at the
-      # top level of the zip; vano-wsl goes next to vano.exe, where the app looks for it. It is
-      # not part of latest.json: its name does not match the setup
+      # top level of the zip. It is not part of latest.json: its name does not match the setup
       # glob there, and the in-app updater of a portable copy never downloads anything.
       - name: Package the portable zip for Windows
         if: runner.os == 'Windows'
@@ -186,8 +187,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path dist | Out-Null
           $zip = Join-Path $PWD "dist\Vano-$env:VERSION-windows-x86_64-portable.zip"
           Compress-Archive -Force -DestinationPath $zip -Path `
-            "target\${{ matrix.target }}\release\vano.exe", `
-            "target\${{ matrix.target }}\release\vano-wsl", 'LICENSE', 'NOTICE'
+            "target\${{ matrix.target }}\release\vano.exe", 'LICENSE', 'NOTICE'
           Get-Item $zip | Format-List Name, Length
 
       - name: Upload artifact

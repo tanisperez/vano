@@ -14,6 +14,7 @@
 use std::io::{BufRead, BufReader, Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
+use std::sync::OnceLock;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
@@ -43,18 +44,64 @@ impl Distro {
     }
 }
 
-/// The name of the Linux program next to `vano.exe`.
+/// The name of the Linux program.
 pub const AGENT: &str = "vano-wsl";
 
-/// Where the Linux program is: `VANO_WSL_AGENT` (for development), or next to the running
-/// executable.
+/// The Linux program built into the Windows executable, set once at startup by the app.
+static EMBEDDED: OnceLock<&'static [u8]> = OnceLock::new();
+
+/// Hands over the Linux program built into the executable (`VANO_EMBED_WSL_AGENT` at build
+/// time), so installed and portable copies are a single file.
+pub fn set_embedded_agent(bytes: &'static [u8]) {
+    let _ = EMBEDDED.set(bytes);
+}
+
+/// Where the Linux program is: `VANO_WSL_AGENT` (for development), a `vano-wsl` next to the
+/// running executable, or the one built into it, written once to the local data folder. A
+/// blocking call: run it in the background.
 pub fn agent() -> Option<PathBuf> {
     if let Some(path) = std::env::var_os("VANO_WSL_AGENT") {
         return Some(PathBuf::from(path));
     }
     let exe = std::env::current_exe().ok()?;
     let path = exe.parent()?.join(AGENT);
-    path.is_file().then_some(path)
+    if path.is_file() {
+        return Some(path);
+    }
+    let bytes = EMBEDDED.get()?;
+    let folder = dirs::data_local_dir()?.join("Vano").join("wsl");
+    match extract(bytes, &folder, env!("CARGO_PKG_VERSION")) {
+        Ok(path) => Some(path),
+        Err(error) => {
+            log::warn!("cannot write {AGENT} to {}: {error}", folder.display());
+            None
+        }
+    }
+}
+
+/// Writes `bytes` as `<folder>/vano-wsl-<version>`, unless it is already there, and removes the
+/// copies of other versions. Written under a temporary name and renamed, so a copy cut short is
+/// never run.
+fn extract(bytes: &[u8], folder: &Path, version: &str) -> std::io::Result<PathBuf> {
+    let path = folder.join(format!("{AGENT}-{version}"));
+    let current = path
+        .metadata()
+        .is_ok_and(|metadata| metadata.len() == bytes.len() as u64);
+    if current {
+        return Ok(path);
+    }
+    std::fs::create_dir_all(folder)?;
+    let partial = folder.join(format!("{AGENT}-{version}.partial"));
+    std::fs::write(&partial, bytes)?;
+    std::fs::rename(&partial, &path)?;
+    for entry in std::fs::read_dir(folder)?.flatten() {
+        let other = entry.path();
+        let name = entry.file_name().to_string_lossy().into_owned();
+        if other != path && name.starts_with(AGENT) {
+            let _ = std::fs::remove_file(other);
+        }
+    }
+    Ok(path)
 }
 
 /// The WSL 2 distributions, the default first. Empty outside Windows or without WSL. Runs
@@ -493,6 +540,19 @@ pub fn linux_path(tree: &Tree, id: vano_core::NodeId) -> String {
 mod tests {
     use super::*;
     use pretty_assertions::assert_eq;
+
+    #[test]
+    #[allow(clippy::unwrap_used)]
+    fn the_built_in_agent_is_written_once_and_old_versions_go() {
+        let dir = tempfile::tempdir().unwrap();
+        std::fs::write(dir.path().join("vano-wsl-0.9.0"), b"old").unwrap();
+        let path = extract(b"agent", dir.path(), "1.0.0").unwrap();
+        assert_eq!(path, dir.path().join("vano-wsl-1.0.0"));
+        assert_eq!(std::fs::read(&path).unwrap(), b"agent");
+        assert!(!dir.path().join("vano-wsl-0.9.0").exists());
+        // Already there: kept as it is.
+        assert_eq!(extract(b"agent", dir.path(), "1.0.0").unwrap(), path);
+    }
 
     #[test]
     fn utf16_output_is_decoded() {

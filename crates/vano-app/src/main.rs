@@ -13,6 +13,11 @@ mod views;
 
 rust_i18n::i18n!("locales", fallback = "en");
 
+/// `vano-wsl`, built into `vano.exe` for WSL distributions (see `build.rs`).
+mod wsl_agent {
+    include!(concat!(env!("OUT_DIR"), "/wsl_agent.rs"));
+}
+
 use std::path::Path;
 use std::process::ExitCode;
 
@@ -46,6 +51,9 @@ fn main() -> ExitCode {
         return ExitCode::SUCCESS;
     }
 
+    if let Some(agent) = wsl_agent::AGENT {
+        vano_system::wsl::set_embedded_agent(agent);
+    }
     let settings = state::settings::load_settings();
     let log_env_var = logging::env_var(&IDENTITY);
     let env_level = std::env::var(&log_env_var).ok();

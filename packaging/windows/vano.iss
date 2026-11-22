@@ -1,8 +1,7 @@
 ﻿; Inno Setup 6 script for Vano. Compile with ISCC, defines on the command line:
-;   ISCC.exe /DAppVersion=0.1.0-rc.1 /DSourceExe=C:\path\vano.exe /DSourceAgent=C:\path\vano-wsl /DOutputDir=C:\out vano.iss
+;   ISCC.exe /DAppVersion=0.1.0-rc.1 /DSourceExe=C:\path\vano.exe /DOutputDir=C:\out vano.iss
 ;   AppVersion  full version, may carry a pre-release suffix (X.Y.Z or X.Y.Z-rc.1)
 ;   SourceExe   path to the release vano.exe
-;   SourceAgent path to vano-wsl, the static Linux program Vano runs inside WSL distributions
 ;   OutputDir   folder for Vano-<version>-windows-x86_64-setup.exe (default: .\Output)
 ; The LICENSE and the icon are found relative to this file (repo root and crates/vano-app).
 
@@ -11,9 +10,6 @@
 #endif
 #ifndef SourceExe
   #error Pass /DSourceExe=<path to vano.exe>
-#endif
-#ifndef SourceAgent
-  #error Pass /DSourceAgent=<path to vano-wsl>
 #endif
 #ifndef OutputDir
   #define OutputDir "Output"
@@ -88,8 +84,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "{#SourceExe}"; DestDir: "{app}"; DestName: "{#AppExe}"; Flags: ignoreversion
-; Next to vano.exe, where the app looks for it to scan inside WSL 2 distributions.
-Source: "{#SourceAgent}"; DestDir: "{app}"; DestName: "vano-wsl"; Flags: ignoreversion
 Source: "..\..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\NOTICE"; DestDir: "{app}"; Flags: ignoreversion
 
@@ -98,6 +92,11 @@ Source: "..\..\NOTICE"; DestDir: "{app}"; Flags: ignoreversion
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"; AppUserModelID: "{#AppId}"
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; AppUserModelID: "{#AppId}"; Tasks: desktopicon
+
+; The copy of vano-wsl the app writes out of vano.exe for WSL distributions (vano_system::wsl).
+; Settings and logs stay.
+[UninstallDelete]
+Type: filesandordirs; Name: "{localappdata}\Vano\wsl"
 
 ; Interactively, a checkbox on the last page. Silent installs (winget) do not launch Vano,
 ; except when the in-app updater asks for it with /relaunch=1.

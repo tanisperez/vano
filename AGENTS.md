@@ -59,8 +59,10 @@ About header), all at tag `v0.32.0`.
 - `vano-wsl`: a small static Linux binary (`x86_64-unknown-linux-musl`, no gpui, no telaio) that
   the Windows app runs inside a distribution with `wsl.exe --cd <its folder> --exec ./vano-wsl`:
   `scan /` writes the tree in the `persist` format to stdout, `delete` deletes for good the
-  NUL-separated paths of stdin. Shipped next to `vano.exe`; `VANO_WSL_AGENT` points elsewhere
-  during development. `vano_scan::start_external` turns that work into a normal `ScanHandle`.
+  NUL-separated paths of stdin. Built into `vano.exe` (`VANO_EMBED_WSL_AGENT` at build time, see
+  `crates/vano-app/build.rs`), so installed and portable copies are one file; the app writes it to
+  `%LOCALAPPDATA%\Vano\wsl\vano-wsl-<version>` the first time a distribution is scanned. A
+  `vano-wsl` next to the executable, or `VANO_WSL_AGENT`, wins during development. `vano_scan::start_external` turns that work into a normal `ScanHandle`.
 - `vano-cli`: the command line (`vano drives`, `scan`, `clean`, `wsl list`, `completions`), as Postino's
   `postino-cli`. `main` calls `vano_cli::run_if_cli` first and opens the window only when it
   returns `None`. It also defines `IDENTITY`. English only; rule names come from `rules.yml`.
