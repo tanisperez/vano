@@ -55,3 +55,18 @@ _version: 2
   es: "No se pudo actualizar en el sitio, descarga la nueva versión desde GitHub"
   gl: "Non se puido actualizar no sitio, descarga a nova versión desde GitHub"
   it: "Impossibile aggiornare sul posto, scarica la nuova versione da GitHub"
+"update.available_linux":
+  en: "Update %{version} is available, download it from the release page"
+  es: "La actualización %{version} está disponible, descárgala desde la página de la versión"
+  gl: "A actualización %{version} está dispoñible, descárgaa desde a páxina da versión"
+  it: "L'aggiornamento %{version} è disponibile, scaricalo dalla pagina della release"
+"update.available_script":
+  en: "Update %{version} is available, run the install command again to update"
+  es: "La actualización %{version} está disponible, vuelve a ejecutar el comando de instalación para actualizar"
+  gl: "A actualización %{version} está dispoñible, volve executar o comando de instalación para actualizar"
+  it: "L'aggiornamento %{version} è disponibile, esegui di nuovo il comando di installazione per aggiornare"
+"update.command_copied":
+  en: "Command copied. Close Vano and run it in a terminal to update: %{command}"
+  es: "Comando copiado. Cierra Vano y ejecútalo en una terminal para actualizar: %{command}"
+  gl: "Comando copiado. Pecha Vano e execútao nun terminal para actualizar: %{command}"
+  it: "Comando copiato. Chiudi Vano ed eseguilo in un terminale per aggiornare: %{command}"

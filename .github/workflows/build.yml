@@ -7,6 +7,17 @@ on:
   workflow_dispatch:
 
 jobs:
+  # The Linux install script served at vano.tanis.codes/install.sh.
+  install-script:
+    name: install script
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Shellcheck
+        run: shellcheck site/install.sh packaging/linux/test-install.sh
+      - name: Test
+        run: packaging/linux/test-install.sh
+
   build:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}

@@ -12,6 +12,7 @@ use vano_core::ROOT;
 use crate::state::format;
 use crate::state::target::disk_name;
 use crate::state::trash::{DeleteMode, trash_key};
+use crate::state::update::ManualUpdate;
 use crate::theme::PaletteExt;
 use crate::theme::metrics::{STATUS_BAR_BUTTON, STATUS_BAR_HEIGHT};
 
@@ -88,7 +89,8 @@ impl AppView {
             None if self.trashing => t!(trash_key!("status.trashing")).into_owned(),
             None => right,
         };
-        let ready = self.state.update.ready().map(|ready| ready.version.clone());
+        let ready = self.state.update.ready().cloned();
+        let manual = self.manual_update();
 
         h_flex()
             .flex_none()
@@ -110,17 +112,35 @@ impl AppView {
                     .child(div().truncate().child(left)),
             )
             .child(div().flex_1())
-            .children(ready.map(|version| {
+            .children(ready.map(|ready| {
+                let version = ready.version.as_str();
+                // A copy that downloads nothing: open the release page, or copy the command of
+                // the install script.
+                let label = match (ready.is_manual_download(), manual) {
+                    (false, _) => t!("status.update_ready", version = version),
+                    (true, ManualUpdate::InstallScript) => {
+                        t!("status.update_available_script", version = version)
+                    }
+                    (true, _) => t!("status.update_available", version = version),
+                };
+                let notes_url = ready.notes_url.clone();
+                let manual_download = ready.is_manual_download();
                 div()
                     .id("status-update")
                     .flex_none()
                     .text_color(palette.accent_text)
                     .cursor_pointer()
                     .hover(|style| style.text_color(palette.fg))
-                    .child(t!("status.update_ready", version = version))
-                    .on_click(
-                        cx.listener(|view, _, window, cx| view.request_update_restart(window, cx)),
-                    )
+                    .child(label)
+                    .on_click(cx.listener(move |view, _, window, cx| {
+                        match (manual_download, manual) {
+                            (false, _) => view.request_update_restart(window, cx),
+                            (true, ManualUpdate::InstallScript) => {
+                                view.copy_update_command(window, cx);
+                            }
+                            (true, _) => cx.open_url(&notes_url),
+                        }
+                    }))
             }))
             .child(div().flex_none().truncate().child(right))
             .child(

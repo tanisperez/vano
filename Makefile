@@ -65,10 +65,9 @@ install: release
 	done
 	$(MAKE) --no-print-directory refresh-desktop-caches
 
-# The latest published release instead of a local build, checked against its SHA256SUMS.
+# The same script as curl -fsSL https://vano.tanis.codes/install.sh | bash.
 install-latest:
-	packaging/linux/install-latest.sh $(PREFIX)
-	$(MAKE) --no-print-directory refresh-desktop-caches
+	site/install.sh --prefix $(PREFIX)
 
 uninstall:
 	rm -f $(PREFIX)/bin/vano $(PREFIX)/share/applications/$(APP_ID).desktop

@@ -59,6 +59,8 @@ for size in "${sizes[@]}"; do
     install -Dm644 "$icons_dir/png/vano-$size.png" \
         "$top/share/icons/hicolor/${size}x${size}/apps/$app_id.png"
 done
+# The install script, run by the in-app updater of a script install with --tarball.
+install -m755 "$root/site/install.sh" "$top/install.sh"
 install -m644 "$root/LICENSE" "$top/LICENSE"
 install -m644 "$root/NOTICE" "$top/NOTICE"
 [[ -f $root/README.md ]] && install -m644 "$root/README.md" "$top/README.md"

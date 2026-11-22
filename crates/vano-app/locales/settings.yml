@@ -205,3 +205,18 @@ _version: 2
   es: "Solo local. Vano nunca se conecta a internet por su cuenta."
   gl: "Só local. Vano nunca se conecta a internet por si mesmo."
   it: "Solo locale. Vano non si connette mai a internet da solo."
+"settings.about.available.text_linux":
+  en: "This copy doesn't update itself. Download the new version from the release page and replace this one."
+  es: "Esta copia no se actualiza sola. Descarga la nueva versión desde la página de la versión y reemplaza esta."
+  gl: "Esta copia non se actualiza soa. Descarga a nova versión desde a páxina da versión e substitúe esta."
+  it: "Questa copia non si aggiorna da sola. Scarica la nuova versione dalla pagina della release e sostituisci questa."
+"settings.about.available.text_script":
+  en: "Installed with the install script. To update, close Vano and run the install command again in a terminal."
+  es: "Instalado con el script de instalación. Para actualizar, cierra Vano y vuelve a ejecutar el comando de instalación en una terminal."
+  gl: "Instalado co script de instalación. Para actualizar, pecha Vano e volve executar o comando de instalación nun terminal."
+  it: "Installato con lo script di installazione. Per aggiornare, chiudi Vano ed esegui di nuovo il comando di installazione in un terminale."
+"settings.about.available.copy":
+  en: "Copy command"
+  es: "Copiar comando"
+  gl: "Copiar comando"
+  it: "Copia comando"

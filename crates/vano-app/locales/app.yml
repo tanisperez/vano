@@ -950,3 +950,13 @@ _version: 2
   es: "Elige qué borrar definitivamente."
   gl: "Escolle que borrar definitivamente."
   it: "Seleziona cosa eliminare definitivamente."
+"status.update_available":
+  en: "Update %{version} available, download"
+  es: "Actualización %{version} disponible, descargar"
+  gl: "Actualización %{version} dispoñible, descargar"
+  it: "Aggiornamento %{version} disponibile, scarica"
+"status.update_available_script":
+  en: "Update %{version} available, copy the update command"
+  es: "Actualización %{version} disponible, copiar el comando para actualizar"
+  gl: "Actualización %{version} dispoñible, copiar o comando para actualizar"
+  it: "Aggiornamento %{version} disponibile, copia il comando di aggiornamento"

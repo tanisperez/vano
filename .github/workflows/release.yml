@@ -82,9 +82,13 @@ jobs:
       matrix:
         include:
           # 22.04 (glibc 2.35) so the binary also runs on Debian 12 and older Ubuntu LTS.
+          # On Linux the updater installs updates only in a copy of the install script the user
+          # can write, announces them in other manual installs (tarball), and stays silent under
+          # /usr (deb, rpm, AUR), so one build serves every package.
           - name: linux-x86_64
             os: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
+            updater: github
           - name: windows-x86_64
             os: windows-latest
             target: x86_64-pc-windows-msvc
@@ -124,7 +128,7 @@ jobs:
           name: vano-wsl
           path: wsl-agent
 
-      # VANO_UPDATER is empty on Linux, which has no in-app updater. VANO_EMBED_WSL_AGENT only
+      # VANO_EMBED_WSL_AGENT only
       # matters on Windows, where the agent was just downloaded.
       - name: Build
         env:
@@ -224,8 +228,10 @@ jobs:
           base="https://github.com/$GH_REPO/releases/download/$TAG"
           mac=$(ls Vano-*-macos-arm64.app.tar.gz 2>/dev/null | head -n 1)
           win=$(ls Vano-*-windows-x86_64-setup.exe 2>/dev/null | head -n 1)
-          if [ -z "$mac" ] || [ -z "$win" ]; then
-            echo "::error::Missing the macOS app archive or the Windows installer in dist"
+          # Linux: a copy installed by the install script updates with this tarball and its install.sh.
+          linux=$(ls vano-*-linux-x86_64.tar.gz 2>/dev/null | head -n 1)
+          if [ -z "$mac" ] || [ -z "$win" ] || [ -z "$linux" ]; then
+            echo "::error::Missing the macOS app archive, the Windows installer or the Linux tarball in dist"
             exit 1
           fi
           jq -n \
@@ -233,12 +239,14 @@ jobs:
             --arg notes_url "https://github.com/$GH_REPO/releases/tag/$TAG" \
             --arg mac_url "$base/$mac" --arg mac_sha "$(sha256sum "$mac" | cut -d' ' -f1)" \
             --arg win_url "$base/$win" --arg win_sha "$(sha256sum "$win" | cut -d' ' -f1)" \
+            --arg linux_url "$base/$linux" --arg linux_sha "$(sha256sum "$linux" | cut -d' ' -f1)" \
             '{
               version: $version,
               notes_url: $notes_url,
               platforms: {
                 "macos-aarch64": { url: $mac_url, sha256: $mac_sha },
-                "windows-x86_64": { url: $win_url, sha256: $win_sha }
+                "windows-x86_64": { url: $win_url, sha256: $win_sha },
+                "linux-x86_64": { url: $linux_url, sha256: $linux_sha }
               }
             }' > latest.json
           cat latest.json
