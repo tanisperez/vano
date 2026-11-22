@@ -48,9 +48,33 @@ jobs:
           echo "prerelease=$prerelease" >> "$GITHUB_OUTPUT"
           echo "Version $version, pre-release: $prerelease"
 
+  # vano-wsl, the static Linux program the Windows app runs inside WSL 2 distributions. Built once
+  # for musl, so it runs in any distribution, and packaged next to vano.exe.
+  agent:
+    name: Build the WSL agent
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+
+      - name: Build
+        run: cargo build --release --locked -p vano-wsl --target x86_64-unknown-linux-musl
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: vano-wsl
+          path: target/x86_64-unknown-linux-musl/release/vano-wsl
+          if-no-files-found: error
+
   build:
     name: Build ${{ matrix.name }}
-    needs: check
+    needs: [check, agent]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     strategy:
@@ -126,6 +150,13 @@ jobs:
         run: |
           packaging/macos/bundle.sh "$VERSION" "target/${{ matrix.target }}/release/vano" dist
 
+      - name: Download the WSL agent
+        if: runner.os == 'Windows'
+        uses: actions/download-artifact@v8
+        with:
+          name: vano-wsl
+          path: target/${{ matrix.target }}/release
+
       # Per-user Inno Setup installer (packaging/windows).
       - name: Package for Windows
         if: runner.os == 'Windows'
@@ -137,11 +168,13 @@ jobs:
           if (-not (Test-Path $iscc)) { choco install innosetup --no-progress -y }
           & $iscc /Q "/DAppVersion=$env:VERSION" `
             "/DSourceExe=$PWD\target\${{ matrix.target }}\release\vano.exe" `
+            "/DSourceAgent=$PWD\target\${{ matrix.target }}\release\vano-wsl" `
             "/DOutputDir=$PWD\dist" packaging\windows\vano.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       # Portable zip, for machines where running an installer is not allowed. Entries sit at the
-      # top level of the zip. It is not part of latest.json: its name does not match the setup
+      # top level of the zip; vano-wsl goes next to vano.exe, where the app looks for it. It is
+      # not part of latest.json: its name does not match the setup
       # glob there, and the in-app updater of a portable copy never downloads anything.
       - name: Package the portable zip for Windows
         if: runner.os == 'Windows'
@@ -153,7 +186,8 @@ jobs:
           New-Item -ItemType Directory -Force -Path dist | Out-Null
           $zip = Join-Path $PWD "dist\Vano-$env:VERSION-windows-x86_64-portable.zip"
           Compress-Archive -Force -DestinationPath $zip -Path `
-            "target\${{ matrix.target }}\release\vano.exe", 'LICENSE', 'NOTICE'
+            "target\${{ matrix.target }}\release\vano.exe", `
+            "target\${{ matrix.target }}\release\vano-wsl", 'LICENSE', 'NOTICE'
           Get-Item $zip | Format-List Name, Length
 
       - name: Upload artifact
