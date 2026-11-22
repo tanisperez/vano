@@ -26,7 +26,8 @@ history under the tag `design-mockups`, and the 0.3.0 one under `design-mockups-
 A Cargo workspace, UI kept thin. Dependency direction (no cycles):
 
 ```
-vano-app ──> vano-scan ──> vano-core
+vano-app ──> vano-delete ─> vano-core
+    │──────> vano-scan ──> vano-core
     │──────> vano-rules ─> vano-core
     └──────> vano-core
 ```
@@ -46,8 +47,12 @@ About header), all at tag `v0.32.0`.
 - `vano-rules`: the recommendation rules (Safe / Review), the category of every node, and the
   live rules that report recommendations as folders finish. Its texts are
   `crates/vano-rules/locales/rules.yml`, linked into the app's `locales/`.
+- `vano-delete`: moving items to the system Trash and putting them back (`trash`), the
+  freedesktop Trash of a WSL 2 distribution (`linux_trash`), and permanent deletion (`delete`).
+  Blocking calls with no UI and no texts, shared by the app and the command line.
 - `vano-app`: the `vano` binary. `state/` is plain Rust and unit tested (settings, results,
-  treemap layout, spring motion, recents, trash, permanent deletion, disk usage). `views/` only builds elements. `theme/` holds
+  treemap layout, spring motion, recents, the texts that name the Trash, disk usage). `views/` only
+  builds elements. `theme/` holds
   only what telaio does not: the three accents as `Tokens` (Indigo is telaio's default), the
   category and cleanup colors (`VanoColors`) and Vano's own metrics. `state/about.rs` defines
   `IDENTITY`, the `telaio_app::AppIdentity` (name, `vano` slug, app id, `VANO` prefix, repository)
@@ -75,7 +80,7 @@ bands rising from the bottom, sized by the Safe and Review bytes inside it
 
 ## Rules
 
-- Permanent deletion (`state/delete.rs`) never follows a symbolic link and never enters another
+- Permanent deletion (`vano-delete/src/delete.rs`) never follows a symbolic link and never enters another
   file system. On Unix every step is relative to a folder already open, with `O_NOFOLLOW`. Only
   folders that are about to go have their permissions opened up.
 - Performance rules from Postino apply: an idle window does no work (no timers or animation

@@ -1,0 +1,26 @@
+[package]
+name = "vano-delete"
+description = "Moving items to the system Trash, putting them back, and deleting them for good."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+vano-core = { path = "../vano-core" }
+chrono = { workspace = true }
+trash = { workspace = true }
+
+[target.'cfg(windows)'.dependencies]
+# The Linux root of a WSL 2 path, whose items go to the distribution's own Trash.
+vano-scan = { path = "../vano-scan" }
+
+[target.'cfg(unix)'.dependencies]
+rustix = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+
+[lints]
+workspace = true

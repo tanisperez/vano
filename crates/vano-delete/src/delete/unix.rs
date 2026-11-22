@@ -9,7 +9,6 @@ use std::os::fd::{AsFd, BorrowedFd, OwnedFd};
 use std::os::unix::ffi::OsStrExt as _;
 use std::path::Path;
 
-use rust_i18n::t;
 use rustix::fs::{
     AtFlags, CWD, Dir, FileType, Mode, OFlags, Stat, fchmod, fstat, openat, statat, unlinkat,
 };
@@ -79,7 +78,7 @@ fn remove_entry(
     }
     // A mount point: what is there belongs to another file system the scan did not count.
     if stat.st_dev as u64 != device {
-        walk.fail(t!("report.other_file_system"));
+        walk.other_file_system();
         return;
     }
     let flags = OFlags::RDONLY | OFlags::DIRECTORY | OFlags::NOFOLLOW | OFlags::CLOEXEC;

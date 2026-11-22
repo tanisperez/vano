@@ -11,7 +11,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 use vano_core::{NodeId, Tree};
 
-use super::trash::{Outcome, TrashError, TrashProgress};
+use crate::trash::{Outcome, TrashError, TrashProgress};
 
 #[cfg(unix)]
 mod unix;
@@ -28,7 +28,7 @@ use portable as platform;
 struct Walk<'a> {
     cancel: &'a AtomicBool,
     on_file: &'a mut dyn FnMut(u64),
-    error: Option<String>,
+    error: Option<TrashError>,
     stopped: bool,
 }
 
@@ -46,7 +46,14 @@ impl Walk<'_> {
 
     /// Records a failure and goes on with the rest. The first one is what the report says.
     fn fail(&mut self, error: impl ToString) {
-        self.error.get_or_insert_with(|| error.to_string());
+        self.error
+            .get_or_insert_with(|| TrashError::Os(error.to_string()));
+    }
+
+    /// Records a mount point found inside the item, left alone.
+    #[cfg_attr(not(unix), allow(dead_code))]
+    fn other_file_system(&mut self) {
+        self.error.get_or_insert(TrashError::OtherFileSystem);
     }
 }
 
@@ -57,7 +64,7 @@ enum ItemEnd {
     /// Stopped by the user: part of it may be gone already.
     Stopped,
     /// Something inside could not be deleted: the rest of it is gone.
-    Failed(String),
+    Failed(TrashError),
 }
 
 fn delete_item(
@@ -102,7 +109,7 @@ pub fn delete_each(paths: &[std::path::PathBuf], progress: &TrashProgress) -> Ou
             }
             // An error about something already gone means nothing is left to delete.
             ItemEnd::Failed(_) if path.symlink_metadata().is_err() => outcome.moved.push(index),
-            ItemEnd::Failed(error) => outcome.failed.push((index, TrashError::Os(error))),
+            ItemEnd::Failed(error) => outcome.failed.push((index, error)),
         }
         progress.done.fetch_add(1, Ordering::Relaxed);
     }

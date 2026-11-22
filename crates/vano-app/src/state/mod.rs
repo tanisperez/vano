@@ -2,9 +2,7 @@
 
 pub mod about;
 pub mod debug_open;
-pub mod delete;
 pub mod format;
-pub mod linux_trash;
 pub mod locale;
 pub mod motion;
 pub mod recents;
@@ -13,6 +11,8 @@ pub mod settings;
 pub mod shortcuts;
 pub mod target;
 pub mod trash;
+
+pub use vano_delete::delete;
 pub mod treemap;
 pub mod update;
 pub mod usage;

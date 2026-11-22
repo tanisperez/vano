@@ -896,6 +896,9 @@ impl AppView {
                 size: results.tree.node(batch_nodes[*index]).size,
                 reason: match error {
                     trash::TrashError::Refused => rust_i18n::t!("report.refused").into_owned(),
+                    trash::TrashError::OtherFileSystem => {
+                        rust_i18n::t!("report.other_file_system").into_owned()
+                    }
                     trash::TrashError::Os(text) => text.clone(),
                 },
             })

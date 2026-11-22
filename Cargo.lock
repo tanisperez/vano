@@ -7088,7 +7088,6 @@ name = "vano-app"
 version = "0.4.0-dev"
 dependencies = [
  "anyhow",
- "chrono",
  "dirs 7.0.0",
  "dunce",
  "embed-resource",
@@ -7096,7 +7095,6 @@ dependencies = [
  "log",
  "pretty_assertions",
  "rust-i18n",
- "rustix",
  "serde",
  "serde_json",
  "telaio-app",
@@ -7104,8 +7102,8 @@ dependencies = [
  "telaio-update",
  "tempfile",
  "toml 1.2.2+spec-1.1.0",
- "trash",
  "vano-core",
+ "vano-delete",
  "vano-rules",
  "vano-scan",
 ]
@@ -7115,6 +7113,18 @@ name = "vano-core"
 version = "0.4.0-dev"
 dependencies = [
  "pretty_assertions",
+]
+
+[[package]]
+name = "vano-delete"
+version = "0.4.0-dev"
+dependencies = [
+ "chrono",
+ "rustix",
+ "tempfile",
+ "trash",
+ "vano-core",
+ "vano-scan",
 ]
 
 [[package]]
