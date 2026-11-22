@@ -945,3 +945,8 @@ _version: 2
   es: "No se pudo analizar %{target}: %{error}"
   gl: "Non se puido analizar %{target}: %{error}"
   it: "Impossibile analizzare %{target}: %{error}"
+"results.recs.sub_wsl":
+  en: "Select items to delete for good."
+  es: "Elige qué borrar definitivamente."
+  gl: "Escolle que borrar definitivamente."
+  it: "Seleziona cosa eliminare definitivamente."

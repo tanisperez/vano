@@ -676,7 +676,11 @@ impl AppView {
             .child(card_header(
                 palette,
                 t!("results.recs.title"),
-                t!(trash_key!("results.recs.sub")),
+                if results.target.kind == TargetKind::Wsl {
+                    t!("results.recs.sub_wsl")
+                } else {
+                    t!(trash_key!("results.recs.sub"))
+                },
                 None,
             ))
             .child(
