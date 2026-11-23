@@ -7161,7 +7161,7 @@ dependencies = [
 
 [[package]]
 name = "vano-app"
-version = "0.4.0-dev"
+version = "1.0.0-dev"
 dependencies = [
  "anyhow",
  "dirs 7.0.0",
@@ -7188,7 +7188,7 @@ dependencies = [
 
 [[package]]
 name = "vano-cli"
-version = "0.4.0-dev"
+version = "1.0.0-dev"
 dependencies = [
  "clap",
  "clap_complete",
@@ -7208,14 +7208,14 @@ dependencies = [
 
 [[package]]
 name = "vano-core"
-version = "0.4.0-dev"
+version = "1.0.0-dev"
 dependencies = [
  "pretty_assertions",
 ]
 
 [[package]]
 name = "vano-delete"
-version = "0.4.0-dev"
+version = "1.0.0-dev"
 dependencies = [
  "chrono",
  "rustix",
@@ -7227,7 +7227,7 @@ dependencies = [
 
 [[package]]
 name = "vano-rules"
-version = "0.4.0-dev"
+version = "1.0.0-dev"
 dependencies = [
  "dirs 7.0.0",
  "vano-core",
@@ -7235,7 +7235,7 @@ dependencies = [
 
 [[package]]
 name = "vano-scan"
-version = "0.4.0-dev"
+version = "1.0.0-dev"
 dependencies = [
  "crossbeam-deque",
  "crossbeam-utils",
@@ -7248,7 +7248,7 @@ dependencies = [
 
 [[package]]
 name = "vano-system"
-version = "0.4.0-dev"
+version = "1.0.0-dev"
 dependencies = [
  "dirs 7.0.0",
  "log",
@@ -7262,7 +7262,7 @@ dependencies = [
 
 [[package]]
 name = "vano-wsl"
-version = "0.4.0-dev"
+version = "1.0.0-dev"
 dependencies = [
  "dirs 7.0.0",
  "tempfile",
