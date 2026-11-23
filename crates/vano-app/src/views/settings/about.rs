@@ -9,7 +9,7 @@ use gpui_kit::prelude::*;
 use gpui_kit::*;
 use rust_i18n::t;
 
-use crate::state::about::{AboutInfo, IDENTITY};
+use crate::state::about::AboutInfo;
 use crate::state::update::{CheckStatus, ManualUpdate, ReadyUpdate, updater_enabled};
 use crate::theme::Palette;
 use crate::theme::metrics::{CONTROL_HEIGHT, RADIUS_LG};
@@ -48,7 +48,12 @@ pub(super) fn render_about(
     pane: &AboutPane,
 ) -> Vec<AnyElement> {
     vec![
-        telaio_app::about::header(&IDENTITY, &pane.info.platform, palette, mono_font_family),
+        telaio_app::about::header(
+            &vano_cli::display_identity(),
+            &pane.info.platform,
+            palette,
+            mono_font_family,
+        ),
         render_updates(weak, palette, mono_font_family, pane),
     ]
 }

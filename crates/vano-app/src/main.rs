@@ -127,7 +127,7 @@ fn main() -> ExitCode {
 fn log_startup(level: state::settings::LogLevel, from_env: Option<&str>, log_path: Option<&Path>) {
     log::info!(
         "Vano {} starting ({} build) on {} {}",
-        env!("CARGO_PKG_VERSION"),
+        vano_cli::version_label(),
         if cfg!(debug_assertions) {
             "debug"
         } else {

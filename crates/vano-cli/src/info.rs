@@ -5,7 +5,7 @@ use std::io::Write;
 
 use telaio_app::cli;
 
-use crate::IDENTITY;
+use crate::display_identity;
 
 /// The command line guide `--help` links to.
 pub const DOCS_URL: &str = "https://vano.tanis.codes/docs/command-line.html";
@@ -35,7 +35,7 @@ impl Info {
     pub fn output(self) -> String {
         match self {
             Info::Help => help_text(),
-            Info::Version => format!("{}\n", cli::version_line(&IDENTITY)),
+            Info::Version => format!("{}\n", cli::version_line(&display_identity())),
         }
     }
 
@@ -81,7 +81,7 @@ Environment variables:
   VANO_LOG  Log level of the window: off, error, warn, info, debug or trace
 
 {footer}",
-        header = cli::help_header(&IDENTITY, TAGLINE),
+        header = cli::help_header(&display_identity(), TAGLINE),
         footer = cli::help_footer(DOCS_URL),
     )
 }
