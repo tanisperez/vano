@@ -50,7 +50,7 @@ The release stays a draft until every asset is uploaded, so nobody sees a half-b
 
 | Asset | Content |
 |---|---|
-| `vano-X.Y.Z-linux-x86_64.tar.gz` | Linux binary plus desktop entry and icons in a `/usr`-like layout |
+| `vano-X.Y.Z-linux-x86_64.tar.gz` | Linux binary plus desktop entry and icons in a `/usr`-like layout, and `install.sh` at the top |
 | `vano_X.Y.Z_amd64.deb` | Debian and Ubuntu package |
 | `vano-X.Y.Z-1.x86_64.rpm` | Fedora and openSUSE package |
 | `vano-X.Y.Z-1-x86_64.pkg.tar.zst` | Arch Linux package, written by `package.sh` with `bsdtar` and `zstd` |
@@ -58,8 +58,13 @@ The release stays a draft until every asset is uploaded, so nobody sees a half-b
 | `Vano-X.Y.Z-macos-arm64.app.tar.gz` | The same app, for the in-app updater |
 | `Vano-X.Y.Z-windows-x86_64-setup.exe` | Per-user Windows installer |
 | `Vano-X.Y.Z-windows-x86_64-portable.zip` | Portable Windows build: `vano.exe`, `LICENSE` and `NOTICE` at the top level of the zip, nothing to install |
-| `latest.json` | Manifest read by the in-app updater: version, release page, and URL plus SHA-256 of the macOS app archive and the Windows installer (not the portable zip) |
+| `latest.json` | Manifest read by the in-app updater: version, release page, and URL plus SHA-256 of the macOS app archive, the Windows installer (not the portable zip) and the Linux tarball |
 | `SHA256SUMS` | SHA-256 of every asset above |
+
+`vano.exe` carries `vano-wsl`, the static Linux program it runs inside WSL 2 distributions: the
+`agent` job builds it for `x86_64-unknown-linux-musl`, and the Windows job downloads it and builds
+with `VANO_EMBED_WSL_AGENT` pointing at it (`crates/vano-app/build.rs`). So the installer and the
+portable zip hold `vano.exe` alone.
 
 The portable zip is built by the Windows job right after the installer, with `Compress-Archive`,
 from the same `vano.exe`. `latest.json` is written by globbing
@@ -92,12 +97,14 @@ document types.
 
 ## In-app updater
 
-The `telaio-update` crate (shared with the other apps, no UI). Package managers own
-updates on Linux, so the updater exists only on macOS and Windows.
+The `telaio-update` crate (shared with the other apps, no UI), as Postino's.
 
-- **Compiled in only with `VANO_UPDATER=github`** at build time, set only on the macOS and Windows
-  jobs of `release.yml`. The app must read it with `option_env!`; otherwise the feature is absent
-  (deb, rpm, AUR and local builds).
+- **Compiled in only with `VANO_UPDATER=github`** at build time, set on the macOS, Windows and
+  Linux jobs of `release.yml`. The app reads it with `option_env!`; local builds have no updater.
+- **Linux:** a copy the install script put in a prefix the user can write (`~/.local`) updates
+  from the app, running the `install.sh` of the downloaded tarball with `--tarball`. Other manual
+  copies (the tarball, a script install in `/usr/local`) only announce a new version. A copy in
+  `/usr` (deb, rpm, Arch, AUR) shows nothing: its package manager owns updates.
 - **Manifest:** `GET https://github.com/tanisperez/vano/releases/latest/download/latest.json`,
   compared with the app's own version using `semver`. GitHub redirects that URL to the newest
   stable release, never to a pre-release. The `VANO_UPDATE_URL` environment variable overrides
@@ -108,10 +115,12 @@ updates on Linux, so the updater exists only on macOS and Windows.
   VANO_UPDATE_URL=https://github.com/tanisperez/vano/releases/download/vX.Y.Z-rc.N/latest.json vano
   ```
 
-- **Manifest format:** `version`, `notes_url` and `platforms`, with the keys `macos-aarch64` and
-  `windows-x86_64`, each `{ url, sha256 }`. `release.yml` writes it with `jq`.
+- **Manifest format:** `version`, `notes_url` and `platforms`, with the keys `macos-aarch64`,
+  `windows-x86_64` and `linux-x86_64`, each `{ url, sha256 }`. `release.yml` writes it with `jq`.
 - **Download:** the asset for this platform is downloaded and its SHA-256 verified. Nothing
-  installs without a click. Asset file names must be plain (no path separators).
+  installs without a click. Restarting to update checks the manifest again first, and a manual
+  check replaces a ready update with a newer one, so a window left open across two releases
+  installs the latest (Postino #300). Asset file names must be plain (no path separators).
 - **Windows install:** run the downloaded installer with
   `/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /relaunch=1` and quit. `vano.iss` closes a running
   Vano through the Restart Manager and relaunches it only because of `/relaunch=1`.
