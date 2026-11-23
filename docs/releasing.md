@@ -53,6 +53,7 @@ The release stays a draft until every asset is uploaded, so nobody sees a half-b
 | `vano-X.Y.Z-linux-x86_64.tar.gz` | Linux binary plus desktop entry and icons in a `/usr`-like layout |
 | `vano_X.Y.Z_amd64.deb` | Debian and Ubuntu package |
 | `vano-X.Y.Z-1.x86_64.rpm` | Fedora and openSUSE package |
+| `vano-X.Y.Z-1-x86_64.pkg.tar.zst` | Arch Linux package, written by `package.sh` with `bsdtar` and `zstd` |
 | `Vano-X.Y.Z-macos-arm64.dmg` | macOS app, Apple silicon, ad-hoc signed |
 | `Vano-X.Y.Z-macos-arm64.app.tar.gz` | The same app, for the in-app updater |
 | `Vano-X.Y.Z-windows-x86_64-setup.exe` | Per-user Windows installer |
@@ -79,8 +80,8 @@ ISCC.exe /DAppVersion=0.1.0 /DSourceExe=..\..\target\release\vano.exe /DOutputDi
 
 Layout of `packaging/`:
 
-- `linux/`: `codes.tanis.vano.desktop`, `nfpm.yaml` (deb and rpm) and `package.sh` (tarball,
-  deb, rpm).
+- `linux/`: `codes.tanis.vano.desktop`, `nfpm.yaml` (deb and rpm), `package.sh` (tarball, deb,
+  rpm, Arch package), and `test-install.sh`, the end to end test of `site/install.sh`.
 - `macos/`: `Info.plist` (template, `bundle.sh` fills the version) and `bundle.sh`.
 - `windows/`: `vano.iss`. It reads the icon from `crates/vano-app/assets/vano.ico`.
 - `aur/`: `PKGBUILD` of `vano-bin`. Set `pkgver` to a stable version and run `updpkgsums`.

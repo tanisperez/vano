@@ -117,6 +117,8 @@ jobs:
             libxkbcommon-dev libxkbcommon-x11-dev \
             libx11-xcb-dev libxcb1-dev \
             libvulkan-dev
+          # bsdtar and zstd write the Arch package (packaging/linux/package.sh).
+          sudo apt-get install -y libarchive-tools zstd
 
       # No Cargo cache: release builds are rare, and the Build workflow's Linux cache comes from a
       # newer Ubuntu whose glibc the build scripts restored here could need.
@@ -143,7 +145,7 @@ jobs:
         shell: pwsh
         run: packaging\windows\merge-manifest.ps1 "target\${{ matrix.target }}\release\vano.exe"
 
-      # Tarball, deb and rpm (packaging/linux).
+      # Tarball, deb, rpm and Arch package (packaging/linux).
       - name: Package for Linux
         if: runner.os == 'Linux'
         env:

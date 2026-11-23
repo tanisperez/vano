@@ -93,9 +93,9 @@
                     </li>
                     <li class="download">
                         <h2>Linux</h2>
-                        <p>x86_64. A <code>.deb</code> for Debian and Ubuntu, an <code>.rpm</code> for Fedora and openSUSE, and a tarball for everything else.</p>
+                        <p>x86_64. A <code>.deb</code> for Debian and Ubuntu, an <code>.rpm</code> for Fedora and openSUSE, a <code>.pkg.tar.zst</code> for Arch, and a tarball for everything else.</p>
                         <a class="btn btn-primary" href="https://github.com/tanisperez/vano/releases/latest">Download a package</a>
-                        <span class="alt">Files <code>.deb</code>, <code>.rpm</code>, <code>.tar.gz</code></span>
+                        <span class="alt">Files <code>.deb</code>, <code>.rpm</code>, <code>.pkg.tar.zst</code>, <code>.tar.gz</code></span>
                     </li>
                 </ul>
             </div>
@@ -135,6 +135,14 @@
 
 <span class="cm"># openSUSE</span>
 <span class="prompt">$ </span>sudo zypper install ./vano-*.x86_64.rpm</pre>
+                        </div>
+                    </article>
+
+                    <article class="channel" id="arch">
+                        <h3>Arch Linux <small>pacman</small></h3>
+                        <p>Also for CachyOS, Manjaro and EndeavourOS.</p>
+                        <div class="code">
+<pre><span class="prompt">$ </span>sudo pacman -U ./vano-*-x86_64.pkg.tar.zst</pre>
                         </div>
                     </article>
 

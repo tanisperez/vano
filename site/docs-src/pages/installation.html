@@ -8,7 +8,7 @@ description: Install Vano on Linux, Windows or macOS with an installer, the Linu
 <div class="table"><table>
     <thead><tr><th>System</th><th>Supported</th><th>Packages</th></tr></thead>
     <tbody>
-        <tr><td>Linux</td><td>x86_64, Wayland or X11, a GPU driver with Vulkan</td><td>Install script, <code>.deb</code>, <code>.rpm</code>, <code>.tar.gz</code></td></tr>
+        <tr><td>Linux</td><td>x86_64, Wayland or X11, a GPU driver with Vulkan</td><td>Install script, <code>.deb</code>, <code>.rpm</code>, <code>.pkg.tar.zst</code>, <code>.tar.gz</code></td></tr>
         <tr><td>Windows</td><td>Windows 10 and 11, 64 bit</td><td>Installer (<code>-setup.exe</code>), portable zip (<code>-portable.zip</code>)</td></tr>
         <tr><td>macOS</td><td>Apple silicon (M1 and later)</td><td>Disk image (<code>.dmg</code>)</td></tr>
     </tbody>
@@ -50,6 +50,11 @@ $ sudo apt install ./vano_*_amd64.deb
 $ sudo dnf install ./vano-*.x86_64.rpm
 $ sudo zypper install ./vano-*.x86_64.rpm
 ```
+<h3>Arch Linux</h3>
+<p>Also for CachyOS, Manjaro and EndeavourOS:</p>
+```shell
+$ sudo pacman -U ./vano-*-x86_64.pkg.tar.zst
+```
 <p>To update a package, install the package of the new version the same way. The app does not offer updates in a copy a package manager owns.</p>
 
 <h3 id="tarball">Tarball</h3>
@@ -83,7 +88,7 @@ $ ./vano-*/bin/vano
         <tr><td>Linux install script in <code>~/.local</code></td><td>Downloaded and installed from the app.</td></tr>
         <tr><td>Linux install script in a system folder</td><td>Announced; run the install command again.</td></tr>
         <tr><td>Windows portable zip, Linux tarball</td><td>Announced, with a link to the release.</td></tr>
-        <tr><td><code>.deb</code>, <code>.rpm</code></td><td>From your package manager; the app shows nothing.</td></tr>
+        <tr><td><code>.deb</code>, <code>.rpm</code>, <code>.pkg.tar.zst</code></td><td>From your package manager; the app shows nothing.</td></tr>
     </tbody>
 </table></div>
 

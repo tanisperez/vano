@@ -34,7 +34,7 @@ KEEP = {
     "node_modules", "Cache Code Cache", "Android/Sdk .ollama", "*.iso *.dmg *.deb",
     "Vano-…-windows-x86_64-setup.exe", "Vano-…-windows-x86_64-portable.zip",
     "Vano-…-macos-arm64.dmg", ".deb", ".rpm", ".tar.gz", "~/.local", "/usr", "bin/", "share/",
-    "apt", "dnf, zypper", "tar.gz", "cargo run --release", "README",
+    "apt", "pacman", ".pkg.tar.zst", "dnf, zypper", "tar.gz", "cargo run --release", "README",
 }
 SKIP_BLOCKS = re.compile(r"<(script|style|pre|svg)\b.*?</\1>", re.S)
 TEXT = re.compile(r">([^<>]*[A-Za-zÀ-ÿ][^<>]*)<")

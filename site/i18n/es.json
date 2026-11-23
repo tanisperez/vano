@@ -120,7 +120,6 @@
   "Download the disk image": "Descargar la imagen de disco",
   "x86_64. A": "x86_64. Un",
   "for Debian and Ubuntu, an": "para Debian y Ubuntu, un",
-  "for Fedora and openSUSE, and a tarball for everything else.": "para Fedora y openSUSE, y un tarball para todo lo demás.",
   "Download a package": "Descargar un paquete",
   "Files": "Archivos",
   "Install on Linux": "Instalar en Linux",
@@ -156,5 +155,9 @@
   "for the system libraries each platform needs.": "para las bibliotecas del sistema que necesita cada plataforma.",
   "Downloads": "Descargas",
   "Download Vano, the native open source disk analyzer, for Linux (install script, deb, rpm, tarball), Windows (installer or portable) and macOS.": "Descarga Vano, el analizador de disco nativo y de código abierto, para Linux (script de instalación, deb, rpm, tarball), Windows (instalador o portable) y macOS.",
-  "The native open source disk analyzer for Linux (install script, deb, rpm, tarball), Windows (installer or portable) and macOS.": "El analizador de disco nativo y de código abierto para Linux (script de instalación, deb, rpm, tarball), Windows (instalador o portable) y macOS."
+  "The native open source disk analyzer for Linux (install script, deb, rpm, tarball), Windows (installer or portable) and macOS.": "El analizador de disco nativo y de código abierto para Linux (script de instalación, deb, rpm, tarball), Windows (instalador o portable) y macOS.",
+  "for Fedora and openSUSE, a": "para Fedora y openSUSE, un",
+  "for Arch, and a tarball for everything else.": "para Arch, y un tarball para todo lo demás.",
+  "Also for CachyOS, Manjaro and EndeavourOS.": "También para CachyOS, Manjaro y EndeavourOS.",
+  "Arch Linux": "Arch Linux"
 }
