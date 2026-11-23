@@ -1006,6 +1006,9 @@ impl AppView {
                     trash::TrashError::OtherFileSystem => {
                         rust_i18n::t!("report.other_file_system").into_owned()
                     }
+                    trash::TrashError::ReadOnlyFolder => {
+                        rust_i18n::t!(trash::trash_key!("report.read_only")).into_owned()
+                    }
                     trash::TrashError::Os(text) => text.clone(),
                 },
             })

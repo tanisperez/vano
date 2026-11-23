@@ -221,6 +221,10 @@ fn done_line(mode: DeleteMode, removed: u64) -> String {
 fn reason(error: &TrashError) -> String {
     match error {
         TrashError::Refused => format!("{} refused it", trash_name()),
+        TrashError::ReadOnlyFolder => format!(
+            "it is a read-only folder, which {} cannot take: use --permanent",
+            trash_name()
+        ),
         TrashError::OtherFileSystem => {
             "it holds another file system, which was left in place".to_string()
         }

@@ -17,7 +17,9 @@ trash = { workspace = true }
 vano-scan = { path = "../vano-scan" }
 
 [target.'cfg(unix)'.dependencies]
-rustix = { workspace = true }
+rustix = { workspace = true, features = ["process"] }
+dirs = { workspace = true }
+log = { workspace = true }
 
 [dev-dependencies]
 tempfile = { workspace = true }

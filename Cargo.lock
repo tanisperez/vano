@@ -7218,6 +7218,8 @@ name = "vano-delete"
 version = "1.0.0-dev"
 dependencies = [
  "chrono",
+ "dirs 7.0.0",
+ "log",
  "rustix",
  "tempfile",
  "trash",

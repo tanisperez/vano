@@ -30,6 +30,10 @@ pub enum TrashError {
     /// A permanent deletion found a mount point inside the item: another file system the scan
     /// did not count, left in place.
     OtherFileSystem,
+    /// A folder without write permission, which the Trash cannot take (it renames the folder).
+    /// Deleting it for good works: that opens up the permissions of what is about to go.
+    #[cfg_attr(not(unix), allow(dead_code))]
+    ReadOnlyFolder,
     /// Any other OS error, as its text.
     Os(String),
 }
@@ -113,7 +117,14 @@ fn move_one(path: &Path) -> Result<(), TrashError> {
     if let Some(root) = vano_scan::linux_root_of(path) {
         return crate::linux_trash::trash(&root, path).map_err(TrashError::Os);
     }
-    trash::delete(path).map_err(|error| match error {
+    #[cfg(all(
+        unix,
+        not(target_os = "macos"),
+        not(target_os = "ios"),
+        not(target_os = "android")
+    ))]
+    let started = std::time::SystemTime::now();
+    let result = trash::delete(path).map_err(|error| match error {
         // The only error of the crate's Windows code that has no OS code: an aborted operation.
         #[cfg(windows)]
         trash::Error::Unknown { .. } => TrashError::Refused,
@@ -127,7 +138,29 @@ fn move_one(path: &Path) -> Result<(), TrashError> {
         trash::Error::FileSystem { source, .. } => TrashError::Os(source.to_string()),
         trash::Error::Os { description, .. } => TrashError::Os(description),
         other => TrashError::Os(other.to_string()),
-    })
+    });
+    // A failed move leaves the item whole, and must leave nothing in the Trash (#34).
+    #[cfg(all(
+        unix,
+        not(target_os = "macos"),
+        not(target_os = "ios"),
+        not(target_os = "android")
+    ))]
+    if result.is_err() && path.symlink_metadata().is_ok() {
+        crate::trash_leftovers::remove_placeholders(path, started);
+        if is_read_only_folder(path) {
+            return Err(TrashError::ReadOnlyFolder);
+        }
+    }
+    result
+}
+
+/// A folder its owner cannot write to, which `rename` cannot move to another folder.
+#[cfg(unix)]
+fn is_read_only_folder(path: &Path) -> bool {
+    use std::os::unix::fs::PermissionsExt as _;
+    path.symlink_metadata()
+        .is_ok_and(|metadata| metadata.is_dir() && metadata.permissions().mode() & 0o200 == 0)
 }
 
 fn move_each_with(

@@ -5,3 +5,10 @@
 pub mod delete;
 pub mod linux_trash;
 pub mod trash;
+#[cfg(all(
+    unix,
+    not(target_os = "macos"),
+    not(target_os = "ios"),
+    not(target_os = "android")
+))]
+mod trash_leftovers;

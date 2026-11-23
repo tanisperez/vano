@@ -960,3 +960,13 @@ _version: 2
   es: "Actualización %{version} disponible, copiar el comando para actualizar"
   gl: "Actualización %{version} dispoñible, copiar o comando para actualizar"
   it: "Aggiornamento %{version} disponibile, copia il comando di aggiornamento"
+"report.read_only":
+  en: "Read-only folder: the Trash cannot take it. Delete it permanently instead."
+  es: "Carpeta de solo lectura: la papelera no puede aceptarla. Bórrala definitivamente."
+  gl: "Cartafol de só lectura: o lixo non pode aceptalo. Bórrao definitivamente."
+  it: "Cartella di sola lettura: il cestino non può accettarla. Eliminala definitivamente."
+"report.read_only.windows":
+  en: "Read-only folder: the Recycle Bin cannot take it. Delete it permanently instead."
+  es: "Carpeta de solo lectura: la papelera de reciclaje no puede aceptarla. Bórrala definitivamente."
+  gl: "Cartafol de só lectura: a papeleira de reciclaxe non pode aceptalo. Bórrao definitivamente."
+  it: "Cartella di sola lettura: il Cestino non può accettarla. Eliminala definitivamente."

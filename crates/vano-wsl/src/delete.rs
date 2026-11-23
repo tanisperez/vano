@@ -109,6 +109,7 @@ pub fn command() -> u8 {
         let reason = match error {
             TrashError::Refused => "refused".to_string(),
             TrashError::OtherFileSystem => "other file system".to_string(),
+            TrashError::ReadOnlyFolder => "read-only folder".to_string(),
             TrashError::Os(text) => text.clone(),
         };
         print_line(&DeleteLine::Failed(*index, reason));
