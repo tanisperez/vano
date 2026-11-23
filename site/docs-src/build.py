@@ -180,7 +180,10 @@ def json_ld(title, description, file, group):
 
 
 def write_root_files(order, metas):
-    urls = [BASE, f"{BASE}install.html"] + [page_url(file) for file, _, _ in order]
+    # The home and download pages in every language (site/i18n), then the docs, in English.
+    pages = [f"{BASE}{lang}{name}" for lang in ("", "es/", "gl/", "it/")
+             for name in ("", "install.html")]
+    urls = pages + [page_url(file) for file, _, _ in order]
     sitemap = "".join(f"    <url>\n        <loc>{url}</loc>\n    </url>\n" for url in urls)
     (SITE / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'

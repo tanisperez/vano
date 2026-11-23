@@ -29,13 +29,15 @@ jobs:
       - uses: actions/checkout@v7
 
       # The documentation pages, sitemap.xml and llms.txt are generated (site/README.md).
-      - name: Build the documentation
-        run: python3 site/docs-src/build.py
+      - name: Build the documentation and the translated pages
+        run: |
+          python3 site/docs-src/build.py
+          python3 site/i18n/build.py
 
-      # site/screenshots holds the screenshot tooling, and site/docs-src the sources of site/docs,
-      # not pages.
+      # site/screenshots holds the screenshot tooling, site/docs-src the sources of site/docs and
+      # site/i18n the translations of site/es, gl and it, not pages.
       - name: Assemble the site
-        run: rsync -a --exclude screenshots/ --exclude docs-src/ --exclude README.md site/ _site/
+        run: rsync -a --exclude screenshots/ --exclude docs-src/ --exclude i18n/ --exclude README.md site/ _site/
 
       - uses: actions/configure-pages@v6
 

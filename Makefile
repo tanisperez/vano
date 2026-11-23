@@ -21,7 +21,7 @@ help:
 	@echo "  clean         Remove build artifacts"
 	@echo "  screenshots   Regenerate the website screenshots (site/img)"
 	@echo "  video         Record the website demo video (site/video)"
-	@echo "  docs          Build the user documentation (site/docs-src into site/docs)"
+	@echo "  docs          Build the docs (site/docs-src) and the translated pages (site/i18n)"
 	@echo "  site          Serve the website on http://localhost:8000"
 
 run:
@@ -116,6 +116,7 @@ video:
 # site/docs is generated, never edited by hand (see site/README.md).
 docs:
 	python3 site/docs-src/build.py
+	python3 site/i18n/build.py
 
 site: docs
 	python3 -m http.server -d site 8000

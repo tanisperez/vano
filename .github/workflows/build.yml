@@ -18,6 +18,17 @@ jobs:
       - name: Test
         run: packaging/linux/test-install.sh
 
+  # The documentation and the translated pages build: no broken link, no missing translation.
+  website:
+    name: website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the documentation and the translated pages
+        run: |
+          python3 site/docs-src/build.py
+          python3 site/i18n/build.py
+
   build:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}

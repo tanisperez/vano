@@ -10,6 +10,11 @@
     <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#15161a" media="(prefers-color-scheme: dark)">
     <link rel="canonical" href="https://vano.tanis.codes/">
+    <link rel="alternate" hreflang="en" href="https://vano.tanis.codes/">
+    <link rel="alternate" hreflang="es" href="https://vano.tanis.codes/es/">
+    <link rel="alternate" hreflang="gl" href="https://vano.tanis.codes/gl/">
+    <link rel="alternate" hreflang="it" href="https://vano.tanis.codes/it/">
+    <link rel="alternate" hreflang="x-default" href="https://vano.tanis.codes/">
     <link rel="icon" href="favicon.ico" sizes="48x48">
     <link rel="icon" href="img/logo.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="img/icon-512.png">
@@ -65,6 +70,7 @@
     <link rel="preload" href="fonts/Geist-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/theme.js"></script>
+    <script src="js/lang.js"></script>
     <script src="js/demo.js" defer></script>
 </head>
 <body>
@@ -262,16 +268,16 @@
 
                     <article class="feature">
                         <div class="copy">
-                            <h3>Your home, the whole disk or any folder</h3>
+                            <h3>Every disk, WSL and any folder</h3>
                             <div class="text">
-                                <p>Pick what to scan and go. Recent scans are kept, so their results open again at once, without scanning twice. Other file systems mounted inside are left alone.</p>
+                                <p>Pick what to scan and go: your home folder, any internal or external disk, any folder, or on Windows a WSL 2 distribution, scanned natively from inside. Recent scans are kept, so their results open again at once, without scanning twice. Prefer a terminal? <code>vano scan</code> and <code>vano clean</code> do the same from the command line.</p>
                             </div>
                         </div>
                         <div class="shot">
                             <img class="light" src="img/home-light.webp" width="2100" height="1260" loading="lazy"
-                                alt="The home screen: scan the home folder, the file system or a chosen folder, and the recent scans below.">
+                                alt="The home screen: the disks with how full each one is, the folders, and the recent scans below.">
                             <img class="dark" src="img/home-dark.webp" width="2100" height="1260" loading="lazy"
-                                alt="The home screen: scan the home folder, the file system or a chosen folder, and the recent scans below.">
+                                alt="The home screen: the disks with how full each one is, the folders, and the recent scans below.">
                         </div>
                     </article>
 
@@ -376,6 +382,12 @@
                 <a href="https://github.com/tanisperez/vano/releases">Releases</a>
                 <a href="https://github.com/tanisperez/vano/issues">Report an issue</a>
                 <a href="https://tanis.codes">tanis.codes</a>
+            </nav>
+            <nav class="langs" aria-label="Language">
+                <a href="/" hreflang="en" lang="en" data-lang="en" aria-current="true">English</a>
+                <a href="/es/" hreflang="es" lang="es" data-lang="es">Español</a>
+                <a href="/gl/" hreflang="gl" lang="gl" data-lang="gl">Galego</a>
+                <a href="/it/" hreflang="it" lang="it" data-lang="it">Italiano</a>
             </nav>
         </div>
     </footer>

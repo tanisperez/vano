@@ -896,6 +896,17 @@ kbd {
     color: var(--fg-muted);
 }
 
+/* The language links: the current one stands out, and the row takes its own line. */
+.site-footer .langs {
+    flex-basis: 100%;
+    gap: 14px;
+}
+
+.site-footer .langs a[aria-current] {
+    color: var(--fg);
+    font-weight: 600;
+}
+
 /* Install page */
 
 .page-head {
