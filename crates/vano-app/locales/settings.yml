@@ -126,10 +126,10 @@ _version: 2
   gl: "Vano %{version} está listo para instalar"
   it: "Vano %{version} è pronto per l'installazione"
 "settings.about.ready.text":
-  en: "Downloaded and verified. Restarting keeps your open tabs; unsaved changes ask first."
-  es: "Descargado y verificado. Reiniciar conserva tus pestañas abiertas; los cambios sin guardar se preguntan antes."
-  gl: "Descargado e verificado. Reiniciar conserva as túas lapelas abertas; os cambios sen gardar pregúntanse antes."
-  it: "Scaricato e verificato. Il riavvio mantiene le schede aperte; per le modifiche non salvate viene chiesta conferma."
+  en: "Downloaded and verified. Restarting installs it and opens Vano again."
+  es: "Descargado y verificado. Al reiniciar se instala y Vano se vuelve a abrir."
+  gl: "Descargado e verificado. Ao reiniciar instálase e Vano vólvese abrir."
+  it: "Scaricato e verificato. Il riavvio lo installa e riapre Vano."
 "settings.about.ready.restart":
   en: "Restart to update"
   es: "Reiniciar para actualizar"
