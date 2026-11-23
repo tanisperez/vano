@@ -64,6 +64,16 @@ impl AppView {
         if self.confirm_contents(&request).items.is_empty() {
             return;
         }
+        // Saved results of a disk that is not connected (or a folder that is gone): its files are
+        // not there, and a move would wrongly count them as removed (#32).
+        if let Some(results) = &self.results
+            && results.target.kind != TargetKind::Wsl
+            && !results.target.path.exists()
+        {
+            let text = t!("toast.not_here", target = results.target.label()).into_owned();
+            self.show_toast(text, None, true, cx);
+            return;
+        }
         self.batch_note = None;
         let weak = cx.weak_entity();
         window.open_dialog(cx, move |dialog, window, cx| {

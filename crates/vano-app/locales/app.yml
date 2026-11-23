@@ -980,3 +980,8 @@ _version: 2
   es: "Abrir ajustes"
   gl: "Abrir axustes"
   it: "Apri impostazioni"
+"toast.not_here":
+  en: "%{target} is not here: these results come from its last scan. Connect it to remove anything."
+  es: "%{target} no está: estos resultados son de su último análisis. Conéctalo para eliminar algo."
+  gl: "%{target} non está: estes resultados son da súa última análise. Conéctao para eliminar algo."
+  it: "%{target} non c'è: questi risultati vengono dalla sua ultima analisi. Collegalo per rimuovere qualcosa."
