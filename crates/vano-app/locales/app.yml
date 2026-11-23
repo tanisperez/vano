@@ -970,3 +970,13 @@ _version: 2
   es: "Carpeta de solo lectura: la papelera de reciclaje no puede aceptarla. Bórrala definitivamente."
   gl: "Cartafol de só lectura: a papeleira de reciclaxe non pode aceptalo. Bórrao definitivamente."
   it: "Cartella di sola lettura: il Cestino non può accettarla. Eliminala definitivamente."
+"home.full_disk_access":
+  en: "macOS asks for Full Disk Access to read system folders. Anything Vano cannot read is counted as Not scanned."
+  es: "macOS pide Acceso total al disco para leer las carpetas del sistema. Lo que Vano no puede leer cuenta como Sin analizar."
+  gl: "macOS pide Acceso total ao disco para ler os cartafoles do sistema. O que Vano non pode ler conta como Sen analizar."
+  it: "macOS chiede l'Accesso completo al disco per leggere le cartelle di sistema. Ciò che Vano non può leggere conta come Non analizzato."
+"home.full_disk_access_open":
+  en: "Open settings"
+  es: "Abrir ajustes"
+  gl: "Abrir axustes"
+  it: "Apri impostazioni"

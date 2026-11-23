@@ -21,9 +21,13 @@ use crate::theme::metrics::{
 use crate::theme::{Palette, PaletteExt, VanoColors};
 
 use super::common::eyebrow;
-use super::components::{IconButton, PrimaryButton, UsageBar};
+use super::components::{IconButton, InlineMessage, InlineMessageKind, PrimaryButton, UsageBar};
 use super::root::AppView;
 use super::title_bar::target_icon;
+
+/// The Full Disk Access list of System Settings, Privacy and Security, on macOS.
+const FULL_DISK_ACCESS_URL: &str =
+    "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles";
 
 /// From this fraction a disk shows "Almost full".
 const ALMOST_FULL: f32 = 0.9;
@@ -118,6 +122,15 @@ impl AppView {
             rows.push(row);
             cards = rest;
         }
+        // macOS keeps protected folders (Mail, Messages, Safari...) from apps without Full Disk
+        // Access (#36): a disk scan undercounts, so say why and where to grant it.
+        let disk_selected = matches!(self.target.kind, TargetKind::Disk | TargetKind::Drive);
+        let full_disk_note = (cfg!(target_os = "macos") && disk_selected).then(|| {
+            InlineMessage::new(InlineMessageKind::Info, t!("home.full_disk_access"))
+                .action(t!("home.full_disk_access_open"), |_, cx| {
+                    cx.open_url(FULL_DISK_ACCESS_URL)
+                })
+        });
         section(
             eyebrow(palette, t!("home.drives")),
             Some(summary),
@@ -125,6 +138,7 @@ impl AppView {
             mono,
         )
         .child(v_flex().gap(px(10.0)).children(rows))
+        .children(full_disk_note)
         .into_any_element()
     }
 
